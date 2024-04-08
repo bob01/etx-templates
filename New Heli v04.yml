@@ -1,0 +1,1816 @@
+semver: 2.9.4
+header:
+  name: New Heli v04
+  bitmap: new.png
+  labels: Favorites,Helis,ELRS
+  modelId:
+    1:
+      val: 0
+timers:
+  0:
+    swtch: L15
+    mode: ON
+    name: ""
+    minuteBeep: 0
+    countdownBeep: 0
+    start: 240
+    persistent: 0
+    countdownStart: 0
+    value: 0
+    showElapsed: 0
+    extraHaptic: 0
+noGlobalFunctions: 0
+thrTrim: 0
+trimInc: 0
+displayTrims: 0
+ignoreSensorIds: 0
+showInstanceIds: 0
+disableThrottleWarning: 0
+enableCustomThrottleWarning: 0
+customThrottleWarningPosition: 0
+beepANACenter: 0
+extendedLimits: 0
+extendedTrims: 0
+throttleReversed: 0
+flightModeData:
+  0:
+    trim:
+      0:
+        value: 0
+        mode: 31
+      1:
+        value: 0
+        mode: 31
+      2:
+        value: 0
+        mode: 31
+      3:
+        value: 0
+        mode: 31
+      4:
+        value: 0
+        mode: 31
+      5:
+        value: 0
+        mode: 31
+    name: ""
+    fadeIn: 0
+    fadeOut: 0
+    gvars:
+      0:
+        val: 71
+      1:
+        val: 430
+      2:
+        val: 400
+mixData:
+  - destCh: 0
+    srcRaw: I0
+    weight: 100
+    swtch: NONE
+    curve:
+      type: 0
+      value: 0
+    delayUp: 0
+    delayDown: 0
+    speedUp: 0
+    speedDown: 0
+    carryTrim: 0
+    mltpx: ADD
+    mixWarn: 0
+    flightModes: 000000000
+    offset: 0
+    name: ""
+  - destCh: 1
+    srcRaw: I1
+    weight: 100
+    swtch: NONE
+    curve:
+      type: 0
+      value: 0
+    delayUp: 0
+    delayDown: 0
+    speedUp: 0
+    speedDown: 0
+    carryTrim: 0
+    mltpx: ADD
+    mixWarn: 0
+    flightModes: 000000000
+    offset: 0
+    name: ""
+  - destCh: 2
+    srcRaw: I4
+    weight: 100
+    swtch: NONE
+    curve:
+      type: 0
+      value: 0
+    delayUp: 0
+    delayDown: 0
+    speedUp: 0
+    speedDown: 0
+    carryTrim: 0
+    mltpx: ADD
+    mixWarn: 0
+    flightModes: 000000000
+    offset: 0
+    name: ""
+  - destCh: 3
+    srcRaw: I3
+    weight: 100
+    swtch: NONE
+    curve:
+      type: 0
+      value: 0
+    delayUp: 0
+    delayDown: 0
+    speedUp: 0
+    speedDown: 0
+    carryTrim: 0
+    mltpx: ADD
+    mixWarn: 0
+    flightModes: 000000000
+    offset: 0
+    name: ""
+  - destCh: 4
+    srcRaw: I5
+    weight: 100
+    swtch: NONE
+    curve:
+      type: 0
+      value: 0
+    delayUp: 0
+    delayDown: 0
+    speedUp: 0
+    speedDown: 0
+    carryTrim: 0
+    mltpx: ADD
+    mixWarn: 0
+    flightModes: 000000000
+    offset: 0
+    name: ""
+  - destCh: 5
+    srcRaw: I2
+    weight: 100
+    swtch: L3
+    curve:
+      type: 3
+      value: 1
+    delayUp: 0
+    delayDown: 0
+    speedUp: 0
+    speedDown: 0
+    carryTrim: 1
+    mltpx: ADD
+    mixWarn: 0
+    flightModes: 000000000
+    offset: 0
+    name: Bank1
+  - destCh: 5
+    srcRaw: I2
+    weight: 100
+    swtch: L4
+    curve:
+      type: 3
+      value: 2
+    delayUp: 0
+    delayDown: 0
+    speedUp: 0
+    speedDown: 0
+    carryTrim: 1
+    mltpx: REPL
+    mixWarn: 0
+    flightModes: 000000000
+    offset: 0
+    name: Bank2
+  - destCh: 5
+    srcRaw: I2
+    weight: 100
+    swtch: L5
+    curve:
+      type: 3
+      value: 3
+    delayUp: 0
+    delayDown: 0
+    speedUp: 0
+    speedDown: 0
+    carryTrim: 1
+    mltpx: REPL
+    mixWarn: 0
+    flightModes: 000000000
+    offset: 0
+    name: Bank3
+  - destCh: 5
+    srcRaw: MAX
+    weight: 100
+    swtch: L11
+    curve:
+      type: 3
+      value: 4
+    delayUp: 0
+    delayDown: 0
+    speedUp: 0
+    speedDown: 0
+    carryTrim: 0
+    mltpx: REPL
+    mixWarn: 0
+    flightModes: 000000000
+    offset: 0
+    name: Hold
+  - destCh: 5
+    srcRaw: MAX
+    weight: -100
+    swtch: L12
+    curve:
+      type: 0
+      value: 0
+    delayUp: 0
+    delayDown: 0
+    speedUp: 0
+    speedDown: 0
+    carryTrim: 0
+    mltpx: REPL
+    mixWarn: 0
+    flightModes: 000000000
+    offset: 0
+    name: Off
+  - destCh: 6
+    srcRaw: I6
+    weight: 66
+    swtch: NONE
+    curve:
+      type: 0
+      value: 0
+    delayUp: 0
+    delayDown: 0
+    speedUp: 0
+    speedDown: 0
+    carryTrim: 0
+    mltpx: ADD
+    mixWarn: 0
+    flightModes: 000000000
+    offset: -33
+    name: ""
+  - destCh: 6
+    srcRaw: MAX
+    weight: 100
+    swtch: L11
+    curve:
+      type: 0
+      value: 0
+    delayUp: 0
+    delayDown: 0
+    speedUp: 0
+    speedDown: 0
+    carryTrim: 1
+    mltpx: REPL
+    mixWarn: 0
+    flightModes: 000000000
+    offset: 0
+    name: Hold
+  - destCh: 7
+    srcRaw: I7
+    weight: 100
+    swtch: NONE
+    curve:
+      type: 0
+      value: 0
+    delayUp: 0
+    delayDown: 0
+    speedUp: 0
+    speedDown: 0
+    carryTrim: 0
+    mltpx: ADD
+    mixWarn: 0
+    flightModes: 000000000
+    offset: 0
+    name: ""
+  - destCh: 8
+    srcRaw: MAX
+    weight: -100
+    swtch: L16
+    curve:
+      type: 0
+      value: 0
+    delayUp: 0
+    delayDown: 0
+    speedUp: 0
+    speedDown: 0
+    carryTrim: 0
+    mltpx: REPL
+    mixWarn: 0
+    flightModes: 000000000
+    offset: 0
+    name: Low
+  - destCh: 8
+    srcRaw: MAX
+    weight: 0
+    swtch: L17
+    curve:
+      type: 0
+      value: 0
+    delayUp: 0
+    delayDown: 0
+    speedUp: 0
+    speedDown: 0
+    carryTrim: 0
+    mltpx: REPL
+    mixWarn: 0
+    flightModes: 000000000
+    offset: 0
+    name: Med
+  - destCh: 8
+    srcRaw: MAX
+    weight: 100
+    swtch: L18
+    curve:
+      type: 0
+      value: 0
+    delayUp: 0
+    delayDown: 0
+    speedUp: 0
+    speedDown: 0
+    carryTrim: 0
+    mltpx: REPL
+    mixWarn: 0
+    flightModes: 000000000
+    offset: 0
+    name: Hi
+  - destCh: 9
+    srcRaw: I12
+    weight: 100
+    swtch: NONE
+    curve:
+      type: 0
+      value: 0
+    delayUp: 0
+    delayDown: 0
+    speedUp: 0
+    speedDown: 0
+    carryTrim: 0
+    mltpx: ADD
+    mixWarn: 0
+    flightModes: 000000000
+    offset: 0
+    name: Rescue
+limitData:
+  0:
+    min: 22
+    max: -23
+    revert: 0
+    offset: 0
+    ppmCenter: 0
+    symetrical: 0
+    name: ""
+    curve: 0
+  1:
+    min: 22
+    max: -23
+    revert: 0
+    offset: 0
+    ppmCenter: 0
+    symetrical: 0
+    name: ""
+    curve: 0
+  2:
+    min: 22
+    max: -23
+    revert: 0
+    offset: 0
+    ppmCenter: 0
+    symetrical: 0
+    name: ""
+    curve: 0
+  3:
+    min: 22
+    max: -23
+    revert: 0
+    offset: 0
+    ppmCenter: 0
+    symetrical: 0
+    name: ""
+    curve: 0
+expoData:
+  - srcRaw: Ail
+    scale: 0
+    mode: 3
+    chn: 0
+    swtch: NONE
+    flightModes: 000000000
+    weight: 100
+    offset: 0
+    curve:
+      type: 1
+      value: 0
+    trimSource: 0
+    name: ""
+  - srcRaw: Ele
+    scale: 0
+    mode: 3
+    chn: 1
+    swtch: NONE
+    flightModes: 000000000
+    weight: 100
+    offset: 0
+    curve:
+      type: 1
+      value: 0
+    trimSource: 0
+    name: ""
+  - srcRaw: Thr
+    scale: 0
+    mode: 3
+    chn: 2
+    swtch: NONE
+    flightModes: 000000000
+    weight: 100
+    offset: 0
+    curve:
+      type: 1
+      value: 0
+    trimSource: 0
+    name: ""
+  - srcRaw: Rud
+    scale: 0
+    mode: 3
+    chn: 3
+    swtch: NONE
+    flightModes: 000000000
+    weight: 100
+    offset: 0
+    curve:
+      type: 1
+      value: 0
+    trimSource: 0
+    name: ""
+  - srcRaw: Thr
+    scale: 0
+    mode: 3
+    chn: 4
+    swtch: NONE
+    flightModes: 000000000
+    weight: 100
+    offset: 0
+    curve:
+      type: 1
+      value: 0
+    trimSource: 1
+    name: ""
+  - srcRaw: SA
+    scale: 0
+    mode: 3
+    chn: 5
+    swtch: NONE
+    flightModes: 000000000
+    weight: 100
+    offset: 0
+    curve:
+      type: 1
+      value: 0
+    trimSource: 1
+    name: ""
+  - srcRaw: SE
+    scale: 0
+    mode: 3
+    chn: 6
+    swtch: NONE
+    flightModes: 000000000
+    weight: 100
+    offset: 0
+    curve:
+      type: 1
+      value: 0
+    trimSource: 0
+    name: ""
+  - srcRaw: SD
+    scale: 0
+    mode: 3
+    chn: 7
+    swtch: NONE
+    flightModes: 000000000
+    weight: 100
+    offset: 0
+    curve:
+      type: 1
+      value: 0
+    trimSource: 1
+    name: ""
+  - srcRaw: SG
+    scale: 0
+    mode: 3
+    chn: 8
+    swtch: NONE
+    flightModes: 000000000
+    weight: -100
+    offset: 0
+    curve:
+      type: 1
+      value: 0
+    trimSource: 0
+    name: ""
+  - srcRaw: SB
+    scale: 0
+    mode: 3
+    chn: 10
+    swtch: NONE
+    flightModes: 000000000
+    weight: 100
+    offset: 0
+    curve:
+      type: 1
+      value: 0
+    trimSource: 0
+    name: ""
+  - srcRaw: SC
+    scale: 0
+    mode: 3
+    chn: 11
+    swtch: NONE
+    flightModes: 000000000
+    weight: 100
+    offset: 0
+    curve:
+      type: 0
+      value: 0
+    trimSource: 0
+    name: ""
+  - srcRaw: SH
+    scale: 0
+    mode: 3
+    chn: 12
+    swtch: NONE
+    flightModes: 000000000
+    weight: 100
+    offset: 0
+    curve:
+      type: 0
+      value: 0
+    trimSource: 0
+    name: ""
+inputNames:
+  0:
+    val: Ail
+  1:
+    val: Ele
+  2:
+    val: Thr
+  3:
+    val: Rud
+  4:
+    val: Coll
+  5:
+    val: Arm
+  6:
+    val: Bank
+  7:
+    val: BBox
+  8:
+    val: Motr
+  10:
+    val: Rate
+  11:
+    val: Talk
+  12:
+    val: Resc
+curves:
+  0:
+    type: 0
+    smooth: 0
+    points: -3
+    name: TC1
+  1:
+    type: 0
+    smooth: 0
+    points: -3
+    name: TC2
+  2:
+    type: 0
+    smooth: 0
+    points: -3
+    name: TC3
+  3:
+    type: 0
+    smooth: 0
+    points: -3
+    name: TCH
+points:
+  0:
+    val: 100
+  1:
+    val: 100
+  2:
+    val: 100
+  3:
+    val: 100
+  4:
+    val: 100
+  5:
+    val: 100
+  6:
+    val: -70
+  7:
+    val: -70
+logicalSw:
+  0:
+    func: FUNC_VPOS
+    def: I5,0
+    delay: 0
+    duration: 0
+    andsw: NONE
+  1:
+    func: FUNC_VPOS
+    def: I5,0
+    delay: 0
+    duration: 0
+    andsw: TELEMETRY_STREAMING
+  2:
+    func: FUNC_VEQUAL
+    def: tele(14),1
+    delay: 0
+    duration: 0
+    andsw: NONE
+  3:
+    func: FUNC_VEQUAL
+    def: tele(14),2
+    delay: 0
+    duration: 0
+    andsw: NONE
+  4:
+    func: FUNC_VEQUAL
+    def: tele(14),3
+    delay: 0
+    duration: 0
+    andsw: NONE
+  5:
+    func: FUNC_VPOS
+    def: tele(15),0
+    delay: 0
+    duration: 0
+    andsw: NONE
+  6:
+    func: FUNC_LESS
+    def: tele(15),gv(2)
+    delay: 5
+    duration: 0
+    andsw: L2
+  7:
+    func: FUNC_LESS
+    def: tele(15),gv(1)
+    delay: 5
+    duration: 0
+    andsw: L2
+  8:
+    func: FUNC_LESS
+    def: tele(19),gv(0)
+    delay: 5
+    duration: 0
+    andsw: L2
+  9:
+    func: FUNC_VPOS
+    def: I8,0
+    delay: 0
+    duration: 0
+    andsw: NONE
+  10:
+    func: FUNC_VEQUAL
+    def: I8,0
+    delay: 0
+    duration: 0
+    andsw: NONE
+  11:
+    func: FUNC_VNEG
+    def: I8,0
+    delay: 0
+    duration: 0
+    andsw: NONE
+  12:
+    func: FUNC_STICKY
+    def: L12,L10
+    delay: 0
+    duration: 0
+    andsw: NONE
+  14:
+    func: FUNC_AND
+    def: L10,L1
+    delay: 0
+    duration: 0
+    andsw: NONE
+  15:
+    func: FUNC_VNEG
+    def: I10,0
+    delay: 0
+    duration: 0
+    andsw: NONE
+  16:
+    func: FUNC_VEQUAL
+    def: I10,0
+    delay: 0
+    duration: 0
+    andsw: NONE
+  17:
+    func: FUNC_VPOS
+    def: I10,0
+    delay: 0
+    duration: 0
+    andsw: NONE
+  18:
+    func: FUNC_VNEG
+    def: I11,0
+    delay: 0
+    duration: 0
+    andsw: NONE
+  19:
+    func: FUNC_VEQUAL
+    def: I11,0
+    delay: 0
+    duration: 0
+    andsw: NONE
+  20:
+    func: FUNC_VPOS
+    def: I11,0
+    delay: 0
+    duration: 0
+    andsw: NONE
+  21:
+    func: FUNC_ADIFFEGREATER
+    def: tele(6),5
+    delay: 0
+    duration: 0
+    andsw: NONE
+  22:
+    func: FUNC_AND
+    def: TELEMETRY_STREAMING,!L19
+    delay: 0
+    duration: 0
+    andsw: NONE
+  23:
+    func: FUNC_AND
+    def: TELEMETRY_STREAMING,L20
+    delay: 10
+    duration: 0
+    andsw: NONE
+  24:
+    func: FUNC_VNEG
+    def: tele(0),-95
+    delay: 5
+    duration: 0
+    andsw: "!L19"
+  25:
+    func: FUNC_VNEG
+    def: tele(2),60
+    delay: 5
+    duration: 0
+    andsw: "!L19"
+  26:
+    func: FUNC_OR
+    def: L25,L26
+    delay: 0
+    duration: 0
+    andsw: NONE
+customFn:
+  0:
+    swtch: ON
+    func: PLAY_SCRIPT
+    def: rf2bg,On
+  1:
+    swtch: L7
+    func: PLAY_TRACK
+    def: clobat,5
+  2:
+    swtch: L8
+    func: PLAY_VALUE
+    def: tele(15),5
+  3:
+    swtch: L9
+    func: PLAY_SOUND
+    def: Sirn,2
+  4:
+    swtch: L3
+    func: PLAY_TRACK
+    def: bank-1,!1x
+  5:
+    swtch: L4
+    func: PLAY_TRACK
+    def: bank-2,!1x
+  6:
+    swtch: L5
+    func: PLAY_TRACK
+    def: bank-3,!1x
+  7:
+    swtch: L16
+    func: PLAY_TRACK
+    def: ratlow,!1x
+  8:
+    swtch: L17
+    func: PLAY_TRACK
+    def: ratmed,!1x
+  9:
+    swtch: L18
+    func: PLAY_TRACK
+    def: rathi,!1x
+  10:
+    swtch: L11
+    func: PLAY_TRACK
+    def: thrhld,!1x
+  11:
+    swtch: L10
+    func: PLAY_TRACK
+    def: thract,!1x
+  12:
+    swtch: L12
+    func: PLAY_VALUE
+    def: tele(15),!1x
+  13:
+    swtch: L12
+    func: PLAY_VALUE
+    def: tele(21),!1x
+  14:
+    swtch: L12
+    func: PLAY_VALUE
+    def: tele(17),!1x
+  15:
+    swtch: L22
+    func: PLAY_VALUE
+    def: tele(6),!1x
+  16:
+    swtch: L27
+    func: PLAY_VALUE
+    def: tele(0),5
+  17:
+    swtch: L27
+    func: PLAY_VALUE
+    def: tele(2),5
+  18:
+    swtch: L23
+    func: LOGS
+    def: 5
+  19:
+    swtch: L24
+    func: PLAY_VALUE
+    def: tele(13),5
+  20:
+    swtch: ON
+    func: SET_SCREEN
+    def: 1,1x
+  21:
+    swtch: TELEMETRY_STREAMING
+    func: SET_SCREEN
+    def: 1,1x
+  22:
+    swtch: "!TELEMETRY_STREAMING"
+    func: SET_SCREEN
+    def: 2,!1x
+swashR:
+  type: TYPE_NONE
+  value: 0
+  collectiveSource: NONE
+  aileronSource: NONE
+  elevatorSource: NONE
+  collectiveWeight: 0
+  aileronWeight: 0
+  elevatorWeight: 0
+thrTraceSrc: Thr
+switchWarningState: AuCdDdEuGd
+thrTrimSw: 0
+potsWarnMode: WARN_OFF
+jitterFilter: OFF
+potsWarnEnabled: 0
+displayChecklist: 0
+gvars:
+  0:
+    name: rLo
+    min: 1024
+    max: 784
+    popup: 0
+    prec: 1
+    unit: 0
+  1:
+    name: bLo
+    min: 1024
+    max: 224
+    popup: 0
+    prec: 1
+    unit: 0
+  2:
+    name: bCr
+    min: 1024
+    max: 224
+    popup: 0
+    prec: 1
+    unit: 0
+telemetryProtocol: 0
+varioData:
+  source: none
+  centerSilent: 0
+  centerMax: 0
+  centerMin: 0
+  min: 0
+  max: 0
+rssiSource: none
+rfAlarms:
+  warning: 45
+  critical: 42
+disableTelemetryWarning: 0
+moduleData:
+  1:
+    type: TYPE_CROSSFIRE
+    channelsStart: 0
+    channelsCount: 16
+    failsafeMode: NOT_SET
+    mod:
+      crsf:
+        telemetryBaudrate: 2
+trainerData:
+  mode: OFF
+  channelsStart: 0
+  channelsCount: -8
+  frameLength: 0
+  delay: 0
+  pulsePol: 0
+telemetrySensors:
+  0:
+    type: TYPE_CUSTOM
+    id1:
+      id: 20
+    subId: 0
+    id2:
+      instance: 0
+    label: 1RSS
+    unit: 17
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  1:
+    type: TYPE_CUSTOM
+    id1:
+      id: 20
+    subId: 0
+    id2:
+      instance: 1
+    label: 2RSS
+    unit: 17
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  2:
+    type: TYPE_CUSTOM
+    id1:
+      id: 20
+    subId: 0
+    id2:
+      instance: 2
+    label: Link
+    unit: 13
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  3:
+    type: TYPE_CUSTOM
+    id1:
+      id: 20
+    subId: 0
+    id2:
+      instance: 3
+    label: RSNR
+    unit: 17
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  4:
+    type: TYPE_CUSTOM
+    id1:
+      id: 20
+    subId: 0
+    id2:
+      instance: 4
+    label: ANT
+    unit: 0
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  5:
+    type: TYPE_CUSTOM
+    id1:
+      id: 20
+    subId: 0
+    id2:
+      instance: 5
+    label: RFMD
+    unit: 0
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  6:
+    type: TYPE_CUSTOM
+    id1:
+      id: 20
+    subId: 0
+    id2:
+      instance: 6
+    label: TxMW
+    unit: 16
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  7:
+    type: TYPE_CUSTOM
+    id1:
+      id: 20
+    subId: 0
+    id2:
+      instance: 7
+    label: TRSS
+    unit: 17
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  8:
+    type: TYPE_CUSTOM
+    id1:
+      id: 20
+    subId: 0
+    id2:
+      instance: 8
+    label: TQly
+    unit: 13
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  9:
+    type: TYPE_CUSTOM
+    id1:
+      id: 20
+    subId: 0
+    id2:
+      instance: 9
+    label: TSNR
+    unit: 17
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  10:
+    type: TYPE_CUSTOM
+    id1:
+      id: 2
+    subId: 0
+    id2:
+      instance: 0
+    label: GPS
+    unit: 40
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  11:
+    type: TYPE_CUSTOM
+    id1:
+      id: 2
+    subId: 0
+    id2:
+      instance: 2
+    label: ESts
+    unit: 0
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 2550
+        offset: 0
+  12:
+    type: TYPE_CUSTOM
+    id1:
+      id: 2
+    subId: 0
+    id2:
+      instance: 3
+    label: BEC
+    unit: 1
+    prec: 2
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 20
+        offset: 0
+  13:
+    type: TYPE_CUSTOM
+    id1:
+      id: 2
+    subId: 0
+    id2:
+      instance: 4
+    label: RPM
+    unit: 18
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 255
+        offset: 0
+  14:
+    type: TYPE_CUSTOM
+    id1:
+      id: 2
+    subId: 0
+    id2:
+      instance: 5
+    label: Bank
+    unit: 0
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  15:
+    type: TYPE_CUSTOM
+    id1:
+      id: 8
+    subId: 0
+    id2:
+      instance: 0
+    label: Batt
+    unit: 1
+    prec: 1
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  16:
+    type: TYPE_CUSTOM
+    id1:
+      id: 8
+    subId: 0
+    id2:
+      instance: 1
+    label: Curr
+    unit: 2
+    prec: 1
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  17:
+    type: TYPE_CUSTOM
+    id1:
+      id: 8
+    subId: 0
+    id2:
+      instance: 2
+    label: Used
+    unit: 14
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  18:
+    type: TYPE_CUSTOM
+    id1:
+      id: 8
+    subId: 0
+    id2:
+      instance: 3
+    label: Bat%
+    unit: 13
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  19:
+    type: TYPE_CUSTOM
+    id1:
+      id: 30
+    subId: 0
+    id2:
+      instance: 0
+    label: BECv
+    unit: 1
+    prec: 2
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 2550
+        offset: 0
+  20:
+    type: TYPE_CUSTOM
+    id1:
+      id: 30
+    subId: 0
+    id2:
+      instance: 1
+    label: Thro
+    unit: 13
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 25500
+        offset: 0
+  21:
+    type: TYPE_CUSTOM
+    id1:
+      id: 30
+    subId: 0
+    id2:
+      instance: 2
+    label: Temp
+    unit: 11
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 25500
+        offset: 0
+  22:
+    type: TYPE_CUSTOM
+    id1:
+      id: 33
+    subId: 0
+    id2:
+      instance: 0
+    label: FM
+    unit: 42
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+screenData:
+  0:
+    LayoutId: Layout4P2B
+    layoutData:
+      zones:
+        0:
+          widgetName: Value
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: TIMER1
+              1:
+                type: Color
+                value:
+                  color: 0x000000
+              2:
+                type: Bool
+                value:
+                  boolValue: 0
+              4:
+                type: Unsigned
+                value:
+                  unsignedValue: 2
+        1:
+          widgetName: vPowerBar
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(15)
+              1:
+                type: Source
+                value:
+                  source: tele(18)
+              2:
+                type: Source
+                value:
+                  source: tele(17)
+              3:
+                type: Signed
+                value:
+                  signedValue: 20
+              4:
+                type: Signed
+                value:
+                  signedValue: 0
+        2:
+          widgetName: Value
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(13)
+              1:
+                type: Color
+                value:
+                  color: 0x000000
+              2:
+                type: Bool
+                value:
+                  boolValue: 0
+              4:
+                type: Unsigned
+                value:
+                  unsignedValue: 2
+        3:
+          widgetName: vThrottle
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(20)
+              1:
+                type: Source
+                value:
+                  source: tele(22)
+              2:
+                type: Source
+                value:
+                  source: NONE
+              3:
+                type: Bool
+                value:
+                  boolValue: 1
+              4:
+                type: Bool
+                value:
+                  boolValue: 1
+        4:
+          widgetName: ModelBmp
+          widgetData:
+            options:
+              0:
+                type: Color
+                value:
+                  color: 0x105c98
+              2:
+                type: Bool
+                value:
+                  boolValue: 0
+              3:
+                type: Color
+                value:
+                  color: 0xe0ecf0
+              4:
+                type: Bool
+                value:
+                  boolValue: 1
+        5:
+          widgetName: Value
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(21)
+              1:
+                type: Color
+                value:
+                  color: 0x000000
+              2:
+                type: Bool
+                value:
+                  boolValue: 0
+              4:
+                type: Unsigned
+                value:
+                  unsignedValue: 2
+      options:
+        0:
+          type: Bool
+          value:
+            boolValue: 1
+        1:
+          type: Bool
+          value:
+            boolValue: 0
+        2:
+          type: Bool
+          value:
+            boolValue: 0
+        3:
+          type: Bool
+          value:
+            boolValue: 0
+        4:
+          type: Bool
+          value:
+            boolValue: 0
+  1:
+    LayoutId: Layout2x4
+    layoutData:
+      zones:
+        0:
+          widgetName: Value
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(+6)
+              1:
+                type: Color
+                value:
+                  color: 0x000000
+              2:
+                type: Bool
+                value:
+                  boolValue: 1
+              4:
+                type: Unsigned
+                value:
+                  unsignedValue: 2
+        1:
+          widgetName: Value
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(17)
+              1:
+                type: Color
+                value:
+                  color: 0x000000
+              2:
+                type: Bool
+                value:
+                  boolValue: 1
+              4:
+                type: Unsigned
+                value:
+                  unsignedValue: 2
+        2:
+          widgetName: Value
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(18)
+              1:
+                type: Color
+                value:
+                  color: 0x000000
+              2:
+                type: Bool
+                value:
+                  boolValue: 1
+              4:
+                type: Unsigned
+                value:
+                  unsignedValue: 2
+        3:
+          widgetName: Value
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(+20)
+              1:
+                type: Color
+                value:
+                  color: 0x000000
+              2:
+                type: Bool
+                value:
+                  boolValue: 1
+              4:
+                type: Unsigned
+                value:
+                  unsignedValue: 2
+        4:
+          widgetName: Value
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(+15)
+              1:
+                type: Color
+                value:
+                  color: 0x000000
+              2:
+                type: Bool
+                value:
+                  boolValue: 1
+              4:
+                type: Unsigned
+                value:
+                  unsignedValue: 2
+        5:
+          widgetName: Value
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(-15)
+              1:
+                type: Color
+                value:
+                  color: 0x000000
+              2:
+                type: Bool
+                value:
+                  boolValue: 1
+              4:
+                type: Unsigned
+                value:
+                  unsignedValue: 2
+        6:
+          widgetName: Value
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(+16)
+              1:
+                type: Color
+                value:
+                  color: 0x000000
+              2:
+                type: Bool
+                value:
+                  boolValue: 1
+              4:
+                type: Unsigned
+                value:
+                  unsignedValue: 2
+        7:
+          widgetName: Value
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(+21)
+              1:
+                type: Color
+                value:
+                  color: 0x000000
+              2:
+                type: Bool
+                value:
+                  boolValue: 1
+              4:
+                type: Unsigned
+                value:
+                  unsignedValue: 2
+      options:
+        0:
+          type: Bool
+          value:
+            boolValue: 1
+        1:
+          type: Bool
+          value:
+            boolValue: 0
+        2:
+          type: Bool
+          value:
+            boolValue: 0
+        3:
+          type: Bool
+          value:
+            boolValue: 0
+        4:
+          type: Bool
+          value:
+            boolValue: 0
+        5:
+          type: Bool
+          value:
+            boolValue: 0
+        6:
+          type: Color
+          value:
+            color: 0x4870c8
+        7:
+          type: Bool
+          value:
+            boolValue: 0
+        8:
+          type: Color
+          value:
+            color: 0x4870c8
+topbarData:
+  zones:
+    0:
+      widgetName: Value
+      widgetData:
+        options:
+          0:
+            type: Source
+            value:
+              source: tele(14)
+          1:
+            type: Color
+            value:
+              color: 0xf8fcf8
+          2:
+            type: Bool
+            value:
+              boolValue: 1
+    1:
+      widgetName: Value
+      widgetData:
+        options:
+          0:
+            type: Source
+            value:
+              source: tele(19)
+          1:
+            type: Color
+            value:
+              color: 0xf8fcf8
+          2:
+            type: Bool
+            value:
+              boolValue: 1
+          4:
+            type: Unsigned
+            value:
+              unsignedValue: 1
+    2:
+      widgetName: Value
+      widgetData:
+        options:
+          0:
+            type: Source
+            value:
+              source: tele(2)
+          1:
+            type: Color
+            value:
+              color: 0xf8fcf8
+          2:
+            type: Bool
+            value:
+              boolValue: 1
+          4:
+            type: Unsigned
+            value:
+              unsignedValue: 1
+    3:
+      widgetName: Value
+      widgetData:
+        options:
+          0:
+            type: Source
+            value:
+              source: tele(6)
+          1:
+            type: Color
+            value:
+              color: 0xf8fcf8
+          2:
+            type: Bool
+            value:
+              boolValue: 1
+          4:
+            type: Unsigned
+            value:
+              unsignedValue: 2
+view: 0
+modelRegistrationID: 647259G-
+usbJoystickExtMode: 0
+usbJoystickIfMode: JOYSTICK
+usbJoystickCircularCut: 0
+radioThemesDisabled: GLOBAL
+radioGFDisabled: GLOBAL
+radioTrainerDisabled: GLOBAL
+modelHeliDisabled: GLOBAL
+modelFMDisabled: GLOBAL
+modelCurvesDisabled: GLOBAL
+modelGVDisabled: GLOBAL
+modelLSDisabled: GLOBAL
+modelSFDisabled: GLOBAL
+modelCustomScriptsDisabled: GLOBAL
+modelTelemetryDisabled: GLOBAL

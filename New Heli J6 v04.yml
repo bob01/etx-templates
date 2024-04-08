@@ -1,6 +1,6 @@
 semver: 2.9.4
 header:
-  name: New Heli v02
+  name: New Heli J6 v04
   bitmap: new.png
   labels: Favorites,Helis,ELRS
   modelId:
@@ -8,7 +8,7 @@ header:
       val: 0
 timers:
   0:
-    swtch: L15
+    swtch: L19
     mode: ON
     name: ""
     minuteBeep: 0
@@ -203,7 +203,7 @@ mixData:
   - destCh: 5
     srcRaw: MAX
     weight: 100
-    swtch: L11
+    swtch: L15
     curve:
       type: 3
       value: 4
@@ -220,7 +220,7 @@ mixData:
   - destCh: 5
     srcRaw: MAX
     weight: -100
-    swtch: L13
+    swtch: L17
     curve:
       type: 0
       value: 0
@@ -236,7 +236,7 @@ mixData:
     name: Off
   - destCh: 6
     srcRaw: I6
-    weight: 66
+    weight: 40
     swtch: NONE
     curve:
       type: 0
@@ -246,15 +246,32 @@ mixData:
     speedUp: 0
     speedDown: 0
     carryTrim: 0
-    mltpx: ADD
+    mltpx: REPL
     mixWarn: 0
     flightModes: 000000000
-    offset: -33
-    name: ""
+    offset: -60
+    name: Banks
+  - destCh: 6
+    srcRaw: I12
+    weight: -40
+    swtch: L7
+    curve:
+      type: 0
+      value: 0
+    delayUp: 0
+    delayDown: 0
+    speedUp: 0
+    speedDown: 0
+    carryTrim: 0
+    mltpx: REPL
+    mixWarn: 0
+    flightModes: 000000000
+    offset: 60
+    name: Extra
   - destCh: 6
     srcRaw: MAX
-    weight: 100
-    swtch: "!L14"
+    weight: 20
+    swtch: "!L18"
     curve:
       type: 0
       value: 0
@@ -288,7 +305,7 @@ mixData:
   - destCh: 8
     srcRaw: MAX
     weight: -100
-    swtch: L16
+    swtch: L20
     curve:
       type: 0
       value: 0
@@ -304,8 +321,8 @@ mixData:
     name: Low
   - destCh: 8
     srcRaw: MAX
-    weight: 0
-    swtch: L17
+    weight: -60
+    swtch: L21
     curve:
       type: 0
       value: 0
@@ -321,8 +338,8 @@ mixData:
     name: Med
   - destCh: 8
     srcRaw: MAX
-    weight: 100
-    swtch: L18
+    weight: -20
+    swtch: L22
     curve:
       type: 0
       value: 0
@@ -463,7 +480,7 @@ expoData:
     curve:
       type: 1
       value: 0
-    trimSource: 1
+    trimSource: 0
     name: ""
   - srcRaw: SD
     scale: 0
@@ -530,6 +547,19 @@ expoData:
       value: 0
     trimSource: 0
     name: ""
+  - srcRaw: SG
+    scale: 0
+    mode: 3
+    chn: 12
+    swtch: NONE
+    flightModes: 000000000
+    weight: 100
+    offset: 0
+    curve:
+      type: 0
+      value: 0
+    trimSource: 0
+    name: ""
 inputNames:
   0:
     val: Ail
@@ -544,7 +574,7 @@ inputNames:
   5:
     val: Arm
   6:
-    val: Mode
+    val: Bank
   7:
     val: BBox
   8:
@@ -555,6 +585,8 @@ inputNames:
     val: Rate
   11:
     val: Talk
+  12:
+    val: Bnk2
 curves:
   0:
     type: 0
@@ -626,133 +658,157 @@ logicalSw:
     andsw: NONE
   5:
     func: FUNC_VPOS
-    def: tele(15),0
+    def: I12,0
     delay: 0
     duration: 0
     andsw: NONE
   6:
+    func: FUNC_VPOS
+    def: I6,0
+    delay: 0
+    duration: 0
+    andsw: "!L6"
+  7:
+    func: FUNC_VEQUAL
+    def: tele(14),5
+    delay: 0
+    duration: 0
+    andsw: NONE
+  8:
+    func: FUNC_VEQUAL
+    def: tele(14),6
+    delay: 0
+    duration: 0
+    andsw: NONE
+  9:
+    func: FUNC_VPOS
+    def: tele(15),0
+    delay: 0
+    duration: 0
+    andsw: NONE
+  10:
     func: FUNC_LESS
     def: tele(15),gv(2)
     delay: 5
     duration: 0
     andsw: L2
-  7:
+  11:
     func: FUNC_LESS
     def: tele(15),gv(1)
     delay: 5
     duration: 0
     andsw: L2
-  8:
+  12:
     func: FUNC_LESS
     def: tele(19),gv(0)
     delay: 5
     duration: 0
     andsw: L2
-  9:
+  13:
     func: FUNC_VPOS
     def: I8,0
     delay: 0
     duration: 0
     andsw: NONE
-  10:
+  14:
     func: FUNC_VNEG
     def: I8,0
     delay: 0
     duration: 0
     andsw: NONE
-  11:
+  15:
     func: FUNC_VPOS
     def: I9,0
     delay: 0
     duration: 0
     andsw: NONE
-  12:
-    func: FUNC_STICKY
-    def: L12,L10
-    delay: 0
-    duration: 0
-    andsw: NONE
-  13:
-    func: FUNC_OR
-    def: L10,L13
-    delay: 0
-    duration: 0
-    andsw: NONE
-  14:
-    func: FUNC_AND
-    def: L10,L1
-    delay: 0
-    duration: 0
-    andsw: NONE
-  15:
-    func: FUNC_VNEG
-    def: I10,0
-    delay: 0
-    duration: 0
-    andsw: NONE
   16:
-    func: FUNC_VEQUAL
-    def: I10,0
+    func: FUNC_STICKY
+    def: L16,L14
     delay: 0
     duration: 0
     andsw: NONE
   17:
+    func: FUNC_OR
+    def: L14,L17
+    delay: 0
+    duration: 0
+    andsw: NONE
+  18:
+    func: FUNC_AND
+    def: L14,L1
+    delay: 0
+    duration: 0
+    andsw: NONE
+  19:
+    func: FUNC_VNEG
+    def: I10,0
+    delay: 0
+    duration: 0
+    andsw: NONE
+  20:
+    func: FUNC_VEQUAL
+    def: I10,0
+    delay: 0
+    duration: 0
+    andsw: NONE
+  21:
     func: FUNC_VPOS
     def: I10,0
     delay: 0
     duration: 0
     andsw: NONE
-  18:
+  22:
     func: FUNC_VNEG
     def: I11,0
     delay: 0
     duration: 0
     andsw: NONE
-  19:
+  23:
     func: FUNC_VEQUAL
     def: I11,0
     delay: 0
     duration: 0
     andsw: NONE
-  20:
+  24:
     func: FUNC_VPOS
     def: I11,0
     delay: 0
     duration: 0
     andsw: NONE
-  21:
+  25:
     func: FUNC_ADIFFEGREATER
     def: tele(6),5
     delay: 0
     duration: 0
     andsw: NONE
-  22:
+  26:
     func: FUNC_AND
-    def: TELEMETRY_STREAMING,!L19
+    def: TELEMETRY_STREAMING,!L23
     delay: 0
     duration: 0
     andsw: NONE
-  23:
+  27:
     func: FUNC_AND
-    def: TELEMETRY_STREAMING,L20
+    def: TELEMETRY_STREAMING,L24
     delay: 10
     duration: 0
     andsw: NONE
-  24:
+  28:
     func: FUNC_VNEG
     def: tele(0),-95
     delay: 5
     duration: 0
-    andsw: "!L19"
-  25:
+    andsw: "!L23"
+  29:
     func: FUNC_VNEG
     def: tele(2),60
     delay: 5
     duration: 0
-    andsw: "!L19"
-  26:
+    andsw: "!L23"
+  30:
     func: FUNC_OR
-    def: L25,L26
+    def: L29,L30
     delay: 0
     duration: 0
     andsw: NONE
@@ -762,15 +818,15 @@ customFn:
     func: PLAY_SCRIPT
     def: rf2bg,On
   1:
-    swtch: L7
+    swtch: L11
     func: PLAY_TRACK
     def: clobat,5
   2:
-    swtch: L8
+    swtch: L12
     func: PLAY_VALUE
     def: tele(15),5
   3:
-    swtch: L9
+    swtch: L13
     func: PLAY_SOUND
     def: Sirn,2
   4:
@@ -786,66 +842,74 @@ customFn:
     func: PLAY_TRACK
     def: bank-3,!1x
   7:
-    swtch: L16
+    swtch: L8
+    func: PLAY_TRACK
+    def: fm-5,!1x
+  8:
+    swtch: L9
+    func: PLAY_TRACK
+    def: fm-6,!1x
+  9:
+    swtch: L20
     func: PLAY_TRACK
     def: ratlow,!1x
-  8:
-    swtch: L17
+  10:
+    swtch: L21
     func: PLAY_TRACK
     def: ratmed,!1x
-  9:
-    swtch: L18
+  11:
+    swtch: L22
     func: PLAY_TRACK
     def: rathi,!1x
-  10:
-    swtch: L11
+  12:
+    swtch: L15
     func: PLAY_TRACK
     def: thrhld,!1x
-  11:
-    swtch: L10
+  13:
+    swtch: L14
     func: PLAY_TRACK
     def: thract,!1x
-  12:
-    swtch: L12
+  14:
+    swtch: L16
     func: PLAY_VALUE
     def: tele(15),!1x
-  13:
-    swtch: L12
+  15:
+    swtch: L16
     func: PLAY_VALUE
     def: tele(21),!1x
-  14:
-    swtch: L12
+  16:
+    swtch: L16
     func: PLAY_VALUE
     def: tele(17),!1x
-  15:
-    swtch: L22
+  17:
+    swtch: L26
     func: PLAY_VALUE
     def: tele(6),!1x
-  16:
-    swtch: L27
+  18:
+    swtch: L31
     func: PLAY_VALUE
     def: tele(0),5
-  17:
-    swtch: L27
+  19:
+    swtch: L31
     func: PLAY_VALUE
     def: tele(2),5
-  18:
-    swtch: L23
+  20:
+    swtch: L27
     func: LOGS
     def: 5
-  19:
-    swtch: L24
+  21:
+    swtch: L28
     func: PLAY_VALUE
     def: tele(13),5
-  20:
+  22:
     swtch: ON
     func: SET_SCREEN
     def: 1,1x
-  21:
+  23:
     swtch: TELEMETRY_STREAMING
     func: SET_SCREEN
     def: 1,1x
-  22:
+  24:
     swtch: "!TELEMETRY_STREAMING"
     func: SET_SCREEN
     def: 2,!1x

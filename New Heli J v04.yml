@@ -1,6 +1,6 @@
 semver: 2.9.4
 header:
-  name: New Heli SG v02
+  name: New Heli J v04
   bitmap: new.png
   labels: Favorites,Helis,ELRS
   modelId:
@@ -220,7 +220,7 @@ mixData:
   - destCh: 5
     srcRaw: MAX
     weight: -100
-    swtch: L12
+    swtch: L13
     curve:
       type: 0
       value: 0
@@ -254,7 +254,7 @@ mixData:
   - destCh: 6
     srcRaw: MAX
     weight: 100
-    swtch: L11
+    swtch: "!L14"
     curve:
       type: 0
       value: 0
@@ -463,7 +463,7 @@ expoData:
     curve:
       type: 1
       value: 0
-    trimSource: 1
+    trimSource: 0
     name: ""
   - srcRaw: SD
     scale: 0
@@ -478,13 +478,26 @@ expoData:
       value: 0
     trimSource: 1
     name: ""
-  - srcRaw: SG
+  - srcRaw: SH
     scale: 0
     mode: 3
     chn: 8
     swtch: NONE
     flightModes: 000000000
-    weight: -100
+    weight: 100
+    offset: 0
+    curve:
+      type: 1
+      value: 0
+    trimSource: 1
+    name: ""
+  - srcRaw: SJ
+    scale: 0
+    mode: 3
+    chn: 9
+    swtch: NONE
+    flightModes: 000000000
+    weight: 100
     offset: 0
     curve:
       type: 1
@@ -531,11 +544,13 @@ inputNames:
   5:
     val: Arm
   6:
-    val: Mode
+    val: Bank
   7:
     val: BBox
   8:
     val: MotA
+  9:
+    val: MotO
   10:
     val: Rate
   11:
@@ -640,20 +655,26 @@ logicalSw:
     duration: 0
     andsw: NONE
   10:
-    func: FUNC_VEQUAL
+    func: FUNC_VNEG
     def: I8,0
     delay: 0
     duration: 0
     andsw: NONE
   11:
-    func: FUNC_VNEG
-    def: I8,0
+    func: FUNC_VPOS
+    def: I9,0
     delay: 0
     duration: 0
     andsw: NONE
   12:
     func: FUNC_STICKY
     def: L12,L10
+    delay: 0
+    duration: 0
+    andsw: NONE
+  13:
+    func: FUNC_OR
+    def: L10,L13
     delay: 0
     duration: 0
     andsw: NONE
@@ -838,7 +859,7 @@ swashR:
   aileronWeight: 0
   elevatorWeight: 0
 thrTraceSrc: Thr
-switchWarningState: AuCdDdEuGd
+switchWarningState: AuCdDdEu
 thrTrimSw: 0
 potsWarnMode: WARN_OFF
 jitterFilter: OFF
