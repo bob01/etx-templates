@@ -1,8 +1,8 @@
 semver: 2.9.4
 header:
-  name: New Heli DN v05
+  name: New Heli J
   bitmap: new.png
-  labels: Favorites,Helis,ELRS
+  labels: ""
   modelId:
     1:
       val: 0
@@ -56,6 +56,13 @@ flightModeData:
     name: ""
     fadeIn: 0
     fadeOut: 0
+    gvars:
+      0:
+        val: 71
+      1:
+        val: 430
+      2:
+        val: 400
 mixData:
   - destCh: 0
     srcRaw: I0
@@ -142,23 +149,6 @@ mixData:
     flightModes: 000000000
     offset: 0
     name: ""
-  - destCh: 4
-    srcRaw: MAX
-    weight: 100
-    swtch: "!L15"
-    curve:
-      type: 0
-      value: 0
-    delayUp: 0
-    delayDown: 0
-    speedUp: 0
-    speedDown: 0
-    carryTrim: 0
-    mltpx: REPL
-    mixWarn: 0
-    flightModes: 000000000
-    offset: 0
-    name: Idle
   - destCh: 5
     srcRaw: I2
     weight: 100
@@ -213,7 +203,7 @@ mixData:
   - destCh: 5
     srcRaw: MAX
     weight: 100
-    swtch: L31
+    swtch: L14
     curve:
       type: 3
       value: 4
@@ -230,7 +220,7 @@ mixData:
   - destCh: 5
     srcRaw: MAX
     weight: -100
-    swtch: L15
+    swtch: L16
     curve:
       type: 0
       value: 0
@@ -264,7 +254,7 @@ mixData:
   - destCh: 6
     srcRaw: MAX
     weight: 100
-    swtch: L14
+    swtch: "!L17"
     curve:
       type: 0
       value: 0
@@ -346,23 +336,6 @@ mixData:
     flightModes: 000000000
     offset: 0
     name: Hi
-  - destCh: 9
-    srcRaw: I12
-    weight: 100
-    swtch: NONE
-    curve:
-      type: 0
-      value: 0
-    delayUp: 0
-    delayDown: 0
-    speedUp: 0
-    speedDown: 0
-    carryTrim: 0
-    mltpx: ADD
-    mixWarn: 0
-    flightModes: 000000000
-    offset: 0
-    name: Rescue
 limitData:
   0:
     min: 22
@@ -466,18 +439,18 @@ expoData:
       value: 0
     trimSource: 1
     name: ""
-  - srcRaw: SF
+  - srcRaw: SA
     scale: 0
     mode: 3
     chn: 5
     swtch: NONE
     flightModes: 000000000
-    weight: -100
+    weight: 100
     offset: 0
     curve:
       type: 1
       value: 0
-    trimSource: 0
+    trimSource: 1
     name: ""
   - srcRaw: SE
     scale: 0
@@ -505,10 +478,23 @@ expoData:
       value: 0
     trimSource: 1
     name: ""
-  - srcRaw: SG
+  - srcRaw: SH
     scale: 0
     mode: 3
     chn: 8
+    swtch: NONE
+    flightModes: 000000000
+    weight: 100
+    offset: 0
+    curve:
+      type: 1
+      value: 0
+    trimSource: 1
+    name: ""
+  - srcRaw: SJ
+    scale: 0
+    mode: 3
+    chn: 9
     swtch: NONE
     flightModes: 000000000
     weight: 100
@@ -544,19 +530,6 @@ expoData:
       value: 0
     trimSource: 0
     name: ""
-  - srcRaw: SH
-    scale: 0
-    mode: 3
-    chn: 12
-    swtch: NONE
-    flightModes: 000000000
-    weight: 100
-    offset: 0
-    curve:
-      type: 0
-      value: 0
-    trimSource: 0
-    name: ""
 inputNames:
   0:
     val: Ail
@@ -575,13 +548,13 @@ inputNames:
   7:
     val: BBox
   8:
-    val: Motr
+    val: MotA
+  9:
+    val: MotO
   10:
     val: Rate
   11:
     val: Talk
-  12:
-    val: Resc
 curves:
   0:
     type: 0
@@ -669,6 +642,24 @@ logicalSw:
     delay: 0
     duration: 0
     andsw: NONE
+  8:
+    func: FUNC_VPOS
+    def: tele(15),0
+    delay: 0
+    duration: 0
+    andsw: NONE
+  9:
+    func: FUNC_LESS
+    def: tele(15),gv(2)
+    delay: 5
+    duration: 0
+    andsw: L2
+  10:
+    func: FUNC_LESS
+    def: tele(15),gv(1)
+    delay: 5
+    duration: 0
+    andsw: L2
   11:
     func: FUNC_LESS
     def: tele(19),gv(0)
@@ -682,14 +673,26 @@ logicalSw:
     duration: 0
     andsw: NONE
   13:
-    func: FUNC_VEQUAL
+    func: FUNC_VNEG
     def: I8,0
     delay: 0
     duration: 0
     andsw: NONE
   14:
-    func: FUNC_VNEG
-    def: I8,0
+    func: FUNC_VPOS
+    def: I9,0
+    delay: 0
+    duration: 0
+    andsw: NONE
+  15:
+    func: FUNC_STICKY
+    def: L15,L13
+    delay: 0
+    duration: 0
+    andsw: NONE
+  16:
+    func: FUNC_OR
+    def: L13,L16
     delay: 0
     duration: 0
     andsw: NONE
@@ -771,17 +774,19 @@ logicalSw:
     delay: 0
     duration: 0
     andsw: NONE
-  30:
-    func: FUNC_OR
-    def: L14,!L1
-    delay: 0
-    duration: 0
-    andsw: NONE
 customFn:
   0:
     swtch: ON
     func: PLAY_SCRIPT
     def: rf2bg,On
+  1:
+    swtch: L10
+    func: PLAY_TRACK
+    def: clobat,5
+  2:
+    swtch: L11
+    func: PLAY_VALUE
+    def: tele(15),5
   3:
     swtch: L12
     func: PLAY_SOUND
@@ -818,6 +823,18 @@ customFn:
     swtch: L13
     func: PLAY_TRACK
     def: thract,!1x
+  12:
+    swtch: L15
+    func: PLAY_VALUE
+    def: tele(15),!1x
+  13:
+    swtch: L15
+    func: PLAY_VALUE
+    def: tele(21),!1x
+  14:
+    swtch: L15
+    func: PLAY_VALUE
+    def: tele(17),!1x
   15:
     swtch: L25
     func: PLAY_VALUE
@@ -860,7 +877,7 @@ swashR:
   aileronWeight: 0
   elevatorWeight: 0
 thrTraceSrc: Thr
-switchWarningState: AuCdDdEuGd
+switchWarningState: AuCdDdEu
 thrTrimSw: 0
 potsWarnMode: WARN_OFF
 jitterFilter: OFF
@@ -871,6 +888,20 @@ gvars:
     name: rLo
     min: 1024
     max: 784
+    popup: 0
+    prec: 1
+    unit: 0
+  1:
+    name: bLo
+    min: 1024
+    max: 224
+    popup: 0
+    prec: 1
+    unit: 0
+  2:
+    name: bCr
+    min: 1024
+    max: 224
     popup: 0
     prec: 1
     unit: 0
@@ -1139,7 +1170,7 @@ telemetrySensors:
     subId: 0
     id2:
       instance: 3
-    label: RxV
+    label: BEC
     unit: 1
     prec: 2
     autoOffset: 0
@@ -1366,6 +1397,30 @@ screenData:
                 type: Unsigned
                 value:
                   unsignedValue: 2
+        1:
+          widgetName: ePowerbar
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(15)
+              1:
+                type: Source
+                value:
+                  source: tele(18)
+              2:
+                type: Source
+                value:
+                  source: tele(17)
+              3:
+                type: Signed
+                value:
+                  signedValue: 20
+              4:
+                type: Signed
+                value:
+                  signedValue: 0
         2:
           widgetName: Value
           widgetData:
@@ -1387,7 +1442,7 @@ screenData:
                 value:
                   unsignedValue: 2
         3:
-          widgetName: vThrottle
+          widgetName: eThrottle
           widgetData:
             options:
               0:
@@ -1430,6 +1485,26 @@ screenData:
                 type: Bool
                 value:
                   boolValue: 1
+        5:
+          widgetName: Value
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(21)
+              1:
+                type: Color
+                value:
+                  color: 0x000000
+              2:
+                type: Bool
+                value:
+                  boolValue: 0
+              4:
+                type: Unsigned
+                value:
+                  unsignedValue: 2
       options:
         0:
           type: Bool
@@ -1475,6 +1550,46 @@ screenData:
                 type: Unsigned
                 value:
                   unsignedValue: 2
+        1:
+          widgetName: Value
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(17)
+              1:
+                type: Color
+                value:
+                  color: 0x000000
+              2:
+                type: Bool
+                value:
+                  boolValue: 1
+              4:
+                type: Unsigned
+                value:
+                  unsignedValue: 2
+        2:
+          widgetName: Value
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(18)
+              1:
+                type: Color
+                value:
+                  color: 0x000000
+              2:
+                type: Bool
+                value:
+                  boolValue: 1
+              4:
+                type: Unsigned
+                value:
+                  unsignedValue: 2
         3:
           widgetName: Value
           widgetData:
@@ -1483,6 +1598,86 @@ screenData:
                 type: Source
                 value:
                   source: tele(+20)
+              1:
+                type: Color
+                value:
+                  color: 0x000000
+              2:
+                type: Bool
+                value:
+                  boolValue: 1
+              4:
+                type: Unsigned
+                value:
+                  unsignedValue: 2
+        4:
+          widgetName: Value
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(+15)
+              1:
+                type: Color
+                value:
+                  color: 0x000000
+              2:
+                type: Bool
+                value:
+                  boolValue: 1
+              4:
+                type: Unsigned
+                value:
+                  unsignedValue: 2
+        5:
+          widgetName: Value
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(-15)
+              1:
+                type: Color
+                value:
+                  color: 0x000000
+              2:
+                type: Bool
+                value:
+                  boolValue: 1
+              4:
+                type: Unsigned
+                value:
+                  unsignedValue: 2
+        6:
+          widgetName: Value
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(+16)
+              1:
+                type: Color
+                value:
+                  color: 0x000000
+              2:
+                type: Bool
+                value:
+                  boolValue: 1
+              4:
+                type: Unsigned
+                value:
+                  unsignedValue: 2
+        7:
+          widgetName: Value
+          widgetData:
+            options:
+              0:
+                type: Source
+                value:
+                  source: tele(+21)
               1:
                 type: Color
                 value:
@@ -1557,7 +1752,7 @@ topbarData:
           0:
             type: Source
             value:
-              source: tele(12)
+              source: tele(19)
           1:
             type: Color
             value:
