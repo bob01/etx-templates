@@ -1,4 +1,4 @@
-Create a new nitro heli model (v6)
+Create new nitro heli model (v6)
 - built for RF 4-bank templates
 - pre-configured telemetry
 - SE: bank
