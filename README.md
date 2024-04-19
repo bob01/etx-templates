@@ -27,6 +27,10 @@ The idea is...
 - familiar/practical main screen
 - summary screen automatically displayed at end of the flight
 
+![image](https://github.com/bob01/etx-templates/assets/4014433/e3de3f75-3bfe-4d51-beb0-7e5cc5d416a8)
+![image](https://github.com/bob01/etx-templates/assets/4014433/08a0e2b5-07ba-484d-a0e5-871c27d71239)
+
+
 ### Create and name new model, assign an image and labels
 ![image](https://github.com/bob01/etx-templates/assets/4014433/6c40cca2-ba6b-4722-999c-26699aa36c75)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/bae4309c-cc97-40b4-a1c3-5140f3279bce)
