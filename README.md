@@ -47,11 +47,19 @@ The idea is...
 ![image](https://github.com/bob01/etx-templates/assets/4014433/7e85c1f7-b39d-44ca-858c-1ed478ffaa81)
 
 
-# Installation
+### Installation
 - download and unzip etx-templates-main.zip
 ![image](https://github.com/bob01/etx-templates/assets/4014433/69cd2a87-3844-4c5a-bf65-9464440fab54)
 - connect the radio and copy the folders from the zip file to the radio
 ![image](https://github.com/bob01/etx-templates/assets/4014433/0fe737ca-b2cb-466a-a2df-61bcda9d4252)
 - done
+
+
+### Get a nice EdgeTX theme (optional)
+- great collection of themes here - https://github.com/EdgeTX/themes
+- Theme "GrownUp" is an excellent choice - https://github.com/EdgeTX/themes/tree/main/THEMES/GrownUp
+![image](https://github.com/bob01/etx-templates/assets/4014433/118c2040-597c-4bcb-88f9-2ce8f5d2a827)
+
+
 
 
