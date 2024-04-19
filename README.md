@@ -2,7 +2,7 @@
 
 
 # Welcome to etxTemplates for EdgeTX
-**New model templates for RotorFlight electric and nitro R/C Helicopters**
+**New model templates for our ELRS RotorFlight electric and nitro R/C Helicopters**
 
 
 ### About etxTemplates
