@@ -35,6 +35,7 @@ The idea is...
 ![image](https://github.com/bob01/etx-templates/assets/4014433/6c40cca2-ba6b-4722-999c-26699aa36c75)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/bae4309c-cc97-40b4-a1c3-5140f3279bce)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/9fdc843a-72bc-4625-86bc-16761d9940c3)
+![image](https://github.com/bob01/etx-templates/assets/4014433/8c1b976e-80d2-496c-beb5-d8d7f21c5de9)
 
 ![image](https://github.com/bob01/etx-templates/assets/4014433/c6f8e435-302c-49ac-9518-682418419e97)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/b006d0b8-7ac9-46e7-8009-eee194809676)
@@ -42,13 +43,6 @@ The idea is...
 ### Bind or assign receiver ID, be sure to check your ELRS settings - D500 packet rate recommended
 ![image](https://github.com/bob01/etx-templates/assets/4014433/3a12aeba-4a79-4b8d-9a39-4e1f0c40df98)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/a85f8916-01f4-4b36-bb71-d6174ba2b0fe)
-
-### Set voltage alarms in global variables
-- rLo: Receiver / FBL battery low voltage, 0 to disable
-- bLo: Battery low voltage, 0 to disable
-- bCr: Battery critical voltage, 0 to disable
-
-![image](https://github.com/bob01/etx-templates/assets/4014433/7e85c1f7-b39d-44ca-858c-1ed478ffaa81)
 
 
 ### Installation
