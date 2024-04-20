@@ -163,7 +163,7 @@ local function runWarningConfig(event)
     y = y + 65
   end
 
-  y = y + 80
+  y = y + 15
   lcd.drawText(40, y, "** Set to zero to disable")
   local result = runFieldsPage(event)
   return result
