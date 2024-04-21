@@ -19,7 +19,7 @@
 
 -- Edits by: Rob Gayle (bob00@rogers.com)
 -- Date: 2024
--- ver: 0.2.5
+-- ver: 0.2.6
 
 local VALUE = 0
 local COMBO = 1
@@ -512,7 +512,7 @@ local function createModel(event)
     local index = fs[9]
     local input = model.getInput(index, 0)
     input.source = fs[5] + SOURCE_SWITCH_OFFSET
-    if fd[5] == 1 then
+    if (fd[5] == 1 and input.weight > 0) or (fd[5] == 0 and input.weight < 0) then
       input.weight = -input.weight
     end
     model.insertInput(index, 0, input)
