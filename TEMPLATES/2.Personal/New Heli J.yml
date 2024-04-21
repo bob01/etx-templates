@@ -10,7 +10,7 @@ timers:
   0:
     swtch: L18
     mode: ON
-    name: ""
+    name: Timer
     minuteBeep: 0
     countdownBeep: 0
     start: 240
@@ -565,7 +565,7 @@ expoData:
       value: 0
     trimSource: 0
     name: ""
-  - srcRaw: SH
+  - srcRaw: SF
     scale: 0
     mode: 3
     chn: 12

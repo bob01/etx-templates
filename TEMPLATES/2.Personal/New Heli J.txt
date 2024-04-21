@@ -1,5 +1,5 @@
-Create new heli model (v7)
+Create new heli model (v8)
 
 Built for RF 4-bank templates w/ pre-configured telemetry
 
-For use with 3-position SH/SJ
+For use with hard coded SH+SJ as the 3-position motor switch

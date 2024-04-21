@@ -1,4 +1,4 @@
-semver: 2.9.4
+semver: 2.10.0
 header:
   name: New Heli N
   bitmap: new.png
@@ -10,7 +10,7 @@ timers:
   0:
     swtch: L18
     mode: ON
-    name: ""
+    name: Timer
     minuteBeep: 0
     countdownBeep: 0
     start: 240
@@ -32,6 +32,7 @@ beepANACenter: 0
 extendedLimits: 0
 extendedTrims: 0
 throttleReversed: 0
+checklistInteractive: 0
 flightModeData:
   0:
     trim:
@@ -66,6 +67,7 @@ mixData:
       value: 0
     delayUp: 0
     delayDown: 0
+    speedPrec: 0
     speedUp: 0
     speedDown: 0
     carryTrim: 0
@@ -83,6 +85,7 @@ mixData:
       value: 0
     delayUp: 0
     delayDown: 0
+    speedPrec: 0
     speedUp: 0
     speedDown: 0
     carryTrim: 0
@@ -100,6 +103,7 @@ mixData:
       value: 0
     delayUp: 0
     delayDown: 0
+    speedPrec: 0
     speedUp: 0
     speedDown: 0
     carryTrim: 0
@@ -117,6 +121,7 @@ mixData:
       value: 0
     delayUp: 0
     delayDown: 0
+    speedPrec: 0
     speedUp: 0
     speedDown: 0
     carryTrim: 0
@@ -134,6 +139,7 @@ mixData:
       value: 0
     delayUp: 0
     delayDown: 0
+    speedPrec: 0
     speedUp: 0
     speedDown: 0
     carryTrim: 0
@@ -151,6 +157,7 @@ mixData:
       value: 0
     delayUp: 0
     delayDown: 0
+    speedPrec: 0
     speedUp: 0
     speedDown: 0
     carryTrim: 0
@@ -168,6 +175,7 @@ mixData:
       value: 1
     delayUp: 0
     delayDown: 0
+    speedPrec: 0
     speedUp: 0
     speedDown: 0
     carryTrim: 1
@@ -185,6 +193,7 @@ mixData:
       value: 2
     delayUp: 0
     delayDown: 0
+    speedPrec: 0
     speedUp: 0
     speedDown: 0
     carryTrim: 1
@@ -202,6 +211,7 @@ mixData:
       value: 3
     delayUp: 0
     delayDown: 0
+    speedPrec: 0
     speedUp: 0
     speedDown: 0
     carryTrim: 1
@@ -219,6 +229,7 @@ mixData:
       value: 4
     delayUp: 0
     delayDown: 0
+    speedPrec: 0
     speedUp: 0
     speedDown: 0
     carryTrim: 0
@@ -236,6 +247,7 @@ mixData:
       value: 0
     delayUp: 0
     delayDown: 0
+    speedPrec: 0
     speedUp: 0
     speedDown: 0
     carryTrim: 0
@@ -253,6 +265,7 @@ mixData:
       value: 0
     delayUp: 0
     delayDown: 0
+    speedPrec: 0
     speedUp: 0
     speedDown: 0
     carryTrim: 0
@@ -270,6 +283,7 @@ mixData:
       value: 0
     delayUp: 0
     delayDown: 0
+    speedPrec: 0
     speedUp: 0
     speedDown: 0
     carryTrim: 1
@@ -287,6 +301,7 @@ mixData:
       value: 0
     delayUp: 0
     delayDown: 0
+    speedPrec: 0
     speedUp: 0
     speedDown: 0
     carryTrim: 0
@@ -304,6 +319,7 @@ mixData:
       value: 0
     delayUp: 0
     delayDown: 0
+    speedPrec: 0
     speedUp: 0
     speedDown: 0
     carryTrim: 0
@@ -321,6 +337,7 @@ mixData:
       value: 0
     delayUp: 0
     delayDown: 0
+    speedPrec: 0
     speedUp: 0
     speedDown: 0
     carryTrim: 0
@@ -338,6 +355,7 @@ mixData:
       value: 0
     delayUp: 0
     delayDown: 0
+    speedPrec: 0
     speedUp: 0
     speedDown: 0
     carryTrim: 0
@@ -355,6 +373,7 @@ mixData:
       value: 0
     delayUp: 0
     delayDown: 0
+    speedPrec: 0
     speedUp: 0
     speedDown: 0
     carryTrim: 0
@@ -671,7 +690,7 @@ logicalSw:
     andsw: NONE
   11:
     func: FUNC_LESS
-    def: tele(19),gv(0)
+    def: tele(12),gv(0)
     delay: 5
     duration: 0
     andsw: L2
@@ -781,75 +800,75 @@ customFn:
   0:
     swtch: ON
     func: PLAY_SCRIPT
-    def: rf2bg,On
+    def: rf2bg,1,On
   3:
     swtch: L12
     func: PLAY_SOUND
-    def: Sirn,2
+    def: Sirn,1,2
   4:
     swtch: L6
     func: PLAY_TRACK
-    def: bank-1,!1x
+    def: bank-1,1,!1x
   5:
     swtch: L7
     func: PLAY_TRACK
-    def: bank-2,!1x
+    def: bank-2,1,!1x
   6:
     swtch: L8
     func: PLAY_TRACK
-    def: bank-3,!1x
+    def: bank-3,1,!1x
   7:
     swtch: L19
     func: PLAY_TRACK
-    def: ratlow,!1x
+    def: ratlow,1,!1x
   8:
     swtch: L20
     func: PLAY_TRACK
-    def: ratmed,!1x
+    def: ratmed,1,!1x
   9:
     swtch: L21
     func: PLAY_TRACK
-    def: rathi,!1x
+    def: "rathi\x00,1,!1x"
   10:
     swtch: L14
     func: PLAY_TRACK
-    def: thrhld,!1x
+    def: thrhld,1,!1x
   11:
     swtch: L13
     func: PLAY_TRACK
-    def: thract,!1x
+    def: thract,1,!1x
   15:
     swtch: L25
     func: PLAY_VALUE
-    def: tele(6),!1x
+    def: tele(6),1,!1x
   16:
     swtch: L30
     func: PLAY_VALUE
-    def: tele(0),5
+    def: tele(0),1,5
   17:
     swtch: L30
     func: PLAY_VALUE
-    def: tele(2),5
+    def: tele(2),1,5
   18:
     swtch: L26
     func: LOGS
-    def: 5
+    def: 5,0
   19:
     swtch: L27
     func: PLAY_VALUE
-    def: tele(13),5
+    def: tele(13),1,5
   20:
     swtch: ON
     func: SET_SCREEN
-    def: 1,1x
+    def: 1,1,1x
   21:
     swtch: TELEMETRY_STREAMING
     func: SET_SCREEN
-    def: 1,1x
+    def: 1,1,1x
   22:
     swtch: "!TELEMETRY_STREAMING"
     func: SET_SCREEN
-    def: 2,!1x
+    def: 2,1,!1x
 swashR:
   type: TYPE_NONE
   value: 0
@@ -863,8 +882,8 @@ thrTraceSrc: Thr
 switchWarningState: AuCdDdEuGd
 thrTrimSw: 0
 potsWarnMode: WARN_OFF
-jitterFilter: OFF
 potsWarnEnabled: 0
+jitterFilter: OFF
 displayChecklist: 0
 gvars:
   0:
@@ -1353,7 +1372,7 @@ screenData:
               0:
                 type: Source
                 value:
-                  source: TIMER1
+                  source: Tmr1
               1:
                 type: Color
                 value:
@@ -1612,6 +1631,7 @@ topbarData:
               unsignedValue: 2
 view: 0
 modelRegistrationID: 647259G-
+hatsMode: GLOBAL
 usbJoystickExtMode: 0
 usbJoystickIfMode: JOYSTICK
 usbJoystickCircularCut: 0
