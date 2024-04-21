@@ -231,44 +231,51 @@ local function initSwitchConfig()
   local sg = input and 0 or 1
   -- motor
   input = model.getInput(INPUT_MOTOR, 0)
+  local reverse = input.weight < 0 and 1 or 0
   switchFields[#switchFields+1] = { x, y, COMBO, sg, input.source - SOURCE_SWITCH_OFFSET, switches, "Motor", wc, INPUT_MOTOR }
-  switchFields[#switchFields+1] = { xd, y, COMBO, sg, 0, direction, sg == 0 and { "Off(SJ)", "Hold", "On" } or {"Off", "Hold", "On"}, wd }
+  switchFields[#switchFields+1] = { xd, y, COMBO, sg, reverse, direction, sg == 0 and { "Off(SJ)", "Hold", "On" } or {"Off", "Hold", "On"}, wd }
   y = y + switchDy
 
   -- arm
   input = model.getInput(INPUT_ARM, 0)
+  reverse = input.weight < 0 and 1 or 0
   switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "Arm", wc, INPUT_ARM}
-  switchFields[#switchFields+1] = { xd, y, COMBO, 1, 0, direction, { "Armed", "Safe", "Safe" }, wd }
+  switchFields[#switchFields+1] = { xd, y, COMBO, 1, reverse, direction, { "Armed", "Safe", "Safe" }, wd }
   y = y + switchDy
 
   -- bank
   input = model.getInput(INPUT_BANK, 0)
+  reverse = input.weight < 0 and 1 or 0
   switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "Bank", wc, INPUT_BANK }
-  switchFields[#switchFields+1] = { xd, y, COMBO, 1, 0, direction, { "Bank3", "Bank2", "Bank1" }, wd }
+  switchFields[#switchFields+1] = { xd, y, COMBO, 1, reverse, direction, { "Bank3", "Bank2", "Bank1" }, wd }
   y = y + switchDy
 
   -- rates
   input = model.getInput(INPUT_RATES, 0)
+  reverse = input.weight < 0 and 1 or 0
   switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "Rates", wc, INPUT_RATES }
-  switchFields[#switchFields+1] = { xd, y, COMBO, 1, 0, direction, { "High", "Med", "Low" }, wd }
+  switchFields[#switchFields+1] = { xd, y, COMBO, 1, reverse, direction, { "High", "Med", "Low" }, wd }
   y = y + switchDy
 
   -- rescue
   input = model.getInput(INPUT_RESCUE, 0)
+  reverse = input.weight < 0 and 1 or 0
   switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "Rescue", wc, INPUT_RESCUE }
-  switchFields[#switchFields+1] = { xd, y, COMBO, 1, 0, direction, { "Activate", "Off" }, wd }
+  switchFields[#switchFields+1] = { xd, y, COMBO, 1, reverse, direction, { "Activate", "Off" }, wd }
   y = y + switchDy
 
   -- blackbox
   input = model.getInput(INPUT_BLACKBOX, 0)
+  reverse = input.weight < 0 and 1 or 0
   switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "BlackBox", wc, INPUT_BLACKBOX }
-  switchFields[#switchFields+1] = { xd, y, COMBO, 1, 0, direction, { "Off", "On", "Erase" }, wd }
+  switchFields[#switchFields+1] = { xd, y, COMBO, 1, reverse, direction, { "Off", "On", "Erase" }, wd }
   y = y + switchDy
 
   -- sd logging
   input = model.getInput(INPUT_SDLOGGING, 0)
+  reverse = input.weight < 0 and 1 or 0
   switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "SD Card Logging", wc, INPUT_SDLOGGING }
-  switchFields[#switchFields+1] = { xd, y, COMBO, 1, 0, direction, { "On", "Call RPM", "Off" }, wd }
+  switchFields[#switchFields+1] = { xd, y, COMBO, 1, reverse, direction, { "On", "Call RPM", "Off" }, wd }
   y = y + switchDy
 end
 
