@@ -302,44 +302,61 @@ local function runWarningConfig(event)
   return result
 end
 
--- BEC voltmeter
+-- Advanced
 local vmeterX = 30
 local vmeterY = 10
-local vmeterImg = nil
+local vmeterAdcImg = nil
+local vmeterBecImg = nil
+local vmeterLabel = "Rx/FBL Voltage Source: "
 local vmeterFields = {
-  { vmeterX + lcd.sizeText("Source: ") + 10, vmeterY + 50, COMBO, 1, 0, { "ESC Telemetry", "Rx/FBL Bus ADC" }, "Source: " }
+  { vmeterX + lcd.sizeText(vmeterLabel) + 10, vmeterY + 50, COMBO, 1, 0, { "ESC Telemetry", "Servo Bus ADC" }, vmeterLabel }
 }
 local vmeterAdcSensor = nil
+local vmeterBecSensor = nil
 
 local TELE_ADC_SENSOR_INDEX     = 12
-local LS_TELE_BASE              = 239
+local TELE_BEC_SENSOR_INDEX     = 19
 
 local function runBecMeterConfig(event)
   lcd.clear()
   lcd.drawBitmap(BackgroundImg,0,0)
   lcd.drawBitmap(ImgPageUp, 0, 95)
   lcd.drawBitmap(ImgPageDn, 455, 95)
-  lcd.drawText(vmeterX - 10, vmeterY, "Rx/FBL Voltage Source", MIDSIZE + TEXT_COLOR)
+  lcd.drawText(vmeterX - 10, vmeterY, "Advanced", MIDSIZE + TEXT_COLOR)
   fields = vmeterFields
 
   local f = vmeterFields[1]
   lcd.drawText(vmeterX, f[2], f[7], TEXT_COLOR)
 
-  if f[5] ~= 0 then
-    -- ADC selected, show help
-    if not vmeterAdcSensor then
-      vmeterAdcSensor = model.getSensor(TELE_ADC_SENSOR_INDEX)
-    end
-    lcd.drawText(vmeterX, f[2] + 40, "** Set the top bar widget source to "..CHAR_TELEMETRY..vmeterAdcSensor.name.." as shown", TEXT_COLOR)
+  local w = lcd.sizeText(f[6][2])
+  lcd.drawFilledRectangle(f[1] - 5, f[2] - 5, w + 10, 30, TEXT_BGCOLOR)
 
-    if not vmeterImg then
-      vmeterImg = Bitmap.open("img/becmeter.png")
-    end
-    lcd.drawBitmap(vmeterImg, 50, 135)
+  if not vmeterAdcSensor then
+    vmeterAdcSensor = model.getSensor(TELE_ADC_SENSOR_INDEX)
+  end
+  if not vmeterBecSensor then
+    vmeterBecSensor = model.getSensor(TELE_BEC_SENSOR_INDEX)
+  end
+  if not vmeterAdcImg then
+    vmeterAdcImg = Bitmap.open("img/adcmeter.png")
+  end
+  if not vmeterBecImg then
+    vmeterBecImg = Bitmap.open("img/becmeter.png")
   end
 
-  local w = lcd.sizeText("Rx/FBL Bus ADC")
-  lcd.drawFilledRectangle(f[1] - 8, f[2] - 5, w + 10, 30, TEXT_BGCOLOR)
+  local sensor = nil
+  local img = nil
+  if f[5] ~= 0 then
+    sensor = vmeterAdcSensor
+    img = vmeterAdcImg
+  else
+    sensor = vmeterBecSensor
+    img = vmeterBecImg
+  end
+
+  -- show help
+  lcd.drawText(45, f[2] + 40, "Top bar widget source should be set to "..CHAR_TELEMETRY..sensor.name, TEXT_COLOR)
+  lcd.drawBitmap(img, 45, 130)
   
   local result = runFieldsPage(event)
   return result
@@ -438,7 +455,7 @@ local function createModel(event)
     model.setGlobalVariable(idx - 1,0,fields[idx][5])
   end
 
-  -- bec voltmeter
+  -- advanced
   local f = vmeterFields[1]
   if f[5] ~= 0 then
     if not vmeterAdcSensor then
