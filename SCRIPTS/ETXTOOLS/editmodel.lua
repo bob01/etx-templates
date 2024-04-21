@@ -149,14 +149,6 @@ local function sjoin(table, separator, reverse)
   return out
 end
 
--- Switches
-local switchX = 30
-local switchY = 10
-local switchDy = 32
-local switchFields;
-
-local SOURCE_SWITCH_OFFSET = 126
-
 local INPUT_MOTOR = 8
 local INPUT_MOTOR_OFF = 9
 local INPUT_ARM = 5
@@ -165,6 +157,66 @@ local INPUT_RESCUE = 12
 local INPUT_RATES = 10
 local INPUT_BLACKBOX = 7
 local INPUT_SDLOGGING = 11
+
+local function checkCompatiblity()
+  local input = model.getInput(INPUT_BLACKBOX, 0)
+  if input and input.inputName == "BBox" then
+    input = model.getInput(INPUT_MOTOR, 0)
+    if input and (input.inputName == "Motr" or input.inputName == "MotA") then
+      input = model.getInput(INPUT_RESCUE, 0)
+      if input and input.inputName == "Resc" then
+        -- compatible, next page
+        selectPage(1)
+      return true
+      end
+    end
+  end
+  return false
+end
+
+local exitPage
+local exitMessage
+local exitX = 40
+local exitY = 10
+
+local function exitWithMessage(message)
+  exitMessage = message
+  page = exitPage
+end
+
+local function runExitWithMessage()
+  lcd.clear()
+  lcd.drawBitmap(BackgroundImg, 0, 0)
+  fields = {}
+  edit = false
+
+  lcd.drawText(exitX - 20, exitY, "Error", MIDSIZE + TEXT_COLOR)
+
+  local w, h = lcd.sizeText(exitMessage)
+  lcd.drawText((LCD_W - w) / 2, (LCD_H - h) / 2, exitMessage, TEXT_COLOR)
+
+  local text = "Hold [RTN] to exit..."
+  w, h = lcd.sizeText(text)
+  lcd.drawText((LCD_W - w) / 2, LCD_H - h, text, TEXT_COLOR + BOLD)
+
+  return 0
+end
+
+local function runCompatiblityCheck()
+  if not checkCompatiblity() then
+    -- incompatible
+    exitWithMessage("Current model is not compatible")
+  end
+  return 0
+end
+
+-- Switches
+local switchX = 30
+local switchY = 10
+local switchDy = 32
+local switchFields;
+
+local SOURCE_SWITCH_OFFSET = 126
 
 local function initSwitchConfig()
   local x = switchX + lcd.sizeText("SD Card Logging") + 20
@@ -305,14 +357,14 @@ end
 -- Advanced
 local vmeterX = 30
 local vmeterY = 10
-local vmeterAdcImg = nil
-local vmeterBecImg = nil
+local vmeterAdcImg
+local vmeterBecImg
 local vmeterLabel = "Rx/FBL Voltage Source: "
 local vmeterFields = {
   { vmeterX + lcd.sizeText(vmeterLabel) + 10, vmeterY + 50, COMBO, 1, 0, { "ESC Telemetry", "Servo Bus ADC" }, vmeterLabel }
 }
-local vmeterAdcSensor = nil
-local vmeterBecSensor = nil
+local vmeterAdcSensor
+local vmeterBecSensor
 
 local TELE_ADC_SENSOR_INDEX     = 12
 local TELE_BEC_SENSOR_INDEX     = 19
@@ -344,8 +396,8 @@ local function runBecMeterConfig(event)
     vmeterBecImg = Bitmap.open("img/becmeter.png")
   end
 
-  local sensor = nil
-  local img = nil
+  local sensor
+  local img
   if f[5] ~= 0 then
     sensor = vmeterAdcSensor
     img = vmeterAdcImg
@@ -391,7 +443,7 @@ local function runConfigSummary(event)
   lcd.drawBitmap(ImgSummary, 300, 60)
   lineIndex = summaryY
 
-  lcd.drawText(summaryX - 20, switchY, "Summary", MIDSIZE + TEXT_COLOR)
+  lcd.drawText(summaryX - 20, summaryY, "Summary", MIDSIZE + TEXT_COLOR)
   lineIndex = lineIndex + 30
 
   -- switches
@@ -469,24 +521,12 @@ local function createModel(event)
   return 2
 end
 
-local function onEnd(event)
-  lcd.clear()
-  lcd.drawBitmap(BackgroundImg, 0, 0)
-  lcd.drawBitmap(ImgSummary, 300, 60)
-
-  lcd.drawText(70, 90, "Model successfully created !", COLOR_THEME_PRIMARY1)
-  lcd.drawText(100, 130, "Hold [RTN] to exit.", COLOR_THEME_PRIMARY1)
-  return 0
-end
-
 -- Init
 local function init()
-  initSwitchConfig()
-  initWarningConfig()
-
   current, edit = 1, false
   pages = {}
 
+  pages[#pages+1] = runCompatiblityCheck
   pages[#pages+1] = runSwitchConfig
   pages[#pages+1] = runWarningConfig
   if isElectric() then
@@ -494,7 +534,17 @@ local function init()
   end
   pages[#pages+1] = runConfigSummary
   pages[#pages+1] = createModel
-  pages[#pages+1] = onEnd
+  pages[#pages+1] = runExitWithMessage
+
+  exitPage = #pages
+
+  -- bail now if model not compatible
+  if not checkCompatiblity() then
+    return
+  end
+
+  initSwitchConfig()
+  initWarningConfig()
 end
 
 
@@ -503,16 +553,16 @@ local function run(event, touchState)
   if event == nil then
     error("Cannot be run as a model script!")
     return 2
+  elseif page == exitPage then
+    -- fall thru, w/o nav for this page
   elseif event == EVT_VIRTUAL_PREV_PAGE and page > 1 then
     killEvents(event);
     selectPage(-1)
   elseif event == EVT_VIRTUAL_NEXT_PAGE and page < #pages - 2 then
     selectPage(1)
   elseif event == EVT_TOUCH_FIRST and (touchState.x <= 40 and touchState.y >= 100 and touchState.y <= 160) then
-    print(string.format("(%s) %s - %s", page, touchState.x, touchState.y))
     selectPage(-1)
   elseif event == EVT_TOUCH_FIRST and (touchState.x >= LCD_W - 40 and touchState.y >= 100 and touchState.y <= 160) then
-    print(string.format("(%s) %s - %s", page, touchState.x, touchState.y))
     if page ~= (#pages - 2) then
       selectPage(1)
     end

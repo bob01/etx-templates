@@ -900,7 +900,7 @@ customFn:
   18:
     swtch: L26
     func: LOGS
-    def: 5,0
+    def: 5,1
   19:
     swtch: L27
     func: PLAY_VALUE
