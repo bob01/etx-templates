@@ -1,9 +1,5 @@
-Create new heli model (v6)
-- built for RF 4-bank templates
-- pre-configured telemetry
-- SE: bank
-- SA: arming
-- SB: rates
-- SC: SD logging (+RPM voice)
-- SD: blackbox
-- SH/J: motor OFF,HOLD,ON
+Create new heli model (v7)
+
+Built for RF 4-bank templates w/ pre-configured telemetry
+
+For use with 3-position SH/SJ

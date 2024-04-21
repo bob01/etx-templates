@@ -1,9 +1,3 @@
-Create new nitro heli model (v6)
-- built for RF 4-bank templates
-- pre-configured telemetry
-- SE: bank
-- SA: arming
-- SB: rates
-- SC: SD logging (+RPM voice)
-- SD: blackbox
-- SG: motor OFF,HOLD,ON
+Create new nitro heli model (v7)
+
+Built for RF 4-bank templates w/ pre-configured telemetry

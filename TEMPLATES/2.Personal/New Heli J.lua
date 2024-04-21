@@ -19,16 +19,19 @@
 
 -- Edits by: Rob Gayle (bob00@rogers.com)
 -- Date: 2024
--- ver: 0.2.0
+-- ver: 0.2.2
 
 local VALUE = 0
 local COMBO = 1
+
 local edit = false
 local page = 1
 local current = 1
 local pages = {}
 local fields = {}
-local Text_Color= lcd.setColor(CUSTOM_COLOR, BLACK)
+local direction = { "Normal", "Reverse" }
+local switches = { "SA", "SB", "SC", "SD", "SE", "SF", "SG", "SH" }
+local switches3Pos = { "SA", "SB", "SC", "SD", "SE", "SG" }
 
 chdir("/TEMPLATES/2.Personal")
 
@@ -72,14 +75,14 @@ end
 -- Redraw the current page
 local function redrawFieldsPage(event)
 
-  for index = 1, 10, 1 do
+  for index = 1, #fields, 1 do
     local field = fields[index]
     if field == nil then
       break
     end
 
     local attr = current == (index) and ((edit == true and BLINK or 0) + INVERS) or 0
-    attr = attr
+    attr = attr + TEXT_COLOR
 
     if field[4] == 1 then
       if field[3] == VALUE then
@@ -105,7 +108,7 @@ local function runFieldsPage(event)
     if fields[current][5] ~= nil then
       edit = not edit
       if edit == false then
-        lcd.clear()
+        -- lcd.clear()
         updateField(fields[current])
       end
     end
@@ -136,59 +139,170 @@ local function setFieldsVisible(...)
   end
 end
 
-local WarningFields = {
-  {50, 50, VALUE, 1, 84, 0, 140, PREC1, "FBL Low Voltage" },
-  {50, 115, VALUE, 1, 21.5, 0, 560, PREC1, "Battery Low Voltage" },
-  {50, 180, VALUE, 1, 20, 0, 560, PREC1, "Battery Critical Voltage" },
-}
+-- Switch
+local switchX = 30
+local switchY = 10
+local switchDy = 32
+local switchFields;
+
+local SOURCE_SWITCH_OFFSET = 126
+
+local INPUT_MOTOR = 8
+local INPUT_MOTOR_OFF = 9
+local INPUT_ARM = 5
+local INPUT_BANK = 6
+local INPUT_RESCUE = 12
+local INPUT_RATES = 10
+local INPUT_BLACKBOX = 7
+local INPUT_SDLOGGING = 11
+
+local function initSwitchConfig()
+  local x = switchX + lcd.sizeText("SD Card Logging") + 20
+  local wc = lcd.sizeText("SA") + 12
+  local xd = x + lcd.sizeText("SA") + 16
+  local wd = lcd.sizeText("Reverse") + 12
+  local y = switchY + 35
+  switchFields = {}
+
+  -- exclude motor switch if using more complex SH/SJ setup
+  local input = model.getInput(INPUT_MOTOR_OFF, 0)
+  if not input then
+    -- motor
+    input = model.getInput(INPUT_MOTOR, 0)
+    switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "Motor", wc, INPUT_MOTOR }
+    switchFields[#switchFields+1] = { xd, y, COMBO, 1, 0, direction, "Off-Hold-On", wd }
+    y = y + switchDy
+  end
+
+  -- arm
+  input = model.getInput(INPUT_ARM, 0)
+  switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "Arm", wc, INPUT_ARM}
+  switchFields[#switchFields+1] = { xd, y, COMBO, 1, 0, direction, "Armed-Safe-Safe", wd }
+  y = y + switchDy
+
+  -- bank
+  input = model.getInput(INPUT_BANK, 0)
+  switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "Bank", wc, INPUT_BANK }
+  switchFields[#switchFields+1] = { xd, y, COMBO, 1, 0, direction, "Bank3-Bank2-Bank1", wd }
+  y = y + switchDy
+
+  -- rates
+  input = model.getInput(INPUT_RATES, 0)
+  switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "Rates", wc, INPUT_RATES }
+  switchFields[#switchFields+1] = { xd, y, COMBO, 1, 0, direction, "High-Med-Low", wd }
+  y = y + switchDy
+
+  -- rescue
+  input = model.getInput(INPUT_RESCUE, 0)
+  switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "Rescue", wc, INPUT_RESCUE }
+  switchFields[#switchFields+1] = { xd, y, COMBO, 1, 0, direction, "Activate-Off", wd }
+  y = y + switchDy
+
+  -- blackbox
+  input = model.getInput(INPUT_BLACKBOX, 0)
+  switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "BlackBox", wc, INPUT_BLACKBOX }
+  switchFields[#switchFields+1] = { xd, y, COMBO, 1, 0, direction, "Off-On-Erase", wd }
+  y = y + switchDy
+
+  -- sd logging
+  input = model.getInput(INPUT_SDLOGGING, 0)
+  switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "SD Card Logging", wc, INPUT_SDLOGGING }
+  switchFields[#switchFields+1] = { xd, y, COMBO, 1, 0, direction, "On-Call RPM-Off", wd }
+  y = y + switchDy
+end
+
+local function runSwitchConfig(event)
+  lcd.clear()
+  lcd.drawBitmap(BackgroundImg,0,0)
+  lcd.drawBitmap(ImgPageDn, 455, 95)
+  lcd.drawText(switchX - 10, switchY, "Switch Assignments", MIDSIZE + TEXT_COLOR)
+  fields = switchFields
+  for idx = 1, #fields do
+    local f = fields[idx]
+    lcd.drawFilledRectangle(f[1] - 5, f[2] - 5, f[8], 30, TEXT_BGCOLOR)
+
+    local tx = f[9] and switchX or (f[1] + f[8] + 4)
+    lcd.drawText(tx, f[2], f[7], TEXT_COLOR)
+  end
+
+  local result = runFieldsPage(event)
+  return result
+end
+
+-- Warnings
+local warningsX = 30
+local warningsY = 10
+local warningFields
+
+local GV_RLO    = 0
+local GV_BLO    = 1
+local GV_BCR    = 2
 
 local function initWarningConfig()
-  fields = WarningFields
-  for idx = 1, #fields do
-    fields[idx][5] = model.getGlobalVariable(idx - 1,0)
+  local x = warningsX + 20
+  local y = warningsY + 70
+  local dy = 60
+  warningFields = {}
+
+  -- rlo
+  local gv = model.getGlobalVariable(GV_RLO, 0)
+  warningFields[#warningFields+1] = { x, y, VALUE, 1, gv, 0, 140, PREC1, "FBL Low Voltage" }
+  y = y + dy
+
+  -- get logical switch #9 (index==8), assume nitro if missing
+  local lswitch9 = model.getLogicalSwitch(8)
+  if lswitch9 and lswitch9.func ~= LS_FUNC_NONE then
+    -- blo
+    gv = model.getGlobalVariable(GV_BLO, 0)
+    warningFields[#warningFields+1] = { x, y, VALUE, 1, gv, 0, 560, PREC1, "Battery Low Voltage" }
+    y = y + dy
+
+    -- bcr
+    gv = model.getGlobalVariable(GV_BCR, 0)
+    warningFields[#warningFields+1] = { x, y, VALUE, 1, gv, 0, 560, PREC1, "Battery Critical Voltage" }
   end
-  
 end
 
 local function runWarningConfig(event)
   lcd.clear()
   lcd.drawBitmap(BackgroundImg,0,0)
+  lcd.drawBitmap(ImgPageUp, 0, 95)
   lcd.drawBitmap(ImgPageDn, 455, 95)
-  fields = WarningFields
-  local y = 20
+  lcd.drawText(warningsX - 10, warningsY, "Voltage Monitors", MIDSIZE + TEXT_COLOR)
+  fields = warningFields
+  local y = warningsY + 40
 
   for idx = 1, #fields do
-    lcd.drawText(40, y, fields[idx][9])
+    lcd.drawText(40, y, fields[idx][9], TEXT_COLOR)
     lcd.drawFilledRectangle(40, y + 25, 100, 30, TEXT_BGCOLOR)
-    y = y + 65
+    y = y + 60
   end
 
-  y = y + 15
-  lcd.drawText(40, y, "** Set to zero to disable")
+  y = y + 10
+  lcd.drawText(40, y, "** Set to zero to disable", TEXT_COLOR)
   local result = runFieldsPage(event)
   return result
 end
 
+-- Summary
+local summaryX = 40
+local summaryFX = 242
+local summaryY = 10
+local summaryDY = 20
 local lineIndex
 
 local function drawNextTextLine(text, text2)
-  lcd.drawText(40, lineIndex, text)
-  lcd.drawText(242, lineIndex, ": " ..text2)
-  lineIndex = lineIndex + 32
+  lcd.drawText(summaryX, lineIndex, text)
+  lcd.drawText(summaryFX, lineIndex, ": " ..text2)
+  lineIndex = lineIndex + summaryDY
 end
 
 local function drawNextNumberLine(text, number, prec)
-  lcd.drawText(40, lineIndex, text)
-  lcd.drawText(242, lineIndex, ": ")
+  lcd.drawText(summaryX, lineIndex, text)
+  lcd.drawText(summaryFX, lineIndex, ": ")
   local dx = lcd.sizeText(": ")
-  lcd.drawNumber(242 + dx, lineIndex, number, LEFT + prec)
-  lineIndex = lineIndex + 32
-end
-
-local function switchLine(text)
-  text=WarningFields[2][5]
-  getFieldInfo(text)
-  swnum=text.id
+  lcd.drawNumber(summaryFX + dx, lineIndex, number, LEFT + prec)
+  lineIndex = lineIndex + summaryDY
 end
 
 local ConfigSummaryFields = {
@@ -200,10 +314,28 @@ local function runConfigSummary(event)
   fields = ConfigSummaryFields
   lcd.drawBitmap(BackgroundImg, 0, 0)
   lcd.drawBitmap(ImgPageUp, 0, 95)
-  lineIndex = 40
+  lineIndex = summaryY
+
+  lcd.drawText(summaryX - 20, switchY, "Summary", MIDSIZE + TEXT_COLOR)
+  lineIndex = lineIndex + 30
+
+  -- switches
+  local f = switchFields
+  for idx = 1, #f, 2 do
+    local fs = switchFields[idx]
+    local fd = switchFields[idx + 1]
+    local val = switches[fs[5] + 1]
+    if fd[5] == 1 then
+      val = val.."  reversed"
+    end
+    if val then
+    drawNextTextLine(fs[7], val)
+    end
+  end
+  lineIndex = lineIndex + 5
 
   -- voltage warnings
-  local f = WarningFields
+  f = warningFields
   for idx = 1, #f do
     local val = f[idx][5]
     if val > 0 then
@@ -220,13 +352,26 @@ local function runConfigSummary(event)
   return result
 end
 
+-- Create model
 local function createModel(event)
   lcd.clear()
 
-  fields = WarningFields
-  local y = 20
+  -- switches
+  for idx = 1, #switchFields, 2 do
+    local fs = switchFields[idx]
+    local fd = switchFields[idx + 1]
+    local index = fs[9]
+    local input = model.getInput(index, 0)
+    input.source = fs[5] + SOURCE_SWITCH_OFFSET
+    if fd[5] == 1 then
+      input.weight = -input.weight
+    end
+    model.insertInput(index, 0, input)
+    model.deleteInput(index, 1)
+  end
 
   -- voltage warnings
+  fields = warningFields
   for idx = 1, #fields do
     model.setGlobalVariable(idx - 1,0,fields[idx][5])
   end
@@ -240,17 +385,19 @@ local function onEnd(event)
   lcd.drawBitmap(BackgroundImg, 0, 0)
   lcd.drawBitmap(ImgSummary, 300, 60)
 
-  lcd.drawText(70, 90, "Model successfully created !")
-  lcd.drawText(100, 130, "Hold [RTN] to exit.", Text_Color)
+  lcd.drawText(70, 90, "Model successfully created !", COLOR_THEME_PRIMARY1)
+  lcd.drawText(100, 130, "Hold [RTN] to exit.", COLOR_THEME_PRIMARY1)
   return 0
 end
 
 -- Init
 local function init()
+  initSwitchConfig()
   initWarningConfig()
 
   current, edit = 1, false
   pages = {
+    runSwitchConfig,
     runWarningConfig,
     runConfigSummary,
     createModel,
