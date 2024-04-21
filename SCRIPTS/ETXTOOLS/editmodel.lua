@@ -163,12 +163,9 @@ local function checkCompatiblity()
   if input and input.inputName == "BBox" then
     input = model.getInput(INPUT_MOTOR, 0)
     if input and (input.inputName == "Motr" or input.inputName == "MotA") then
-      input = model.getInput(INPUT_RESCUE, 0)
-      if input and input.inputName == "Resc" then
-        -- compatible, next page
-        selectPage(1)
+      -- compatible, next page
+      selectPage(1)
       return true
-      end
     end
   end
   return false
@@ -259,10 +256,12 @@ local function initSwitchConfig()
 
   -- rescue
   input = model.getInput(INPUT_RESCUE, 0)
-  reverse = input.weight < 0 and 1 or 0
-  switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "Rescue", wc, INPUT_RESCUE }
-  switchFields[#switchFields+1] = { xd, y, COMBO, 1, reverse, direction, { "Activate", "Off" }, wd }
-  y = y + switchDy
+  if input and input.inputName == "Resc" then
+    reverse = input.weight < 0 and 1 or 0
+    switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "Rescue", wc, INPUT_RESCUE }
+    switchFields[#switchFields+1] = { xd, y, COMBO, 1, reverse, direction, { "Activate", "Off" }, wd }
+    y = y + switchDy
+  end
 
   -- blackbox
   input = model.getInput(INPUT_BLACKBOX, 0)
