@@ -19,7 +19,7 @@
 
 -- Edits by: Rob Gayle (bob00@rogers.com)
 -- Date: 2024
--- ver: 0.2.4
+-- ver: 0.2.5
 
 local VALUE = 0
 local COMBO = 1
@@ -249,10 +249,12 @@ local function initSwitchConfig()
 
   -- rates
   input = model.getInput(INPUT_RATES, 0)
-  reverse = input.weight < 0 and 1 or 0
-  switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "Rates", wc, INPUT_RATES }
-  switchFields[#switchFields+1] = { xd, y, COMBO, 1, reverse, direction, { "High", "Med", "Low" }, wd }
-  y = y + switchDy
+  if input and input.inputName == "Rate" then
+    reverse = input.weight < 0 and 1 or 0
+    switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "Rates", wc, INPUT_RATES }
+    switchFields[#switchFields+1] = { xd, y, COMBO, 1, reverse, direction, { "High", "Med", "Low" }, wd }
+    y = y + switchDy
+  end
 
   -- rescue
   input = model.getInput(INPUT_RESCUE, 0)
@@ -272,10 +274,12 @@ local function initSwitchConfig()
 
   -- sd logging
   input = model.getInput(INPUT_SDLOGGING, 0)
-  reverse = input.weight < 0 and 1 or 0
-  switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "SD Card Logging", wc, INPUT_SDLOGGING }
-  switchFields[#switchFields+1] = { xd, y, COMBO, 1, reverse, direction, { "On", "Call RPM", "Off" }, wd }
-  y = y + switchDy
+  if input and input.inputName == "Talk" then
+    reverse = input.weight < 0 and 1 or 0
+    switchFields[#switchFields+1] = { x, y, COMBO, 1, input.source - SOURCE_SWITCH_OFFSET, switches, "SD Card Logging", wc, INPUT_SDLOGGING }
+    switchFields[#switchFields+1] = { xd, y, COMBO, 1, reverse, direction, { "On", "Call RPM", "Off" }, wd }
+    y = y + switchDy
+  end
 end
 
 local function runSwitchConfig(event)
@@ -366,16 +370,30 @@ local vmeterY = 10
 local vmeterAdcImg
 local vmeterBecImg
 local vmeterLabel = "Rx/FBL Voltage Source: "
-local vmeterFields = {
-  { vmeterX + lcd.sizeText(vmeterLabel) + 10, vmeterY + 50, COMBO, 1, 0, { "ESC Telemetry", "Servo Bus ADC" }, vmeterLabel }
-}
+local vmeterFields
 local vmeterAdcSensor
-local vmeterBecSensor
+local vmeterEscSensor
 
 local TELE_ADC_SENSOR_INDEX     = 12
-local TELE_BEC_SENSOR_INDEX     = 19
+local TELE_ESC_SENSOR_INDEX     = 19
 
-local function runBecMeterConfig(event)
+local function initAdvancedConfig()
+  vmeterFields = {}
+
+  if not vmeterAdcSensor then
+    vmeterAdcSensor = model.getSensor(TELE_ADC_SENSOR_INDEX)
+  end
+  if not vmeterEscSensor then
+    vmeterEscSensor = model.getSensor(TELE_ESC_SENSOR_INDEX)
+  end
+
+  local lswitch = model.getLogicalSwitch(LS_BEC_MONITOR_INDEX)
+  local isAdcSensor = lswitch.v1 == getSourceIndex(CHAR_TELEMETRY..vmeterAdcSensor.name)
+
+  vmeterFields[1] = { vmeterX + lcd.sizeText(vmeterLabel) + 10, vmeterY + 50, COMBO, 1, isAdcSensor and 1 or 0, { "ESC Telemetry", "Servo Bus ADC" }, vmeterLabel }
+end
+
+local function runAdvancedConfig(event)
   lcd.clear()
   lcd.drawBitmap(BackgroundImg,0,0)
   lcd.drawBitmap(ImgPageUp, 0, 95)
@@ -389,12 +407,6 @@ local function runBecMeterConfig(event)
   local w = lcd.sizeText(f[6][2])
   lcd.drawFilledRectangle(f[1] - 5, f[2] - 5, w + 10, 30, TEXT_BGCOLOR)
 
-  if not vmeterAdcSensor then
-    vmeterAdcSensor = model.getSensor(TELE_ADC_SENSOR_INDEX)
-  end
-  if not vmeterBecSensor then
-    vmeterBecSensor = model.getSensor(TELE_BEC_SENSOR_INDEX)
-  end
   if not vmeterAdcImg then
     vmeterAdcImg = Bitmap.open("img/adcmeter.png")
   end
@@ -408,7 +420,7 @@ local function runBecMeterConfig(event)
     sensor = vmeterAdcSensor
     img = vmeterAdcImg
   else
-    sensor = vmeterBecSensor
+    sensor = vmeterEscSensor
     img = vmeterBecImg
   end
 
@@ -515,14 +527,11 @@ local function createModel(event)
 
   -- advanced
   local f = vmeterFields[1]
-  if f[5] ~= 0 then
-    if not vmeterAdcSensor then
-      vmeterAdcSensor = model.getSensor(TELE_ADC_SENSOR_INDEX)
-    end
-    local lswitch = model.getLogicalSwitch(LS_BEC_MONITOR_INDEX)
-    lswitch.v1 = getSourceIndex(CHAR_TELEMETRY..vmeterAdcSensor.name)
-    model.setLogicalSwitch(LS_BEC_MONITOR_INDEX, lswitch)
-  end
+  -- if f[5] ~= 0 then
+
+  local lswitch = model.getLogicalSwitch(LS_BEC_MONITOR_INDEX)
+  lswitch.v1 = getSourceIndex(CHAR_TELEMETRY..(f[5] > 0 and vmeterAdcSensor.name or vmeterEscSensor.name))
+  model.setLogicalSwitch(LS_BEC_MONITOR_INDEX, lswitch)
 
   return 2
 end
@@ -536,7 +545,7 @@ local function init()
   pages[#pages+1] = runSwitchConfig
   pages[#pages+1] = runWarningConfig
   if isElectric() then
-    pages[#pages+1] = runBecMeterConfig
+    pages[#pages+1] = runAdvancedConfig
   end
   pages[#pages+1] = runConfigSummary
   pages[#pages+1] = createModel
@@ -551,6 +560,7 @@ local function init()
 
   initSwitchConfig()
   initWarningConfig()
+  initAdvancedConfig()
 end
 
 
