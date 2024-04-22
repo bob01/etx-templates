@@ -172,12 +172,14 @@ local function checkCompatiblity()
 end
 
 local exitPage
+local exitTitle
 local exitMessage
 local exitX = 40
 local exitY = 10
 
-local function exitWithMessage(message)
+local function exitWithMessage(title, message)
   exitMessage = message
+  exitTitle = title
   page = exitPage
 end
 
@@ -187,7 +189,7 @@ local function runExitWithMessage()
   fields = {}
   edit = false
 
-  lcd.drawText(exitX - 20, exitY, "Error", MIDSIZE + TEXT_COLOR)
+  lcd.drawText(exitX - 20, exitY, exitTitle, MIDSIZE + TEXT_COLOR)
 
   local w, h = lcd.sizeText(exitMessage)
   lcd.drawText((LCD_W - w) / 2, (LCD_H - h) / 2, exitMessage, TEXT_COLOR)
@@ -202,7 +204,7 @@ end
 local function runCompatiblityCheck()
   if not checkCompatiblity() then
     -- incompatible
-    exitWithMessage("Current model is not compatible")
+    exitWithMessage("Error", "Current model is not compatible")
   end
   return 0
 end
@@ -527,13 +529,12 @@ local function createModel(event)
 
   -- advanced
   local f = vmeterFields[1]
-  -- if f[5] ~= 0 then
-
   local lswitch = model.getLogicalSwitch(LS_BEC_MONITOR_INDEX)
   lswitch.v1 = getSourceIndex(CHAR_TELEMETRY..(f[5] > 0 and vmeterAdcSensor.name or vmeterEscSensor.name))
   model.setLogicalSwitch(LS_BEC_MONITOR_INDEX, lswitch)
 
-  return 2
+  exitWithMessage("Success", "Model settings saved")
+  return 0
 end
 
 -- Init
