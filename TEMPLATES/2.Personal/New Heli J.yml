@@ -1796,25 +1796,25 @@ topbarData:
             value:
               boolValue: 1
     1:
-      widgetName: Value
+      widgetName: eBecMeter
       widgetData:
         options:
           0:
-            type: Source
-            value:
-              source: tele(19)
-          1:
             type: Color
             value:
               color: 0xf8fcf8
-          2:
+          1:
             type: Bool
             value:
               boolValue: 1
-          4:
-            type: Unsigned
+          2:
+            type: Signed
             value:
-              unsignedValue: 1
+              signedValue: 0
+          3:
+            type: Signed
+            value:
+              signedValue: 4
     2:
       widgetName: Value
       widgetData:
@@ -1855,6 +1855,17 @@ topbarData:
             type: Unsigned
             value:
               unsignedValue: 2
+    4:
+      widgetName: Radio Info
+      widgetData: ~
+    5:
+      widgetName: Date Time
+      widgetData:
+        options:
+          0:
+            type: Color
+            value:
+              color: 0xf8fcf8
 view: 0
 modelRegistrationID: 647259G-
 hatsMode: GLOBAL
