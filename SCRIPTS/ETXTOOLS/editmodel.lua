@@ -19,7 +19,7 @@
 
 -- Edits by: Rob Gayle (bob00@rogers.com)
 -- Date: 2024
--- ver: 0.2.7
+-- ver: 0.2.8
 
 local VALUE = 0
 local COMBO = 1
@@ -322,8 +322,8 @@ local GV_BCR      = 2
 local GV_BLO_FLD  = 3
 local GV_BCR_FLD  = 4
 
-local function updCells(f)
-  local cells = f[5] + 1
+local function updWarningCells(f)
+  local cells = f[5]
   local lo = cells * 35
   local cr = cells * 33
 
@@ -345,7 +345,7 @@ local function initWarningConfig()
   -- electric only
   if isElectric() then
     -- cell count
-    warningFields[#warningFields+1] = { x, y, COMBO, 1, 12 - 1, { "1S", "2S", "3S", "4S", "5S", "6S", "7S", "8S", "9S", "10S", "11S", "12S", "13S", "14S", "15S", "16S" }, "Battery Cell Count (change to quickly set defaults)", upd = updCells, nosave = true }
+    warningFields[#warningFields+1] = { x, y, COMBO, 1, 0, { "---", "1S", "2S", "3S", "4S", "5S", "6S", "7S", "8S", "9S", "10S", "11S", "12S", "13S", "14S", "15S", "16S" }, "Battery Cell Count (change to quickly set defaults)", upd = updWarningCells, nosave = true }
     y = y + dy
 
     gv = model.getGlobalVariable(GV_BLO, 0)
