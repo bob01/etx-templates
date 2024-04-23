@@ -11,8 +11,10 @@ The idea is...
 - new model
 - name it, give it an image and maybe labels
 - bind or assign a receiver ID if using model match
-- set the 3 global variables for rx and batt warnings (or not)
+- customize switch assignments, battery warnings etc (or not)
 - GO FLY
+
+No need to know what an input, mixer, logical switch, special function or global variable is ... unless you want to...
 
 
 ### Requirements / dependencies
@@ -73,9 +75,5 @@ The idea is...
 
 ### Get a nice EdgeTX theme (optional)
 - great collection of themes here - https://github.com/EdgeTX/themes
-- Theme "GrownUp" is an excellent choice - https://github.com/EdgeTX/themes/tree/main/THEMES/GrownUp
+- theme "GrownUp" is an excellent choice - https://github.com/EdgeTX/themes/tree/main/THEMES/GrownUp
 ![image](https://github.com/bob01/etx-templates/assets/4014433/118c2040-597c-4bcb-88f9-2ce8f5d2a827)
-
-
-
-
