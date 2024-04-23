@@ -1,11 +1,11 @@
 [![GitHub license](https://img.shields.io/github/license/bob01/etxwidgets)](https://github.com/bob01/etxwidgets/main/LICENSE)
 
 
-# Welcome to etxTemplates for EdgeTX
+# Welcome to etx-Templates for EdgeTX
 **New model templates for our ELRS RotorFlight electric and nitro R/C Helicopters**
 
 
-### About etxTemplates
+### About etx-Templates
 These templates have been created to quickly create new EdgeTx models for our standard ELRS RotorFlight configurations with all of the boilerplate stuff out of the way.
 The idea is... 
 - new model
