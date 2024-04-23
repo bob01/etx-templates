@@ -12,6 +12,7 @@ The idea is...
 - name it, give it an image and maybe labels
 - bind or assign a receiver ID if using model match
 - customize switch assignments, battery warnings etc (or not)
+- verify that all controls are correct and setup is safe
 - GO FLY
 
 No need to know what an input, mixer, logical switch, special function or global variable is ... unless you want to...
@@ -42,7 +43,7 @@ No need to know what an input, mixer, logical switch, special function or global
 ![image](https://github.com/bob01/etx-templates/assets/4014433/08a0e2b5-07ba-484d-a0e5-871c27d71239)
 
 
-### Create a new model using the EdgeTx wizard
+## Start by creating a new model using the EdgeTx wizard...
 ![image](https://github.com/bob01/etx-templates/assets/4014433/6c40cca2-ba6b-4722-999c-26699aa36c75)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/bae4309c-cc97-40b4-a1c3-5140f3279bce)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/7cb186ef-f856-4b28-bccc-fc215e0d5c82)
