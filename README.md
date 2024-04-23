@@ -69,7 +69,7 @@ No need to know what an input, mixer, logical switch, special function or global
 
 
 ### Installation
-- download and unzip etx-templates-main.zip
+- download and unzip etx-templates-main.zip from (https://github.com/bob01/etx-templates)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/69cd2a87-3844-4c5a-bf65-9464440fab54)
 - connect the radio and copy the folders from the zip file to the radio
 ![image](https://github.com/bob01/etx-templates/assets/4014433/0fe737ca-b2cb-466a-a2df-61bcda9d4252)
@@ -79,3 +79,7 @@ No need to know what an input, mixer, logical switch, special function or global
 - great collection of themes here - https://github.com/EdgeTX/themes
 - theme "GrownUp" is an excellent choice - https://github.com/EdgeTX/themes/tree/main/THEMES/GrownUp
 ![image](https://github.com/bob01/etx-templates/assets/4014433/118c2040-597c-4bcb-88f9-2ce8f5d2a827)
+
+
+### Enjoy.
+
