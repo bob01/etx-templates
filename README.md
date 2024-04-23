@@ -18,6 +18,7 @@ No need to know what an input, mixer, logical switch, special function or global
 
 
 ### Requirements / dependencies
+- RadioMaster Tx16s or equivalent (large color screen)
 - EdgeTx 2.10 or later
 - RotorFlight 2 or later
 - flight controller should have be prepared with (** coming soon **) or a compatible configuration (modes/adjustments/telemetry etc) 
