@@ -19,7 +19,7 @@
 
 -- Edits by: Rob Gayle (bob00@rogers.com)
 -- Date: 2024
--- ver: 0.2.6
+-- ver: 0.2.7
 
 local VALUE = 0
 local COMBO = 1
@@ -53,6 +53,9 @@ local function addField(step)
   end
   if (step < 0 and field[5] > min) or (step > 0 and field[5] < max) then
     field[5] = field[5] + step
+  end
+  if field.upd then
+    field.upd(field)
   end
 end
 
@@ -93,10 +96,6 @@ local function redrawFieldsPage(event)
   end
 end
 
-local function updateField(field)
-  local value = field[5]
-end
-
 -- Main
 local function runFieldsPage(event)
   if event == EVT_VIRTUAL_EXIT then -- exit script
@@ -106,7 +105,6 @@ local function runFieldsPage(event)
       edit = not edit
       if edit == false then
         -- lcd.clear()
-        updateField(fields[current])
       end
     end
   elseif edit then
@@ -317,31 +315,45 @@ local warningsX = 30
 local warningsY = 10
 local warningFields
 
-local GV_RLO    = 0
-local GV_BLO    = 1
-local GV_BCR    = 2
+local GV_RLO      = 0
+local GV_BLO      = 1
+local GV_BCR      = 2
+
+local GV_BLO_FLD  = 3
+local GV_BCR_FLD  = 4
+
+local function updCells(f)
+  local cells = f[5] + 1
+  local lo = cells * 35
+  local cr = cells * 33
+
+  warningFields[GV_BLO_FLD][5] = lo
+  warningFields[GV_BCR_FLD][5] = cr
+end
 
 local function initWarningConfig()
   local x = warningsX + 20
-  local y = warningsY + 70
+  local y = warningsY + 65
   local dy = 60
   warningFields = {}
 
   -- rlo
   local gv = model.getGlobalVariable(GV_RLO, 0)
   warningFields[#warningFields+1] = { x, y, VALUE, 1, gv, 0, 140, PREC1, "Rx/FBL Low Voltage" }
-  y = y + dy
+  y = y + dy + 15
 
   -- electric only
   if isElectric() then
-    -- blo
+    -- cell count
+    warningFields[#warningFields+1] = { x, y, COMBO, 1, 12 - 1, { "1S", "2S", "3S", "4S", "5S", "6S", "7S", "8S", "9S", "10S", "11S", "12S", "13S", "14S", "15S", "16S" }, "Battery Cell Count (change to quickly set defaults)", upd = updCells, nosave = true }
+    y = y + dy
+
     gv = model.getGlobalVariable(GV_BLO, 0)
     warningFields[#warningFields+1] = { x, y, VALUE, 1, gv, 0, 560, PREC1, "Battery Low Voltage" }
-    y = y + dy
 
     -- bcr
     gv = model.getGlobalVariable(GV_BCR, 0)
-    warningFields[#warningFields+1] = { x, y, VALUE, 1, gv, 0, 560, PREC1, "Battery Critical Voltage" }
+    warningFields[#warningFields+1] = { LCD_W / 2, y, VALUE, 1, gv, 0, 560, PREC1, "Battery Critical Voltage" }
   end
 end
 
@@ -352,16 +364,17 @@ local function runWarningConfig(event)
   lcd.drawBitmap(ImgPageDn, 455, 95)
   lcd.drawText(warningsX - 10, warningsY, "Voltage Monitors", MIDSIZE + TEXT_COLOR)
   fields = warningFields
-  local y = warningsY + 40
 
   for idx = 1, #fields do
-    lcd.drawText(40, y, fields[idx][9], TEXT_COLOR)
-    lcd.drawFilledRectangle(40, y + 25, 100, 30, TEXT_BGCOLOR)
-    y = y + 60
+    local f = fields[idx]
+    local lidx = f[3] == COMBO and 7 or 9
+    lcd.drawText(f[1] - 5, f[2] - 28, f[lidx], TEXT_COLOR)
+    lcd.drawFilledRectangle(f[1] - 5, f[2] - 5, 100, 30, TEXT_BGCOLOR)
   end
 
-  y = y + 10
-  lcd.drawText(40, y, "** Set to zero to disable", TEXT_COLOR)
+  local text = "** Set to zero to disable **"
+  local _, h = lcd.sizeText(text)
+  lcd.drawText(LCD_W / 2, LCD_H - h, text, TEXT_COLOR + CENTER)
   local result = runFieldsPage(event)
   return result
 end
@@ -482,13 +495,15 @@ local function runConfigSummary(event)
   lineIndex = lineIndex + 6
 
   -- voltage warnings
-  f = warningFields
-  for idx = 1, #f do
-    local val = f[idx][5]
-    if val > 0 then
-      drawNextNumberLine(f[idx][9], val, f[idx][8])
-    else
-      drawNextTextLine(f[idx][9], "disabled")
+  for idx = 1, #warningFields do
+    f = warningFields[idx]
+    if not f.nosave then
+      local val = f[5]
+      if val > 0 then
+        drawNextNumberLine(f[9], val, f[8])
+      else
+        drawNextTextLine(f[9], "disabled")
+      end
     end
   end
 
@@ -522,9 +537,13 @@ local function createModel(event)
   end
 
   -- voltage warnings
-  fields = warningFields
-  for idx = 1, #fields do
-    model.setGlobalVariable(idx - 1,0,fields[idx][5])
+  local gvidx = 0
+  for idx = 1, #warningFields do
+    local f = warningFields[idx]
+    if not f.nosave then
+      model.setGlobalVariable(gvidx, 0, f[5])
+      gvidx = gvidx + 1
+    end
   end
 
   -- advanced
