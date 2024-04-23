@@ -6,7 +6,7 @@
 
 
 ### About etxTemplates
-These templates have been created to quickly create new models for our standard ELRS RotorFlight configurations with all of the boilerplate stuff out of the way.
+These templates have been created to quickly create new EdgeTx models for our standard ELRS RotorFlight configurations with all of the boilerplate stuff out of the way.
 The idea is... 
 - new model
 - name it, give it an image and maybe labels
@@ -15,10 +15,17 @@ The idea is...
 - GO FLY
 
 
+### Requirements / dependencies
+- EdgeTx 2.10 or later
+- etxWidgets (https://github.com/bob01/etx-widgets)
+- RotorFlight 2 or later
+- flight controller should have be prepared with (** coming soon **) or a compatible configuration (modes/adjustments/telemetry etc) 
+
+
 ### Features
 - standard primary switch configurations (bank, safety, motor etc)
 - configured telemetry sensors w/ recognizable names, units, ratios all preset
-- familir mixer channel mappings
+- familiar mixer channel mappings
 - output channel endpoints and subtrim aligned to ELRS (make sure your Tx sticks are calibrated)
 - logical switch and special functions implementing warnings, various telemetry monitoring
 - optional switches for RF blackbox and EdgeTX SD logging
@@ -31,18 +38,29 @@ The idea is...
 ![image](https://github.com/bob01/etx-templates/assets/4014433/08a0e2b5-07ba-484d-a0e5-871c27d71239)
 
 
-### Create and name new model, assign an image and labels
+### Create a new model using the EdgeTx wizard
 ![image](https://github.com/bob01/etx-templates/assets/4014433/6c40cca2-ba6b-4722-999c-26699aa36c75)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/bae4309c-cc97-40b4-a1c3-5140f3279bce)
-![image](https://github.com/bob01/etx-templates/assets/4014433/9fdc843a-72bc-4625-86bc-16761d9940c3)
-![image](https://github.com/bob01/etx-templates/assets/4014433/8c1b976e-80d2-496c-beb5-d8d7f21c5de9)
+![image](https://github.com/bob01/etx-templates/assets/4014433/6ffdf055-27d9-4dd0-953b-538d7bc42163)
 
+### The model editor follows for switch assignments and voltage monitors etc.
+![image](https://github.com/bob01/etx-templates/assets/4014433/88fe8555-9cd0-45d1-8669-36d80a40d10a)
+![image](https://github.com/bob01/etx-templates/assets/4014433/6358c318-2860-4c05-913d-dbd148e2aa23)
+![image](https://github.com/bob01/etx-templates/assets/4014433/f9e3993a-9a16-4611-856f-fa0473919ac9)
+![image](https://github.com/bob01/etx-templates/assets/4014433/870b21cf-4010-4613-8f7d-001b4d13e6b0)
+
+### Name it, assign an image and maybe labels
 ![image](https://github.com/bob01/etx-templates/assets/4014433/c6f8e435-302c-49ac-9518-682418419e97)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/b006d0b8-7ac9-46e7-8009-eee194809676)
 
 ### Bind or assign receiver ID, be sure to check your ELRS settings - D500 packet rate recommended
 ![image](https://github.com/bob01/etx-templates/assets/4014433/3a12aeba-4a79-4b8d-9a39-4e1f0c40df98)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/a85f8916-01f4-4b36-bb71-d6174ba2b0fe)
+### Done.
+
+
+### The model editor is available at any time from the System screen
+![image](https://github.com/bob01/etx-templates/assets/4014433/80200453-a1ef-4417-b9ba-216b1281bcd4)
 
 
 ### Installation
@@ -50,7 +68,6 @@ The idea is...
 ![image](https://github.com/bob01/etx-templates/assets/4014433/69cd2a87-3844-4c5a-bf65-9464440fab54)
 - connect the radio and copy the folders from the zip file to the radio
 ![image](https://github.com/bob01/etx-templates/assets/4014433/0fe737ca-b2cb-466a-a2df-61bcda9d4252)
-- done
 
 
 ### Get a nice EdgeTX theme (optional)
