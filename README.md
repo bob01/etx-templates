@@ -2,7 +2,7 @@
 
 
 # Welcome to etx-Templates for EdgeTX
-**New model templates for our ELRS RotorFlight electric and nitro R/C Helicopters**
+**New model templates for our ELRS RotorFlight electric and nitro R/C Helicopters, use at your own risk**
 
 
 ### About etx-Templates
@@ -12,7 +12,7 @@ The idea is...
 - name it, give it an image and maybe labels
 - bind or assign a receiver ID if using model match
 - customize switch assignments, battery warnings etc (or not)
-- verify that all controls are correct and setup is safe
+- verify that all controls are correct and setup is SAFE
 - GO FLY
 
 No need to know what an input, mixer, logical switch, special function or global variable is ... unless you want to...
