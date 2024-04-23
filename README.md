@@ -17,12 +17,15 @@ The idea is...
 
 ### Requirements / dependencies
 - EdgeTx 2.10 or later
-- etxWidgets (https://github.com/bob01/etx-widgets)
 - RotorFlight 2 or later
 - flight controller should have be prepared with (** coming soon **) or a compatible configuration (modes/adjustments/telemetry etc) 
 
 
 ### Features
+- familiar helicopter radio look and feel
+- familiar/practical main screen
+- summary screen automatically displayed at end of the flight
+- familiar/throttle curves (TC1, TC2, TC3, TCH)
 - standard primary switch configurations (bank, safety, motor etc)
 - configured telemetry sensors w/ recognizable names, units, ratios all preset
 - familiar mixer channel mappings
@@ -30,9 +33,7 @@ The idea is...
 - logical switch and special functions implementing warnings, various telemetry monitoring
 - optional switches for RF blackbox and EdgeTX SD logging
 - 4 bank / profile configuration
-- familiar/throttle curves (TC1, TC2, TC3, TCH)
-- familiar/practical main screen
-- summary screen automatically displayed at end of the flight
+- main screen uses etx-widgets (https://github.com/bob01/etx-widgets), included in this package
 
 ![image](https://github.com/bob01/etx-templates/assets/4014433/e3de3f75-3bfe-4d51-beb0-7e5cc5d416a8)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/08a0e2b5-07ba-484d-a0e5-871c27d71239)
@@ -41,7 +42,7 @@ The idea is...
 ### Create a new model using the EdgeTx wizard
 ![image](https://github.com/bob01/etx-templates/assets/4014433/6c40cca2-ba6b-4722-999c-26699aa36c75)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/bae4309c-cc97-40b4-a1c3-5140f3279bce)
-![image](https://github.com/bob01/etx-templates/assets/4014433/6ffdf055-27d9-4dd0-953b-538d7bc42163)
+![image](https://github.com/bob01/etx-templates/assets/4014433/7cb186ef-f856-4b28-bccc-fc215e0d5c82)
 
 ### The model editor follows for switch assignments and voltage monitors etc.
 ![image](https://github.com/bob01/etx-templates/assets/4014433/88fe8555-9cd0-45d1-8669-36d80a40d10a)
@@ -60,7 +61,7 @@ The idea is...
 
 
 ### The model editor is available at any time from the System screen
-![image](https://github.com/bob01/etx-templates/assets/4014433/80200453-a1ef-4417-b9ba-216b1281bcd4)
+![image](https://github.com/bob01/etx-templates/assets/4014433/1e14e7b4-0a3f-4cd7-bf14-ff0659111a02)
 
 
 ### Installation
