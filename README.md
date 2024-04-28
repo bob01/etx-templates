@@ -15,10 +15,9 @@ The idea is...
 - bind or assign a receiver ID if using model match
 - customize switch assignments, battery warnings etc (or not)
 - verify that all controls are correct and setup is SAFE
-- GO FLY
+- GO FLY<br>No need to know what an input, mixer, logical switch, special function or global variable is ... unless you want to...
 
-No need to know what an input, mixer, logical switch, special function or global variable is ... unless you want to...
-
+Best used with [etx-presets (for RotorFlight)](https://github.com/bob01/etx-presets-rotorflight)
 
 ### Requirements / dependencies
 - RadioMaster Tx16s or equivalent (large color screen)
