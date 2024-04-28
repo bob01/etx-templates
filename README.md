@@ -2,9 +2,9 @@
 
 
 # Welcome to etx-Templates for EdgeTX
-**New model templates for our ELRS RotorFlight electric and nitro R/C Helicopters, use at your own risk**
+**New model templates for our ELRS RotorFlight electric and nitro R/C Helicopters**<br>Thanks to Mike W. and Diego A. for the endless hours of testing and great ideas.
 
-Thanks to Mike W. and Diego A. for the endless hours of testing and great ideas.
+** USE AT YOUR OWN RISK **
 
 
 ### About etx-Templates
