@@ -1,21 +1,26 @@
 [![GitHub license](https://img.shields.io/github/license/bob01/etxwidgets)](https://github.com/bob01/etxwidgets/main/LICENSE)
 
 
-# Welcome to etxTemplates for EdgeTX
-**New model templates for our ELRS RotorFlight electric and nitro R/C Helicopters**
+# Welcome to etx-Templates for EdgeTX
+**New model templates for our ELRS RotorFlight electric and nitro R/C Helicopters**<br>Thanks to Mike W. and Diego A. for the endless hours of testing and great ideas.
+
+** USE AT YOUR OWN RISK **
 
 
-### About etxTemplates
+### About etx-Templates
 These templates have been created to quickly create new EdgeTx models for our standard ELRS RotorFlight configurations with all of the boilerplate stuff out of the way.
 The idea is... 
 - new model
 - name it, give it an image and maybe labels
 - bind or assign a receiver ID if using model match
-- set the 3 global variables for rx and batt warnings (or not)
-- GO FLY
+- customize switch assignments, battery warnings etc (or not)
+- verify that all controls are correct and setup is SAFE
+- GO FLY<br>No need to know what an input, mixer, logical switch, special function or global variable is ...<br>unless you really want to...
 
+Best used with [etx-presets (for RotorFlight)](https://github.com/bob01/etx-presets-rotorflight)
 
 ### Requirements / dependencies
+- RadioMaster Tx16s or equivalent (large color screen)
 - EdgeTx 2.10 or later
 - RotorFlight 2 or later
 - flight controller should have be prepared with (** coming soon **) or a compatible configuration (modes/adjustments/telemetry etc) 
@@ -39,7 +44,7 @@ The idea is...
 ![image](https://github.com/bob01/etx-templates/assets/4014433/08a0e2b5-07ba-484d-a0e5-871c27d71239)
 
 
-### Create a new model using the EdgeTx wizard
+## Start by creating a new model using the EdgeTx wizard...
 ![image](https://github.com/bob01/etx-templates/assets/4014433/6c40cca2-ba6b-4722-999c-26699aa36c75)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/bae4309c-cc97-40b4-a1c3-5140f3279bce)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/7cb186ef-f856-4b28-bccc-fc215e0d5c82)
@@ -65,7 +70,7 @@ The idea is...
 
 
 ### Installation
-- download and unzip etx-templates-main.zip
+- download and unzip etx-templates-main.zip from (https://github.com/bob01/etx-templates)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/69cd2a87-3844-4c5a-bf65-9464440fab54)
 - connect the radio and copy the folders from the zip file to the radio
 ![image](https://github.com/bob01/etx-templates/assets/4014433/0fe737ca-b2cb-466a-a2df-61bcda9d4252)
@@ -73,9 +78,9 @@ The idea is...
 
 ### Get a nice EdgeTX theme (optional)
 - great collection of themes here - https://github.com/EdgeTX/themes
-- Theme "GrownUp" is an excellent choice - https://github.com/EdgeTX/themes/tree/main/THEMES/GrownUp
+- theme "GrownUp" is an excellent choice - https://github.com/EdgeTX/themes/tree/main/THEMES/GrownUp
 ![image](https://github.com/bob01/etx-templates/assets/4014433/118c2040-597c-4bcb-88f9-2ce8f5d2a827)
 
 
-
+### Enjoy.
 
