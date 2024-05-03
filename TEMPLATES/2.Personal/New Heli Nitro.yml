@@ -1,6 +1,6 @@
 semver: 2.10.0
 header:
-  name: New Heli N
+  name: New Heli
   bitmap: new.png
   labels: ""
   modelId:

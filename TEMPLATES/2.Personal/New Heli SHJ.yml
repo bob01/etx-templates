@@ -1,6 +1,6 @@
 semver: 2.10.0
 header:
-  name: New Heli J
+  name: New Heli
   bitmap: new.png
   labels: ""
   modelId:
@@ -1506,7 +1506,7 @@ screenData:
               2:
                 type: Source
                 value:
-                  source: NONE
+                  source: tele(11)
               3:
                 type: Bool
                 value:

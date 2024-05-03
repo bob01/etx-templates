@@ -1485,7 +1485,7 @@ screenData:
               2:
                 type: Source
                 value:
-                  source: NONE
+                  source: tele(11)
               3:
                 type: Bool
                 value:
