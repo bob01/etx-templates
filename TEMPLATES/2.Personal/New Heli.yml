@@ -1228,7 +1228,7 @@ telemetrySensors:
     onlyPositive: 0
     cfg:
       custom:
-        ratio: 255
+        ratio: 0
         offset: 0
   14:
     type: TYPE_CUSTOM
