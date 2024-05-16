@@ -19,6 +19,9 @@ The idea is...
 
 Best used with [etx-presets (for RotorFlight)](https://github.com/bob01/etx-presets-rotorflight)
 
+### Release notes
+- 2024.05.15 - v2.1 - adjusted RPM tele ratio to 0 to address EdgeTx 2.10.0-rc4 to 2.10.0 release changes
+
 ### Requirements / dependencies
 - RadioMaster Tx16s or equivalent (large color screen)
 - EdgeTx 2.10 or later
