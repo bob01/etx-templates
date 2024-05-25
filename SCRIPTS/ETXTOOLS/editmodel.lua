@@ -19,7 +19,7 @@
 
 -- Edits by: Rob Gayle (bob00@rogers.com)
 -- Date: 2024
--- ver: 0.2.8
+-- ver: 0.3.0
 
 local VALUE = 0
 local COMBO = 1
@@ -30,7 +30,9 @@ local current = 1
 local pages = {}
 local fields = {}
 local direction = { "Normal", "Reverse" }
+local labels = { "Off", "..", "On" }
 local switches = { "SA", "SB", "SC", "SD", "SE", "SF", "SG", "SH", "SI", "SJ" }
+local optswitches = { "---", "SA", "SB", "SC", "SD", "SE", "SF", "SG", "SH", "SI", "SJ" }
 
 chdir("/SCRIPTS/ETXTOOLS")
 
@@ -69,9 +71,9 @@ end
 
 -- Select the next or previous editable field
 local function selectField(step)
-  -- repeat
+  repeat
     current = 1 + ((current + step - 1 + #fields) % #fields)
-  -- until fields[current][4]==1
+  until fields[current][4] ~= 0
 end
 
 -- Redraw the current page
@@ -128,7 +130,9 @@ end
 local function sjoin(table, separator, reverse)
   local out = ""
 
-  if reverse ~= 0 then
+  if reverse == 2 then
+    out = "NONE"
+  elseif reverse == 1 then
     for i = #table, 1, -1 do
       out = out..table[i]
       if i > 1 then
@@ -301,6 +305,81 @@ local function runSwitchConfig(event)
   return result
 end
 
+-- Optional Switches
+local MIX_CH11 = 10
+local MIX_CH12 = 11
+local MIX_CH13 = 12
+local MIX_CH14 = 13
+
+local optSwitchX = 35
+local optSwitchY = 10
+local optSwitchDy = 32
+local optSwitchFields;
+
+local function initOptSwitchConfig()
+  local x = optSwitchX + lcd.sizeText("SD Card Logging") + 20
+  local wc = lcd.sizeText("SA") + 12
+  local xd = x + lcd.sizeText("SA") + 16
+  local wd = lcd.sizeText("Reverse") + 12
+  local y = optSwitchY + 35
+  optSwitchFields = {}
+
+  -- mixes
+  for idx = 1, 4 do
+    local name = "Opt"..idx
+    local mix = model.getMix(MIX_CH11 + idx - 1, 0)
+    if mix == nil or mix.name == name then
+      local source = mix and (mix.source - SOURCE_SWITCH_OFFSET + 1) or 0
+      if source >= 0 and source < #optswitches then
+        local reverse = mix and (mix.weight < 0 and 1 or 0) or 2
+        local enabled = 0
+        local label = string.format("Option %d (ch1%d)", idx, idx)
+        optSwitchFields[#optSwitchFields+1] = { x, y, COMBO, 1, source, optswitches, label, wc, MIX_CH11 + idx - 1 }
+        optSwitchFields[#optSwitchFields+1] = { xd, y, COMBO, enabled, reverse, direction, labels, wd }
+        y = y + optSwitchDy
+      end
+    end
+  end
+end
+
+local function runOptSwitchConfig(event)
+  lcd.clear()
+  lcd.drawBitmap(BackgroundImg,0,0)
+  lcd.drawBitmap(ImgPageUp, 0, 95)
+  lcd.drawBitmap(ImgPageDn, 455, 95)
+  lcd.drawText(optSwitchX - 15, optSwitchY, "Optional Switchs", MIDSIZE + TEXT_COLOR)
+  fields = optSwitchFields
+
+  -- update direction label
+  for idx = 1, #fields, 2 do
+    local f = fields[idx]
+    local fr = fields[idx + 1]
+    local source = f[5]
+    -- enable/disable direction
+    fr[4] = source ~= 0 and 1 or 0
+    if source == 0 and fr[5] ~= 2 then
+      -- no source selected, force direction to NONE
+      fr[5] = 2
+    elseif source ~= 0 and fr[5] == 2 then
+      -- source selected, set direction
+      fr[5] = 0
+    end
+  end
+
+  -- draw fields and labels
+  for idx = 1, #fields do
+    local f = fields[idx]
+    lcd.drawFilledRectangle(f[1] - 5, f[2] - 5, f[8], 30, TEXT_BGCOLOR)
+
+    local tx = f[9] and optSwitchX or (f[1] + f[8] + 4)
+    local text = f[9] and f[7] or sjoin(f[7], "-", f[5])
+    lcd.drawText(tx, f[2], text, TEXT_COLOR)
+  end
+
+  local result = runFieldsPage(event)
+  return result
+end
+
 local LS_BATT_CONNECTED_INDEX       = 8
 local LS_BEC_MONITOR_INDEX          = 11
 
@@ -375,6 +454,7 @@ local function runWarningConfig(event)
   local text = "** Set to zero to disable **"
   local _, h = lcd.sizeText(text)
   lcd.drawText(LCD_W / 2, LCD_H - h, text, TEXT_COLOR + CENTER)
+
   local result = runFieldsPage(event)
   return result
 end
@@ -536,6 +616,42 @@ local function createModel(event)
     model.deleteInput(index, 1)
   end
 
+  -- optional switches
+  for idx = 1, #optSwitchFields, 2 do
+    local f = optSwitchFields[idx]
+    local fr = optSwitchFields[idx + 1]
+    local index = f[9]
+    local name = "Opt"..(index - MIX_CH11 + 1)
+    local source = f[5]
+
+    local mix = model.getMix(index, 0)
+    if mix == nil then
+      -- no existing mix
+      if source ~= 0 then
+        -- add mix
+        mix = {}
+        mix.name = name
+        mix.source = source + SOURCE_SWITCH_OFFSET - 1
+        mix.weight = fr[5] == 0 and 100 or -100
+        model.insertMix(index, 0, mix)
+      end
+    else
+      -- existing mix, process only if ours
+      if mix.name == name then
+        if source ~= 0 then
+          -- change mix
+          mix.source = source + SOURCE_SWITCH_OFFSET - 1
+          mix.weight = fr[5] == 0 and 100 or -100
+          model.insertMix(index, 0, mix)
+          model.deleteMix(index, 1)
+        else
+          -- delete mix
+          model.deleteMix(index, 0)
+        end
+      end
+    end
+  end
+
   -- voltage warnings
   local gvidx = 0
   for idx = 1, #warningFields do
@@ -563,6 +679,7 @@ local function init()
 
   pages[#pages+1] = runCompatiblityCheck
   pages[#pages+1] = runSwitchConfig
+  pages[#pages+1] = runOptSwitchConfig
   pages[#pages+1] = runWarningConfig
   if isElectric() then
     pages[#pages+1] = runAdvancedConfig
@@ -579,6 +696,7 @@ local function init()
   end
 
   initSwitchConfig()
+  initOptSwitchConfig()
   initWarningConfig()
   initAdvancedConfig()
 end
