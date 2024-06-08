@@ -17,9 +17,9 @@
 ---- #                                                                       #
 ---- #########################################################################
 
--- Edits by: Rob Gayle (bob00@rogers.com)
+-- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2024
--- ver: 0.3.0
+-- ver: 0.3.2
 
 local VALUE = 0
 local COMBO = 1
@@ -418,7 +418,11 @@ local function initWarningConfig()
 
   -- rlo
   local gv = model.getGlobalVariable(GV_RLO, 0)
-  warningFields[#warningFields+1] = { x, y, VALUE, 1, gv, 0, 140, PREC1, "Rx/FBL Low Voltage" }
+
+  -- temporary fix for GV / Tele / prec comparison issue
+  if gv > 0 and gv < 100 then gv = gv * 10 end
+
+  warningFields[#warningFields+1] = { x, y, VALUE, 1, gv, 0, 1024, PREC2, "Rx/FBL Low Voltage" }
   y = y + dy + 15
 
   -- electric only

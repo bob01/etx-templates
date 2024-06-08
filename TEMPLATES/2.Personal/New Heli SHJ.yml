@@ -937,9 +937,9 @@ gvars:
   0:
     name: rLo
     min: 1024
-    max: 784
+    max: 0
     popup: 0
-    prec: 1
+    prec: 0
     unit: 0
   1:
     name: bLo
