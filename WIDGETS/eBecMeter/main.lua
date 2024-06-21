@@ -96,7 +96,6 @@ local function refreshZoneTiny(wgt)
     end
 end
 
--- This function allow recording of lowest cells when widget is in background
 local function background(wgt)
     -- data available
     wgt.isDataAvailable = type(getValue("FM")) == "string"

@@ -61,9 +61,9 @@ flightModeData:
       0:
         val: 71
       1:
-        val: 430
+        val: 0
       2:
-        val: 400
+        val: 0
 mixData:
   - destCh: 0
     srcRaw: I0
@@ -697,7 +697,7 @@ logicalSw:
     andsw: L2
   11:
     func: FUNC_LESS
-    def: tele(19),gv(0)
+    def: tele(12),gv(0)
     delay: 5
     duration: 0
     andsw: L2
@@ -933,6 +933,13 @@ gvars:
     max: 224
     popup: 0
     prec: 1
+    unit: 0
+  3:
+    name: Cel
+    min: 1024
+    max: 1008
+    popup: 0
+    prec: 0
     unit: 0
 telemetryProtocol: 0
 varioData:

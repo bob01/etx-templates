@@ -1,4 +1,4 @@
-Create new heli (v2.2)
+Create new heli (v2.3)
 
 Built for RF 4-bank templates w/ pre-configured telemetry
 

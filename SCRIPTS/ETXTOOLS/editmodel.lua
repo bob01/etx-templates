@@ -19,7 +19,7 @@
 
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2024
--- ver: 0.3.2
+-- ver: 0.3.4
 
 local VALUE = 0
 local COMBO = 1
@@ -397,16 +397,18 @@ local warningFields
 local GV_RLO      = 0
 local GV_BLO      = 1
 local GV_BCR      = 2
+local GV_CEL      = 3
 
 local GV_BLO_FLD  = 3
 local GV_BCR_FLD  = 4
 
 local function updWarningCells(f)
   local cells = f[5]
+  
   local lo = cells * 35
-  local cr = cells * 33
-
   warningFields[GV_BLO_FLD][5] = lo
+
+  local cr = cells * 33
   warningFields[GV_BCR_FLD][5] = cr
 end
 
@@ -428,7 +430,8 @@ local function initWarningConfig()
   -- electric only
   if isElectric() then
     -- cell count
-    warningFields[#warningFields+1] = { x, y, COMBO, 1, 0, { "---", "1S", "2S", "3S", "4S", "5S", "6S", "7S", "8S", "9S", "10S", "11S", "12S", "13S", "14S", "15S", "16S" }, "Battery Cell Count (change to quickly set defaults)", upd = updWarningCells, nosave = true }
+    gv = model.getGlobalVariable(GV_CEL, 0)
+    warningFields[#warningFields+1] = { x, y, COMBO, 1, gv, { "---", "1S", "2S", "3S", "4S", "5S", "6S", "7S", "8S", "9S", "10S", "11S", "12S", "13S", "14S", "15S", "16S" }, "Battery Cell Count", upd = updWarningCells, celcombo = true }
     y = y + dy
 
     gv = model.getGlobalVariable(GV_BLO, 0)
@@ -581,7 +584,7 @@ local function runConfigSummary(event)
   -- voltage warnings
   for idx = 1, #warningFields do
     f = warningFields[idx]
-    if not f.nosave then
+    if not f.celcombo then
       local val = f[5]
       if val > 0 then
         drawNextNumberLine(f[9], val, f[8])
@@ -660,9 +663,11 @@ local function createModel(event)
   local gvidx = 0
   for idx = 1, #warningFields do
     local f = warningFields[idx]
-    if not f.nosave then
+    if not f.celcombo then
       model.setGlobalVariable(gvidx, 0, f[5])
       gvidx = gvidx + 1
+    else
+      model.setGlobalVariable(GV_CEL, 0, f[5])
     end
   end
 
