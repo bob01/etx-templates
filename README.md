@@ -20,6 +20,7 @@ The idea is...
 Best used with [etx-presets (for RotorFlight)](https://github.com/bob01/etx-presets-rotorflight)
 
 ### Release notes
+- 2024.05.22 - v2.3 - model editor now sets the cell count setting of power bar widget, BEC voltage source defaults to servo bus telemetry sensor as more FC's are providing this sensor.
 - 2024.05.15 - v2.1 - adjusted RPM tele ratio to 0 to address EdgeTx 2.10.0-rc4 to 2.10.0 release changes
 
 ### Requirements / dependencies
