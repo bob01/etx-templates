@@ -20,6 +20,7 @@
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2024
 -- ver: 0.3.4
+-- ver: 0.3.5 - removed BEC/ADC page (most FC's have ADCs now)
 
 local VALUE = 0
 local COMBO = 1
@@ -690,9 +691,9 @@ local function init()
   pages[#pages+1] = runSwitchConfig
   pages[#pages+1] = runOptSwitchConfig
   pages[#pages+1] = runWarningConfig
-  if isElectric() then
-    pages[#pages+1] = runAdvancedConfig
-  end
+  -- if isElectric() then
+  --   pages[#pages+1] = runAdvancedConfig
+  -- end
   pages[#pages+1] = runConfigSummary
   pages[#pages+1] = createModel
   pages[#pages+1] = runExitWithMessage
