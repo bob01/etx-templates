@@ -59,7 +59,6 @@ Best used with [etx-presets (for RotorFlight)](https://github.com/bob01/etx-pres
 ### The model editor follows for switch assignments and voltage monitors etc.
 ![image](https://github.com/bob01/etx-templates/assets/4014433/88fe8555-9cd0-45d1-8669-36d80a40d10a)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/6358c318-2860-4c05-913d-dbd148e2aa23)
-![image](https://github.com/bob01/etx-templates/assets/4014433/f9e3993a-9a16-4611-856f-fa0473919ac9)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/870b21cf-4010-4613-8f7d-001b4d13e6b0)
 
 ### Name it, assign an image and maybe labels
