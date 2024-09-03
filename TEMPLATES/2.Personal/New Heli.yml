@@ -59,11 +59,7 @@ flightModeData:
     fadeOut: 0
     gvars:
       0:
-        val: 71
-      1:
-        val: 0
-      2:
-        val: 0
+        val: 710
 mixData:
   - destCh: 0
     srcRaw: I0
@@ -661,43 +657,43 @@ logicalSw:
     andsw: NONE
   5:
     func: FUNC_VEQUAL
-    def: tele(14),1
+    def: tele(34),1
     delay: 0
     duration: 0
     andsw: NONE
   6:
     func: FUNC_VEQUAL
-    def: tele(14),2
+    def: tele(34),2
     delay: 0
     duration: 0
     andsw: NONE
   7:
     func: FUNC_VEQUAL
-    def: tele(14),3
+    def: tele(34),3
     delay: 0
     duration: 0
     andsw: NONE
   8:
     func: FUNC_VPOS
-    def: tele(15),0
+    def: tele(18),0
     delay: 0
     duration: 0
     andsw: NONE
   9:
     func: FUNC_LESS
-    def: tele(15),gv(2)
+    def: tele(18),gv(2)
     delay: 5
     duration: 0
     andsw: L2
   10:
     func: FUNC_LESS
-    def: tele(15),gv(1)
+    def: tele(18),gv(1)
     delay: 5
     duration: 0
     andsw: L2
   11:
     func: FUNC_LESS
-    def: tele(12),gv(0)
+    def: tele(10),gv(0)
     delay: 5
     duration: 0
     andsw: L2
@@ -769,7 +765,7 @@ logicalSw:
     andsw: NONE
   24:
     func: FUNC_ADIFFEGREATER
-    def: tele(6),5
+    def: tele(3),5
     delay: 0
     duration: 0
     andsw: NONE
@@ -787,13 +783,13 @@ logicalSw:
     andsw: NONE
   27:
     func: FUNC_VNEG
-    def: tele(0),-95
+    def: tele(7),-95
     delay: 5
     duration: 0
     andsw: "!L22"
   28:
     func: FUNC_VNEG
-    def: tele(2),60
+    def: tele(5),60
     delay: 5
     duration: 0
     andsw: "!L22"
@@ -906,7 +902,17 @@ swashR:
   aileronWeight: 0
   elevatorWeight: 0
 thrTraceSrc: Thr
-switchWarningState: AuCdDdEuGd
+switchWarning:
+  SA:
+    pos: up
+  SC:
+    pos: down
+  SD:
+    pos: down
+  SE:
+    pos: up
+  SG:
+    pos: down
 thrTrimSw: 0
 potsWarnMode: WARN_OFF
 potsWarnEnabled: 0

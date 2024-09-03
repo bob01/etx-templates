@@ -57,6 +57,9 @@ flightModeData:
     name: ""
     fadeIn: 0
     fadeOut: 0
+    gvars:
+      0:
+        val: 710
 mixData:
   - destCh: 0
     srcRaw: I0
@@ -2181,7 +2184,7 @@ topbarData:
             type: Color
             value:
               color: 0xf8fcf8
-view: 0
+view: 1
 modelRegistrationID: 647259G-
 hatsMode: GLOBAL
 usbJoystickExtMode: 0
