@@ -20,7 +20,7 @@ The idea is...
 Best used with [etx-presets (for RotorFlight)](https://github.com/bob01/etx-presets-rotorflight)
 
 ### Release notes
-- 2024.09.02 - added support for RotorFlight v2.1 (use branch RF-2.1.x)
+- 2024.09.02 - revised for RotorFlight v2.1
 - 2024.08.05 - ModelEditor - dropped BEC/ADC page - all current FC's have BEC ADCs now
 - 2024.07.09 - eThrottle - Report "Bad Auto" + haptic if GOV reports LOST-HS ie bailout will not be available
 - 2024.05.22 - v2.3 - model editor now sets the cell count setting of power bar widget, BEC voltage source defaults to servo bus telemetry sensor as more FC's are providing this sensor.
