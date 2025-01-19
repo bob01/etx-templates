@@ -20,7 +20,8 @@
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2024
 -- ver: 0.3.4
--- ver: 0.3.5 - removed BEC/ADC page (most FC's have ADCs now)
+-- ver: 0.3.5 - deprecated BEC/ADC page (most FC's have ADCs now)
+-- ver: 0.3.8 - removed BEC/ADC page UI / save
 
 local VALUE = 0
 local COMBO = 1
@@ -382,7 +383,6 @@ local function runOptSwitchConfig(event)
 end
 
 local LS_BATT_CONNECTED_INDEX       = 8
-local LS_BEC_MONITOR_INDEX          = 11
 
 local function isElectric()
   -- get logical switch, assume nitro if missing
@@ -463,74 +463,6 @@ local function runWarningConfig(event)
   local _, h = lcd.sizeText(text)
   lcd.drawText(LCD_W / 2, LCD_H - h, text, TEXT_COLOR + CENTER)
 
-  local result = runFieldsPage(event)
-  return result
-end
-
--- Advanced
-local vmeterX = 30
-local vmeterY = 10
-local vmeterAdcImg
-local vmeterBecImg
-local vmeterLabel = "Rx/FBL Voltage Source: "
-local vmeterFields
-local vmeterAdcSensor
-local vmeterEscSensor
-
-local TELE_ADC_SENSOR_INDEX     = 12
-local TELE_ESC_SENSOR_INDEX     = 19
-
-local function initAdvancedConfig()
-  vmeterFields = {}
-
-  if not vmeterAdcSensor then
-    vmeterAdcSensor = model.getSensor(TELE_ADC_SENSOR_INDEX)
-  end
-  if not vmeterEscSensor then
-    vmeterEscSensor = model.getSensor(TELE_ESC_SENSOR_INDEX)
-  end
-
-  local lswitch = model.getLogicalSwitch(LS_BEC_MONITOR_INDEX)
-  local isAdcSensor = lswitch.v1 == getSourceIndex(CHAR_TELEMETRY..vmeterAdcSensor.name)
-
-  vmeterFields[1] = { vmeterX + lcd.sizeText(vmeterLabel) + 10, vmeterY + 50, COMBO, 1, isAdcSensor and 1 or 0, { "ESC Telemetry", "Servo Bus ADC" }, vmeterLabel }
-end
-
-local function runAdvancedConfig(event)
-  lcd.clear()
-  lcd.drawBitmap(BackgroundImg,0,0)
-  lcd.drawBitmap(ImgPageUp, 0, 95)
-  lcd.drawBitmap(ImgPageDn, 455, 95)
-  lcd.drawText(vmeterX - 10, vmeterY, "Advanced", MIDSIZE + TEXT_COLOR)
-  fields = vmeterFields
-
-  local f = vmeterFields[1]
-  lcd.drawText(vmeterX, f[2], f[7], TEXT_COLOR)
-
-  local w = lcd.sizeText(f[6][2])
-  lcd.drawFilledRectangle(f[1] - 5, f[2] - 5, w + 10, 30, TEXT_BGCOLOR)
-
-  if not vmeterAdcImg then
-    vmeterAdcImg = Bitmap.open("img/adcmeter.png")
-  end
-  if not vmeterBecImg then
-    vmeterBecImg = Bitmap.open("img/becmeter.png")
-  end
-
-  local sensor
-  local img
-  if f[5] ~= 0 then
-    sensor = vmeterAdcSensor
-    img = vmeterAdcImg
-  else
-    sensor = vmeterEscSensor
-    img = vmeterBecImg
-  end
-
-  -- show help
-  lcd.drawText(45, f[2] + 40, "Top bar widget source should be set to "..CHAR_TELEMETRY..sensor.name, TEXT_COLOR)
-  lcd.drawBitmap(img, 45, 130)
-  
   local result = runFieldsPage(event)
   return result
 end
@@ -672,12 +604,6 @@ local function createModel(event)
     end
   end
 
-  -- advanced
-  local f = vmeterFields[1]
-  local lswitch = model.getLogicalSwitch(LS_BEC_MONITOR_INDEX)
-  lswitch.v1 = getSourceIndex(CHAR_TELEMETRY..(f[5] > 0 and vmeterAdcSensor.name or vmeterEscSensor.name))
-  model.setLogicalSwitch(LS_BEC_MONITOR_INDEX, lswitch)
-
   exitWithMessage("Success", "Model settings saved")
   return 0
 end
@@ -708,7 +634,6 @@ local function init()
   initSwitchConfig()
   initOptSwitchConfig()
   initWarningConfig()
-  initAdvancedConfig()
 end
 
 

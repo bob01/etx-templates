@@ -1,4 +1,4 @@
-semver: 2.10.0
+semver: 2.10.4
 header:
   name: New Heli
   bitmap: new.png
@@ -59,11 +59,7 @@ flightModeData:
     fadeOut: 0
     gvars:
       0:
-        val: 71
-      1:
-        val: 0
-      2:
-        val: 0
+        val: 710
 mixData:
   - destCh: 0
     srcRaw: I0
@@ -661,43 +657,43 @@ logicalSw:
     andsw: NONE
   5:
     func: FUNC_VEQUAL
-    def: tele(14),1
+    def: tele(34),1
     delay: 0
     duration: 0
     andsw: NONE
   6:
     func: FUNC_VEQUAL
-    def: tele(14),2
+    def: tele(34),2
     delay: 0
     duration: 0
     andsw: NONE
   7:
     func: FUNC_VEQUAL
-    def: tele(14),3
+    def: tele(34),3
     delay: 0
     duration: 0
     andsw: NONE
   8:
     func: FUNC_VPOS
-    def: tele(15),0
+    def: tele(18),0
     delay: 0
     duration: 0
     andsw: NONE
   9:
     func: FUNC_LESS
-    def: tele(15),gv(2)
+    def: tele(18),gv(2)
     delay: 5
     duration: 0
     andsw: L2
   10:
     func: FUNC_LESS
-    def: tele(15),gv(1)
+    def: tele(18),gv(1)
     delay: 5
     duration: 0
     andsw: L2
   11:
     func: FUNC_LESS
-    def: tele(12),gv(0)
+    def: tele(10),gv(0)
     delay: 5
     duration: 0
     andsw: L2
@@ -769,7 +765,7 @@ logicalSw:
     andsw: NONE
   24:
     func: FUNC_ADIFFEGREATER
-    def: tele(6),5
+    def: tele(3),5
     delay: 0
     duration: 0
     andsw: NONE
@@ -787,13 +783,13 @@ logicalSw:
     andsw: NONE
   27:
     func: FUNC_VNEG
-    def: tele(0),-95
+    def: tele(7),-95
     delay: 5
     duration: 0
     andsw: "!L22"
   28:
     func: FUNC_VNEG
-    def: tele(2),60
+    def: tele(5),60
     delay: 5
     duration: 0
     andsw: "!L22"
@@ -815,7 +811,7 @@ customFn:
   2:
     swtch: L11
     func: PLAY_VALUE
-    def: tele(15),1,5
+    def: tele(18),1,5
   3:
     swtch: L12
     func: PLAY_SOUND
@@ -855,27 +851,27 @@ customFn:
   12:
     swtch: L15
     func: PLAY_VALUE
-    def: tele(15),1,!1x
+    def: tele(18),1,!1x
   13:
     swtch: L15
     func: PLAY_VALUE
-    def: tele(21),1,!1x
+    def: tele(17),1,!1x
   14:
     swtch: L15
     func: PLAY_VALUE
-    def: tele(17),1,!1x
+    def: tele(25),1,!1x
   15:
     swtch: L25
     func: PLAY_VALUE
-    def: tele(6),1,!1x
+    def: tele(3),1,!1x
   16:
     swtch: L30
     func: PLAY_VALUE
-    def: tele(0),1,5
+    def: tele(7),1,5
   17:
     swtch: L30
     func: PLAY_VALUE
-    def: tele(2),1,5
+    def: tele(5),1,5
   18:
     swtch: L26
     func: LOGS
@@ -883,7 +879,7 @@ customFn:
   19:
     swtch: L27
     func: PLAY_VALUE
-    def: tele(13),1,5
+    def: tele(24),1,5
   20:
     swtch: ON
     func: SET_SCREEN
@@ -906,7 +902,17 @@ swashR:
   aileronWeight: 0
   elevatorWeight: 0
 thrTraceSrc: Thr
-switchWarningState: AuCdDdEuGd
+switchWarning:
+  SA:
+    pos: up
+  SC:
+    pos: down
+  SD:
+    pos: down
+  SE:
+    pos: up
+  SG:
+    pos: down
 thrTrimSw: 0
 potsWarnMode: WARN_OFF
 potsWarnEnabled: 0
@@ -970,65 +976,12 @@ trainerData:
   frameLength: 0
   delay: 0
   pulsePol: 0
+scriptsData:
+  0:
+    file: rf2tlm
+    name: ""
 telemetrySensors:
   0:
-    type: TYPE_CUSTOM
-    id1:
-      id: 20
-    subId: 0
-    id2:
-      instance: 0
-    label: 1RSS
-    unit: 17
-    prec: 0
-    autoOffset: 0
-    filter: 0
-    logs: 1
-    persistent: 0
-    onlyPositive: 0
-    cfg:
-      custom:
-        ratio: 0
-        offset: 0
-  1:
-    type: TYPE_CUSTOM
-    id1:
-      id: 20
-    subId: 0
-    id2:
-      instance: 1
-    label: 2RSS
-    unit: 17
-    prec: 0
-    autoOffset: 0
-    filter: 0
-    logs: 1
-    persistent: 0
-    onlyPositive: 0
-    cfg:
-      custom:
-        ratio: 0
-        offset: 0
-  2:
-    type: TYPE_CUSTOM
-    id1:
-      id: 20
-    subId: 0
-    id2:
-      instance: 2
-    label: Link
-    unit: 13
-    prec: 0
-    autoOffset: 0
-    filter: 0
-    logs: 1
-    persistent: 0
-    onlyPositive: 0
-    cfg:
-      custom:
-        ratio: 0
-        offset: 0
-  3:
     type: TYPE_CUSTOM
     id1:
       id: 20
@@ -1047,7 +1000,7 @@ telemetrySensors:
       custom:
         ratio: 0
         offset: 0
-  4:
+  1:
     type: TYPE_CUSTOM
     id1:
       id: 20
@@ -1066,7 +1019,7 @@ telemetrySensors:
       custom:
         ratio: 0
         offset: 0
-  5:
+  2:
     type: TYPE_CUSTOM
     id1:
       id: 20
@@ -1085,7 +1038,7 @@ telemetrySensors:
       custom:
         ratio: 0
         offset: 0
-  6:
+  3:
     type: TYPE_CUSTOM
     id1:
       id: 20
@@ -1104,7 +1057,7 @@ telemetrySensors:
       custom:
         ratio: 0
         offset: 0
-  7:
+  4:
     type: TYPE_CUSTOM
     id1:
       id: 20
@@ -1123,14 +1076,14 @@ telemetrySensors:
       custom:
         ratio: 0
         offset: 0
-  8:
+  5:
     type: TYPE_CUSTOM
     id1:
       id: 20
     subId: 0
     id2:
       instance: 8
-    label: TQly
+    label: Link
     unit: 13
     prec: 0
     autoOffset: 0
@@ -1142,7 +1095,7 @@ telemetrySensors:
       custom:
         ratio: 0
         offset: 0
-  9:
+  6:
     type: TYPE_CUSTOM
     id1:
       id: 20
@@ -1161,16 +1114,73 @@ telemetrySensors:
       custom:
         ratio: 0
         offset: 0
-  10:
+  7:
     type: TYPE_CUSTOM
     id1:
-      id: 2
+      id: 20
     subId: 0
     id2:
       instance: 0
-    label: GPS
-    unit: 40
+    label: 1RSS
+    unit: 17
     prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  8:
+    type: TYPE_CUSTOM
+    id1:
+      id: 20
+    subId: 0
+    id2:
+      instance: 1
+    label: 2RSS
+    unit: 17
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  9:
+    type: TYPE_CUSTOM
+    id1:
+      id: 20
+    subId: 0
+    id2:
+      instance: 2
+    label: RQly
+    unit: 13
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  10:
+    type: TYPE_CUSTOM
+    id1:
+      id: 4225
+    subId: 0
+    id2:
+      instance: 0
+    label: BEC
+    unit: 1
+    prec: 2
     autoOffset: 0
     filter: 0
     logs: 1
@@ -1183,11 +1193,11 @@ telemetrySensors:
   11:
     type: TYPE_CUSTOM
     id1:
-      id: 2
+      id: 60929
     subId: 0
     id2:
-      instance: 2
-    label: ESts
+      instance: 0
+    label: "*Cnt"
     unit: 0
     prec: 0
     autoOffset: 0
@@ -1197,18 +1207,18 @@ telemetrySensors:
     onlyPositive: 0
     cfg:
       custom:
-        ratio: 2550
+        ratio: 0
         offset: 0
   12:
     type: TYPE_CUSTOM
     id1:
-      id: 2
+      id: 60930
     subId: 0
     id2:
-      instance: 3
-    label: BEC
-    unit: 1
-    prec: 2
+      instance: 0
+    label: "*Skp"
+    unit: 0
+    prec: 0
     autoOffset: 0
     filter: 0
     logs: 1
@@ -1216,17 +1226,17 @@ telemetrySensors:
     onlyPositive: 0
     cfg:
       custom:
-        ratio: 20
+        ratio: 0
         offset: 0
   13:
     type: TYPE_CUSTOM
     id1:
-      id: 2
+      id: 4128
     subId: 0
     id2:
-      instance: 4
-    label: RPM
-    unit: 18
+      instance: 0
+    label: Cel#
+    unit: 0
     prec: 0
     autoOffset: 0
     filter: 0
@@ -1240,13 +1250,13 @@ telemetrySensors:
   14:
     type: TYPE_CUSTOM
     id1:
-      id: 2
+      id: 4145
     subId: 0
     id2:
-      instance: 5
-    label: Bank
-    unit: 0
-    prec: 0
+      instance: 0
+    label: CPtc
+    unit: 20
+    prec: 1
     autoOffset: 0
     filter: 0
     logs: 1
@@ -1259,12 +1269,12 @@ telemetrySensors:
   15:
     type: TYPE_CUSTOM
     id1:
-      id: 8
+      id: 4165
     subId: 0
     id2:
       instance: 0
-    label: Batt
-    unit: 1
+    label: EscP
+    unit: 13
     prec: 1
     autoOffset: 0
     filter: 0
@@ -1278,12 +1288,12 @@ telemetrySensors:
   16:
     type: TYPE_CUSTOM
     id1:
-      id: 8
+      id: 4166
     subId: 0
     id2:
-      instance: 1
-    label: Curr
-    unit: 2
+      instance: 0
+    label: Esc%
+    unit: 13
     prec: 1
     autoOffset: 0
     filter: 0
@@ -1297,12 +1307,12 @@ telemetrySensors:
   17:
     type: TYPE_CUSTOM
     id1:
-      id: 8
+      id: 4167
     subId: 0
     id2:
-      instance: 2
-    label: Used
-    unit: 14
+      instance: 0
+    label: Temp
+    unit: 11
     prec: 0
     autoOffset: 0
     filter: 0
@@ -1316,13 +1326,13 @@ telemetrySensors:
   18:
     type: TYPE_CUSTOM
     id1:
-      id: 8
+      id: 4113
     subId: 0
     id2:
-      instance: 3
-    label: Bat%
-    unit: 13
-    prec: 0
+      instance: 0
+    label: Vbat
+    unit: 1
+    prec: 2
     autoOffset: 0
     filter: 0
     logs: 1
@@ -1335,12 +1345,12 @@ telemetrySensors:
   19:
     type: TYPE_CUSTOM
     id1:
-      id: 30
+      id: 4114
     subId: 0
     id2:
       instance: 0
-    label: BECv
-    unit: 1
+    label: Curr
+    unit: 2
     prec: 2
     autoOffset: 0
     filter: 0
@@ -1349,16 +1359,16 @@ telemetrySensors:
     onlyPositive: 0
     cfg:
       custom:
-        ratio: 2550
+        ratio: 0
         offset: 0
   20:
     type: TYPE_CUSTOM
     id1:
-      id: 30
+      id: 4116
     subId: 0
     id2:
-      instance: 1
-    label: Thro
+      instance: 0
+    label: Bat%
     unit: 13
     prec: 0
     autoOffset: 0
@@ -1368,17 +1378,17 @@ telemetrySensors:
     onlyPositive: 0
     cfg:
       custom:
-        ratio: 25500
+        ratio: 0
         offset: 0
   21:
     type: TYPE_CUSTOM
     id1:
-      id: 30
+      id: 4149
     subId: 0
     id2:
-      instance: 2
-    label: Temp
-    unit: 11
+      instance: 0
+    label: Thr
+    unit: 13
     prec: 0
     autoOffset: 0
     filter: 0
@@ -1387,17 +1397,340 @@ telemetrySensors:
     onlyPositive: 0
     cfg:
       custom:
-        ratio: 25500
+        ratio: 0
         offset: 0
   22:
     type: TYPE_CUSTOM
     id1:
-      id: 33
+      id: 4169
     subId: 0
     id2:
       instance: 0
-    label: FM
-    unit: 42
+    label: BecV
+    unit: 1
+    prec: 2
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  23:
+    type: TYPE_CUSTOM
+    id1:
+      id: 4170
+    subId: 0
+    id2:
+      instance: 0
+    label: BecI
+    unit: 2
+    prec: 2
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  24:
+    type: TYPE_CUSTOM
+    id1:
+      id: 4288
+    subId: 0
+    id2:
+      instance: 0
+    label: RPM
+    unit: 18
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  25:
+    type: TYPE_CUSTOM
+    id1:
+      id: 4115
+    subId: 0
+    id2:
+      instance: 0
+    label: Capa
+    unit: 14
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  26:
+    type: TYPE_CUSTOM
+    id1:
+      id: 4146
+    subId: 0
+    id2:
+      instance: 0
+    label: CRol
+    unit: 20
+    prec: 1
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  27:
+    type: TYPE_CUSTOM
+    id1:
+      id: 4148
+    subId: 0
+    id2:
+      instance: 0
+    label: CCol
+    unit: 20
+    prec: 1
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  28:
+    type: TYPE_CUSTOM
+    id1:
+      id: 4175
+    subId: 0
+    id2:
+      instance: 0
+    label: Esc#
+    unit: 0
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  29:
+    type: TYPE_CUSTOM
+    id1:
+      id: 4224
+    subId: 0
+    id2:
+      instance: 0
+    label: Vesc
+    unit: 1
+    prec: 2
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  30:
+    type: TYPE_CUSTOM
+    id1:
+      id: 4240
+    subId: 0
+    id2:
+      instance: 0
+    label: Iesc
+    unit: 2
+    prec: 2
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  31:
+    type: TYPE_CUSTOM
+    id1:
+      id: 4609
+    subId: 0
+    id2:
+      instance: 0
+    label: Mode
+    unit: 0
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  32:
+    type: TYPE_CUSTOM
+    id1:
+      id: 4610
+    subId: 0
+    id2:
+      instance: 0
+    label: ARM
+    unit: 0
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  33:
+    type: TYPE_CUSTOM
+    id1:
+      id: 4611
+    subId: 0
+    id2:
+      instance: 0
+    label: ARMD
+    unit: 0
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  34:
+    type: TYPE_CUSTOM
+    id1:
+      id: 4625
+    subId: 0
+    id2:
+      instance: 0
+    label: Bank
+    unit: 0
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  35:
+    type: TYPE_CUSTOM
+    id1:
+      id: 4097
+    subId: 0
+    id2:
+      instance: 0
+    label: BEAT
+    unit: 0
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  36:
+    type: TYPE_CUSTOM
+    id1:
+      id: 4147
+    subId: 0
+    id2:
+      instance: 0
+    label: CYaw
+    unit: 20
+    prec: 1
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  37:
+    type: TYPE_CUSTOM
+    id1:
+      id: 4174
+    subId: 0
+    id2:
+      instance: 0
+    label: EscF
+    unit: 0
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  38:
+    type: TYPE_CUSTOM
+    id1:
+      id: 4613
+    subId: 0
+    id2:
+      instance: 0
+    label: Gov
+    unit: 0
+    prec: 0
+    autoOffset: 0
+    filter: 0
+    logs: 1
+    persistent: 0
+    onlyPositive: 0
+    cfg:
+      custom:
+        ratio: 0
+        offset: 0
+  39:
+    type: TYPE_CUSTOM
+    id1:
+      id: 4626
+    subId: 0
+    id2:
+      instance: 0
+    label: RTE#
+    unit: 0
     prec: 0
     autoOffset: 0
     filter: 0
@@ -1434,26 +1767,22 @@ screenData:
                 value:
                   unsignedValue: 2
         1:
-          widgetName: ePowerbar
+          widgetName: erPowerbar
           widgetData:
             options:
               0:
-                type: Source
-                value:
-                  source: tele(15)
-              1:
-                type: Source
-                value:
-                  source: tele(18)
-              2:
-                type: Source
-                value:
-                  source: tele(17)
-              3:
                 type: Signed
                 value:
                   signedValue: 20
-              4:
+              1:
+                type: Signed
+                value:
+                  signedValue: 6
+              2:
+                type: Signed
+                value:
+                  signedValue: 20
+              3:
                 type: Signed
                 value:
                   signedValue: 0
@@ -1464,7 +1793,7 @@ screenData:
               0:
                 type: Source
                 value:
-                  source: tele(13)
+                  source: tele(24)
               1:
                 type: Color
                 value:
@@ -1478,29 +1807,13 @@ screenData:
                 value:
                   unsignedValue: 2
         3:
-          widgetName: eThrottle
+          widgetName: erThrottle
           widgetData:
             options:
               0:
-                type: Source
+                type: Color
                 value:
-                  source: tele(20)
-              1:
-                type: Source
-                value:
-                  source: tele(22)
-              2:
-                type: Source
-                value:
-                  source: tele(11)
-              3:
-                type: Bool
-                value:
-                  boolValue: 1
-              4:
-                type: Bool
-                value:
-                  boolValue: 1
+                  color: 0x000000
         4:
           widgetName: ModelBmp
           widgetData:
@@ -1528,7 +1841,7 @@ screenData:
               0:
                 type: Source
                 value:
-                  source: tele(21)
+                  source: tele(17)
               1:
                 type: Color
                 value:
@@ -1573,7 +1886,7 @@ screenData:
               0:
                 type: Source
                 value:
-                  source: tele(+6)
+                  source: tele(3)
               1:
                 type: Color
                 value:
@@ -1593,7 +1906,7 @@ screenData:
               0:
                 type: Source
                 value:
-                  source: tele(17)
+                  source: tele(25)
               1:
                 type: Color
                 value:
@@ -1613,7 +1926,7 @@ screenData:
               0:
                 type: Source
                 value:
-                  source: tele(18)
+                  source: tele(20)
               1:
                 type: Color
                 value:
@@ -1633,7 +1946,7 @@ screenData:
               0:
                 type: Source
                 value:
-                  source: tele(+20)
+                  source: tele(21)
               1:
                 type: Color
                 value:
@@ -1653,7 +1966,7 @@ screenData:
               0:
                 type: Source
                 value:
-                  source: tele(+15)
+                  source: tele(+18)
               1:
                 type: Color
                 value:
@@ -1673,7 +1986,7 @@ screenData:
               0:
                 type: Source
                 value:
-                  source: tele(-15)
+                  source: tele(-18)
               1:
                 type: Color
                 value:
@@ -1693,7 +2006,7 @@ screenData:
               0:
                 type: Source
                 value:
-                  source: tele(+16)
+                  source: tele(+19)
               1:
                 type: Color
                 value:
@@ -1713,7 +2026,7 @@ screenData:
               0:
                 type: Source
                 value:
-                  source: tele(+21)
+                  source: tele(+17)
               1:
                 type: Color
                 value:
@@ -1772,7 +2085,7 @@ topbarData:
           0:
             type: Source
             value:
-              source: tele(14)
+              source: tele(34)
           1:
             type: Color
             value:
@@ -1782,25 +2095,25 @@ topbarData:
             value:
               boolValue: 1
     1:
-      widgetName: eBecMeter
+      widgetName: Value
       widgetData:
         options:
           0:
+            type: Source
+            value:
+              source: tele(10)
+          1:
             type: Color
             value:
               color: 0xf8fcf8
-          1:
+          2:
             type: Bool
             value:
               boolValue: 1
-          2:
-            type: Signed
+          4:
+            type: Unsigned
             value:
-              signedValue: 0
-          3:
-            type: Signed
-            value:
-              signedValue: 4
+              unsignedValue: 1
     2:
       widgetName: Value
       widgetData:
@@ -1808,7 +2121,7 @@ topbarData:
           0:
             type: Source
             value:
-              source: tele(2)
+              source: tele(5)
           1:
             type: Color
             value:
@@ -1828,7 +2141,7 @@ topbarData:
           0:
             type: Source
             value:
-              source: tele(6)
+              source: tele(3)
           1:
             type: Color
             value:

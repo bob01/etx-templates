@@ -20,16 +20,13 @@
 -- Designed for 1/8 cell
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2024
--- ver: 0.6.8
+-- ver: 0.8.0
 
-local app_name = "eThrottle"
+local app_name = "erThrottle"
 
 local AUDIO_PATH = "/SOUNDS/en/"
 
 local _options = {
-    { "ThrottleSensor"    , SOURCE, 0 },
-    { "FlightModeSensor"  , SOURCE, 0 },
-    { "EscStatus"         , SOURCE, 0 },
     { "Color"             , COLOR, BLACK },
 }
 
@@ -40,10 +37,6 @@ local LEVEL_TRACE       = 0
 local LEVEL_INFO        = 1
 local LEVEL_WARN        = 2
 local LEVEL_ERROR       = 3
-
-local PARAM_STATUS_NEED_RESET       = 0x0FFF
-local PARAM_OOB_FLAG                = 0x0F00
-local PARAM_OOB_MASK                = 0x00FF
 
 local escStatusColors = {
     [LEVEL_TRACE] = GREY,
@@ -76,9 +69,22 @@ local bootEpoch = getDateTime()
 local bootTime = getTime()
 
 --------------------------------------------------------------
--- YGE status
+-- ESC signatures
 
-local YGE_SIG                   = 0xA5      -- ESC signature
+local ESC_SIG_NONE              = 0x00
+local ESC_SIG_BLHELI32          = 0xC8
+local ESC_SIG_HW4               = 0x9B
+local ESC_SIG_KON               = 0x4B
+local ESC_SIG_OMP               = 0xD0
+local ESC_SIG_ZTW               = 0xDD
+local ESC_SIG_APD               = 0xA0
+local ESC_SIG_PL5               = 0xFD
+local ESC_SIG_TRIB              = 0x53
+local ESC_SIG_OPENYGE           = 0xA5
+local ESC_SIG_RESTART           = 0xFF
+
+--------------------------------------------------------------
+-- YGE status
 
 local STATE_MASK                = 0x0F      -- status bit mask
 local STATE_DISARMED            = 0x00      -- Motor stopped
@@ -194,8 +200,6 @@ end
 -- *         6:  N/A
 -- *         7:  Throttle error
 
-local TRIB_SIG                  = 0x53      -- ESC signature
-
  local function tribGetStatus(code, changed)
     local text = "Scorpion ESC OK"
     local level = LEVEL_INFO
@@ -246,8 +250,6 @@ end
 -- *         6:  Input-voltage error
 -- *         7:  Motor connection error
 
-local PL5_SIG                   = 0xFD      -- ESC signature
-
 local function pl5GetStatus(code, changed)
    local text = "HobbyWing ESC OK"
    local level = LEVEL_INFO
@@ -291,6 +293,13 @@ end
 
 --------------------------------------------------------------
 
+local function getSensorFieldInfo(wgt, name)
+    local fi = getFieldInfo(name)
+    if fi == nil then
+        wgt.common.log("Required sensor '"..name.."' missing")
+    end
+    return fi
+end
 
 local function update(wgt, options)
     if (wgt == nil) then
@@ -301,10 +310,33 @@ local function update(wgt, options)
 
     wgt.fmode = ""
     wgt.throttle = ""
-    wgt.fmSensorMode = FM_MODE_FM
-    wgt.fmGovLostHs = false
 
     escStatusColors[LEVEL_INFO] = wgt.options.Color
+
+    -- reload common libraries
+    local commonClass = loadScript("/WIDGETS/erLib/lib_common.lua", "tcd")
+    wgt.common = commonClass(app_name)
+
+    -- get sensors
+    local fi = getSensorFieldInfo(wgt, "ARM")
+    wgt.sensorArmId = fi and fi.id or 0
+
+    fi = getSensorFieldInfo(wgt, "ARMD")
+    wgt.sensorArmDisabledId = fi and fi.id or 0
+
+    fi = getSensorFieldInfo(wgt, "Thr")
+    wgt.sensorThrId = fi and fi.id or 0
+
+    fi = getSensorFieldInfo(wgt, "Gov")
+    wgt.sensorGovId = fi and fi.id or 0
+
+    fi = getSensorFieldInfo(wgt, "Esc#")
+    wgt.sensorEscSigId = fi and fi.id or 0
+
+    fi = getSensorFieldInfo(wgt, "EscF")
+    wgt.sensorEscFlagsId = fi and fi.id or 0
+    
+    wgt.sig = ESC_SIG_NONE
 end
 
 local function create(zone, options)
@@ -320,8 +352,6 @@ local function create(zone, options)
 
         fmode = "",
         throttle = "",
-        fmSensorMode = FM_MODE_FM,
-        fmGovLostHs = false,
 
         connected = false,
         armed = false,
@@ -389,7 +419,11 @@ local function refreshZoneSmall(wgt)
     lcd.drawText(cell.x, cell.y, CHAR_TELEMETRY .. "Throttle", LEFT + wgt.text_color)
 
     if wgt.isDataAvailable then
-        lcd.drawText(rx, cell.y, wgt.fmode, RIGHT + wgt.text_color)
+        local flags = RIGHT + wgt.text_color
+        if string.len(wgt.fmode) > 14 then
+            flags = flags + SMLSIZE
+        end
+        lcd.drawText(rx, cell.y, wgt.fmode, flags)
     end
 
     local _,vh = lcd.sizeText(wgt.throttle, BOLD + MIDSIZE)
@@ -397,12 +431,13 @@ local function refreshZoneSmall(wgt)
 
     local text
     local color
-    if wgt.scode == PARAM_STATUS_NEED_RESET then
+    if wgt.sig == ESC_SIG_RESTART then
         text = "RESTART ESC"
         color = escStatusColors[LEVEL_ERROR] + BLINK
     else
         text = escstatus_text
         color = wgt.escstatus_color
+        color = BLACK
     end
     if text then
         _,vh = lcd.sizeText(text, color)
@@ -465,27 +500,52 @@ local function refreshAppMode(wgt, event, touchState)
     end
 end
 
-local FM_DISABLED = "DISABLED"
-local FM_GOV_OFF = "OFF"
-local FM_GOV_IDLE = "IDLE"
-local FM_GOV_DISARMED = "DISARMED"
-local FM_GOV_LOSTHS = "LOST-HS"
+local govStates = {
+    [0] = "OFF",
+    "IDLE",
+    "SPOOLUP",
+    "RECOVERY",
+    "ACTIVE",
+    "THR-OFF",
+    "LOST-HS",
+    "AUTOROT",
+    "BAILOUT",
+}
+
+local armDisabledDescs = {
+    [0] = "NOGYRO",
+    "FAILSAFE",
+    "RXLOSS",
+    "BADRX",
+    "BOXFAILSAFE",
+    "RUNAWAY",
+    "CRASH",
+    "THROTTLE",
+    "ANGLE",
+    "BOOTGRACE",
+    "NOPREARM",
+    "LOAD",
+    "CALIB",
+    "CLI",
+    "CMS",
+    "BST",
+    "MSP",
+    "PARALYZE",
+    "GPS",
+    "RESCUE_SW",
+    "RPMFILTER",
+    "REBOOT_REQD",
+    "DSHOT_BBANG",
+    "NO_ACC_CAL",
+    "MOTOR_PROTO",
+    "ARMSWITCH",
+}
 
 -- This function allow recording of lowest cells when widget is in background
 local function background(wgt)
 
     -- assume telemetry not available
-    wgt.isDataAvailable = false
-
-    -- configured?
-    local fm
-    if wgt.options.FlightModeSensor ~= 0 then
-        -- configured, try to fetch telemetry value - will be 0 (number) if not connected
-        fm = getValue(wgt.options.FlightModeSensor)
-        wgt.isDataAvailable = type(fm) == "string"
--- wgt.isDataAvailable = true --getValue(wgt.options.ThrottleSensor) == 40     -- <<== for testing only
--- fm = "Normal *"
-    end
+    wgt.isDataAvailable = wgt.common.isTelemetryActive()
 
     -- connected?
     if wgt.isDataAvailable then
@@ -503,70 +563,94 @@ local function background(wgt)
 
         -- armed?
         local armed
-        if wgt.fmSensorMode == FM_MODE_FM then
-            -- assume FM sensor...
-            armed = string.find(fm, "*") ~= nil
-
-            -- ...unless known GOV state seen
-            if fm == FM_GOV_DISARMED or fm == FM_GOV_OFF or fm == FM_GOV_IDLE then
-                wgt.fmSensorMode = FM_MODE_GOV
-            end
+        if wgt.sensorArmId ~= 0 then
+            armed = (bit32.band(getValue(wgt.sensorArmId), 0x01) == 0x01)
+        else
+            armed = false
         end
 
-        if wgt.fmSensorMode == FM_MODE_GOV then
-            -- GOV sensor
-            armed = not (fm == FM_DISABLED or fm == FM_GOV_DISARMED);
-        end
-
-        local govLostHs = wgt.fmGovLostHs
         if armed then
             -- armed, get ESC throttle if configured
-            if wgt.options.ThrottleSensor ~= 0 then
-                local thro = getValue(wgt.options.ThrottleSensor)
+            if wgt.sensorThrId ~= 0 then
+                local thro = getValue(wgt.sensorThrId)
                 wgt.throttle = string.format("%d%%", thro)
             else
                 wgt.throttle = "--"
             end
-            wgt.fmGovLostHs = (fm == FM_GOV_LOSTHS)
         else
             -- not armed
             wgt.throttle = "Safe"
-            wgt.fmGovLostHs = false
         end
 
-        -- ESC status
-        if wgt.options.EscStatus ~=0 then
-            wgt.scode = getValue(wgt.options.EscStatus)
-            if bit32.band(wgt.scode, PARAM_OOB_FLAG) == PARAM_OOB_FLAG then
-                if not escGetStatus and wgt.scode ~= PARAM_STATUS_NEED_RESET then
-                    local sig = bit32.band(wgt.scode, PARAM_OOB_MASK)
-                    if sig == YGE_SIG then
-                        escGetStatus = ygeGetStatus
-                        escResetStatus = ygeResetStatus
-                    elseif sig == TRIB_SIG then
-                        escGetStatus = tribGetStatus
-                        escResetStatus = tribResetStatus
-                    elseif sig == PL5_SIG then
-                        escGetStatus = pl5GetStatus
-                        escResetStatus = pl5ResetStatus
-                    elseif sig ~= 0 then
-                        escstatus_text = "Unrecognized ESC"
+        -- GOV status
+        local govStatus
+        if wgt.sensorGovId ~= 0 and wgt.sensorArmDisabledId ~= 0 then
+            local gs = getValue(wgt.sensorGovId)
+            local adf = getValue(wgt.sensorArmDisabledId)
+
+            if not armed then
+                if adf ~= 0 then
+                    govStatus = "";
+                    -- find a better message
+                    for i = 1, #armDisabledDescs do
+                        local bit = i - 1
+                        if bit32.band(adf, bit32.lshift(1, bit)) ~= 0 then
+                            local desc = armDisabledDescs[bit]
+                            local len = string.len(govStatus)
+                            if len + string.len(desc) + 1 > 18 then
+                                govStatus = govStatus.." +"
+                                break
+                            end
+                            govStatus = govStatus..(len > 0 and " " or "")..desc
+                        end
                     end
-                    escstatus_level = LEVEL_INFO
+                    govStatus = "* "..govStatus
+                else
+                    govStatus = "DISARMED";
                 end
-            elseif escGetStatus then
-                local changed = logPutEv(wgt, wgt.scode)
-                local status = escGetStatus(wgt.scode, changed)
-                if status.level >= escstatus_level then
-                    escstatus_text = status.text
-                    escstatus_level = status.level
-                    wgt.escstatus_color = escStatusColors[status.level]
+            else
+                if gs < #govStates then
+                    govStatus = govStates[gs]
+                else
+                    govStatus = "UNKNOWN("..gs..")"
                 end
+            end
+        else
+            govStatus = "--"
+        end
+        wgt.fmode = govStatus
+
+        -- ESC sig
+        if wgt.sensorEscSigId ~= 0 and wgt.sensorEscFlagsId ~= 0 then
+            wgt.sig = getValue(wgt.sensorEscSigId)
+            if not escGetStatus then
+                if wgt.sig == ESC_SIG_OPENYGE then
+                    escGetStatus = ygeGetStatus
+                    escResetStatus = ygeResetStatus
+                elseif wgt.sig == ESC_SIG_TRIB then
+                    escGetStatus = tribGetStatus
+                    escResetStatus = tribResetStatus
+                elseif wgt.sig == ESC_SIG_PL5 then
+                    escGetStatus = pl5GetStatus
+                    escResetStatus = pl5ResetStatus
+                elseif wgt.sig ~= ESC_SIG_NONE then
+                    escstatus_text = "Unrecognized ESC"
+                end
+                escstatus_level = LEVEL_INFO
             end
         end
 
-        -- keep value for display
-        wgt.fmode = fm
+        -- ESC flags
+        if escGetStatus then
+            local flags = getValue(wgt.sensorEscFlagsId)
+            local changed = logPutEv(wgt, flags)
+            local status = escGetStatus(flags, changed)
+            if status.level >= escstatus_level then
+                escstatus_text = status.text
+                escstatus_level = status.level
+                wgt.escstatus_color = escStatusColors[status.level]
+            end
+        end
 
         -- announce if armed state changed
         if wgt.armed ~= armed then
@@ -576,13 +660,6 @@ local function background(wgt)
                 playAudio("disarm")
             end
             wgt.armed = armed
-        end
-
-        -- announce if bailout failed
-        if wgt.fmGovLostHs and wgt.fmGovLostHs ~= govLostHs then
-            playAudio("auto")
-            playAudio("bad")
-            playHaptic(100, 0)
         end
     else
         -- not connected
