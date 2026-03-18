@@ -18,7 +18,8 @@
 ---- #########################################################################
 
 -- Author: Rob Gayle (bob00@rogers.com)
--- Date: 2024
+-- Date: 2026
+-- ver: 0.4.0 - support for TX16S MK3 / RF 2.3.x
 -- ver: 0.3.4
 -- ver: 0.3.5 - deprecated BEC/ADC page (most FC's have ADCs now)
 -- ver: 0.3.8 - removed BEC/ADC page UI / save
@@ -88,7 +89,7 @@ local function redrawFieldsPage(event)
     end
 
     local attr = current == (index) and ((edit == true and BLINK or 0) + INVERS) or 0
-    attr = attr + TEXT_COLOR
+    attr = attr + COLOR_THEME_SECONDARY1
 
     if field[3] == VALUE then
       lcd.drawNumber(field[1], field[2], field[5], LEFT + attr + field[8])
@@ -193,14 +194,14 @@ local function runExitWithMessage()
   fields = {}
   edit = false
 
-  lcd.drawText(exitX - 20, exitY, exitTitle, MIDSIZE + TEXT_COLOR)
+  lcd.drawText(exitX - 20, exitY, exitTitle, MIDSIZE + COLOR_THEME_SECONDARY1)
 
   local w, h = lcd.sizeText(exitMessage)
-  lcd.drawText((LCD_W - w) / 2, (LCD_H - h) / 2, exitMessage, TEXT_COLOR)
+  lcd.drawText((LCD_W - w) / 2, (LCD_H - h) / 2, exitMessage, COLOR_THEME_SECONDARY1)
 
   local text = "Hold [RTN] to exit..."
   w, h = lcd.sizeText(text)
-  lcd.drawText((LCD_W - w) / 2, LCD_H - h, text, TEXT_COLOR + BOLD)
+  lcd.drawText((LCD_W - w) / 2, LCD_H - h, text, COLOR_THEME_SECONDARY1 + BOLD)
 
   return 0
 end
@@ -292,15 +293,15 @@ local function runSwitchConfig(event)
   lcd.clear()
   lcd.drawBitmap(BackgroundImg,0,0)
   lcd.drawBitmap(ImgPageDn, 455, 95)
-  lcd.drawText(switchX - 10, switchY, "Switch Assignments", MIDSIZE + TEXT_COLOR)
+  lcd.drawText(switchX - 10, switchY, "Switch Assignments", MIDSIZE + COLOR_THEME_SECONDARY1)
   fields = switchFields
   for idx = 1, #fields do
     local f = fields[idx]
-    lcd.drawFilledRectangle(f[1] - 5, f[2] - 5, f[8], 30, TEXT_BGCOLOR)
+    lcd.drawFilledRectangle(f[1] - 5, f[2] - 5, f[8], 30, COLOR_THEME_SECONDARY3)
 
     local tx = f[9] and switchX or (f[1] + f[8] + 4)
     local text = f[9] and f[7] or sjoin(f[7], "-", f[5])
-    lcd.drawText(tx, f[2], text, TEXT_COLOR)
+    lcd.drawText(tx, f[2], text, COLOR_THEME_SECONDARY1)
   end
 
   local result = runFieldsPage(event)
@@ -349,7 +350,7 @@ local function runOptSwitchConfig(event)
   lcd.drawBitmap(BackgroundImg,0,0)
   lcd.drawBitmap(ImgPageUp, 0, 95)
   lcd.drawBitmap(ImgPageDn, 455, 95)
-  lcd.drawText(optSwitchX - 15, optSwitchY, "Optional Switchs", MIDSIZE + TEXT_COLOR)
+  lcd.drawText(optSwitchX - 15, optSwitchY, "Optional Switchs", MIDSIZE + COLOR_THEME_SECONDARY1)
   fields = optSwitchFields
 
   -- update direction label
@@ -371,11 +372,11 @@ local function runOptSwitchConfig(event)
   -- draw fields and labels
   for idx = 1, #fields do
     local f = fields[idx]
-    lcd.drawFilledRectangle(f[1] - 5, f[2] - 5, f[8], 30, TEXT_BGCOLOR)
+    lcd.drawFilledRectangle(f[1] - 5, f[2] - 5, f[8], 30, COLOR_THEME_SECONDARY3)
 
     local tx = f[9] and optSwitchX or (f[1] + f[8] + 4)
     local text = f[9] and f[7] or sjoin(f[7], "-", f[5])
-    lcd.drawText(tx, f[2], text, TEXT_COLOR)
+    lcd.drawText(tx, f[2], text, COLOR_THEME_SECONDARY1)
   end
 
   local result = runFieldsPage(event)
@@ -449,19 +450,19 @@ local function runWarningConfig(event)
   lcd.drawBitmap(BackgroundImg,0,0)
   lcd.drawBitmap(ImgPageUp, 0, 95)
   lcd.drawBitmap(ImgPageDn, 455, 95)
-  lcd.drawText(warningsX - 10, warningsY, "Voltage Monitors", MIDSIZE + TEXT_COLOR)
+  lcd.drawText(warningsX - 10, warningsY, "Voltage Monitors", MIDSIZE + COLOR_THEME_SECONDARY1)
   fields = warningFields
 
   for idx = 1, #fields do
     local f = fields[idx]
     local lidx = f[3] == COMBO and 7 or 9
-    lcd.drawText(f[1] - 5, f[2] - 28, f[lidx], TEXT_COLOR)
-    lcd.drawFilledRectangle(f[1] - 5, f[2] - 5, 100, 30, TEXT_BGCOLOR)
+    lcd.drawText(f[1] - 5, f[2] - 28, f[lidx], COLOR_THEME_SECONDARY1)
+    lcd.drawFilledRectangle(f[1] - 5, f[2] - 5, 100, 30, COLOR_THEME_SECONDARY3)
   end
 
   local text = "** Set to zero to disable **"
   local _, h = lcd.sizeText(text)
-  lcd.drawText(LCD_W / 2, LCD_H - h, text, TEXT_COLOR + CENTER)
+  lcd.drawText(LCD_W / 2, LCD_H - h, text, COLOR_THEME_SECONDARY1 + CENTER)
 
   local result = runFieldsPage(event)
   return result
@@ -475,16 +476,16 @@ local summaryDY = 20
 local lineIndex
 
 local function drawNextTextLine(text, text2)
-  lcd.drawText(summaryX, lineIndex, text, TEXT_COLOR)
-  lcd.drawText(summaryFX, lineIndex, ": " ..text2, TEXT_COLOR)
+  lcd.drawText(summaryX, lineIndex, text, COLOR_THEME_SECONDARY1)
+  lcd.drawText(summaryFX, lineIndex, ": " ..text2, COLOR_THEME_SECONDARY1)
   lineIndex = lineIndex + summaryDY
 end
 
 local function drawNextNumberLine(text, number, prec)
-  lcd.drawText(summaryX, lineIndex, text, TEXT_COLOR)
-  lcd.drawText(summaryFX, lineIndex, ": ", TEXT_COLOR)
+  lcd.drawText(summaryX, lineIndex, text, COLOR_THEME_SECONDARY1)
+  lcd.drawText(summaryFX, lineIndex, ": ", COLOR_THEME_SECONDARY1)
   local dx = lcd.sizeText(": ")
-  lcd.drawNumber(summaryFX + dx, lineIndex, number, LEFT + prec + TEXT_COLOR)
+  lcd.drawNumber(summaryFX + dx, lineIndex, number, LEFT + prec + COLOR_THEME_SECONDARY1)
   lineIndex = lineIndex + summaryDY
 end
 
@@ -496,7 +497,7 @@ local function runConfigSummary(event)
   lcd.drawBitmap(ImgSummary, 300, 60)
   lineIndex = summaryY
 
-  lcd.drawText(summaryX - 20, summaryY, "Summary", MIDSIZE + TEXT_COLOR)
+  lcd.drawText(summaryX - 20, summaryY, "Summary", MIDSIZE + COLOR_THEME_SECONDARY1)
   lineIndex = lineIndex + 30
 
   -- switches
@@ -529,7 +530,7 @@ local function runConfigSummary(event)
 
   local text = "Hold [Enter] to apply changes or [RTN] to cancel..."
   local w, h = lcd.sizeText(text)
-  lcd.drawText((LCD_W - w) / 2, LCD_H - h, text, TEXT_COLOR + BOLD)
+  lcd.drawText((LCD_W - w) / 2, LCD_H - h, text, COLOR_THEME_SECONDARY1 + BOLD)
 
   local result = runFieldsPage(event)
   if event == EVT_VIRTUAL_ENTER_LONG then

@@ -1,4 +1,4 @@
-Create new heli (v4.0.03170)
-For RotorFlight v2.3+
+Create new heli (v3.9.0)
+For RotorFlight v2.2+
 
 Built for RF 4-bank templates w/ pre-configured telemetry

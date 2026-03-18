@@ -41,8 +41,8 @@
 -- Added consumption "power bar"
 -- friendlier UI, new name (vPowerBar), specify cell count option, reserve, haptic critical
 -- Author: Rob Gayle (bob00@rogers.com)
--- Date: 2024
--- ver: 0.8.2
+-- Date: 2026
+-- ver: 0.9.0.03170
 
 local app_name = "erPowerbar"
 
@@ -56,18 +56,22 @@ local cellFull = 4.16
 local CELL_DETECTION_TIME = 1000
 local VOLTTIMER_DISABLED = -1
 
-local GV_CEL = 3
-
 local defaultVoltSensor = "Vbat"
 local defaultPcntSensor = "Bat%"
 local defaultMahSensor = "Capa"
+local defaultCellSensor = "Cel#"
 
 local _options = {
     { "VoltSensor"            , SOURCE, 0 },
     { "PcntSensor"            , SOURCE, 0 },
     { "MahSensor"             , SOURCE, 0 },
-    { "Reserve"               , VALUE, 20, 0, 1000 },   -- reserve (or filter samples if calc percentage)
+    { "CellSensor"            , SOURCE, 0 },
     { "Cells"                 , VALUE, 0, 0, 14 },      -- cell detection time (or interval if calc perceentage)
+    { "Reserve"               , VALUE, 20, 0, 1000 },   -- reserve (or filter samples if calc percentage)
+    { "ArmedLS"               , SOURCE, 0 },
+    { "BattFull"              , VALUE, 412, 0, 480 },
+    { "BattLow"               , VALUE, 345, 0, 440 },
+    { "BattCrit"              , VALUE, 330, 0, 440 },
 }
 
 --------------------------------------------------------------
@@ -110,6 +114,10 @@ local function update(wgt, options)
         wgt.options.MahSensor = defaultMahSensor
     end
 
+    if wgt.options.CellSensor == 0 then
+        wgt.options.CellSensor = defaultCellSensor
+    end
+
     local fi = getSensorFieldInfo(wgt, wgt.options.VoltSensor)
     wgt.sensorVoltId = fi and fi.id or 0
 
@@ -119,21 +127,14 @@ local function update(wgt, options)
     fi = getSensorFieldInfo(wgt, wgt.options.PcntSensor)
     wgt.sensorPcntId = fi and fi.id or 0
 
-    fi = getSensorFieldInfo(wgt, "Cel#")
+    fi = getSensorFieldInfo(wgt, wgt.options.CellSensor)
     wgt.sensorCellsId = fi and fi.id or 0
 
     -- cell count
     if wgt.options.Cells == 0 then
-        local gvCel = model.getGlobalVariable(GV_CEL, 0)
-        if gvCel == 0 then
-            -- auto cell detection
-            wgt.cellCount = 1
-            wgt.cell_detected = false
-        else
-            -- use GV cell count
-            wgt.cellCount = gvCel
-            wgt.cell_detected = true
-        end
+        -- use telemetry cell count
+        wgt.cellCount = 1
+        wgt.cell_detected = false
     else
         -- use cell settings
         wgt.cellCount = wgt.options.Cells
@@ -228,16 +229,6 @@ local function calculateBatteryData(wgt)
         else
             playAudio("batlow")
             playNumber(v * 10, 1, PREC1)
-        end
-    end
-
-    -- check if GV:4(Cel) cell count changed
-    if wgt.options.Cells == 0 then
-        local gvCel = model.getGlobalVariable(GV_CEL, 0)
-        if gvCel ~= 0 and gvCel ~= wgt.cellCount then
-            -- use new GV cell count
-            wgt.cellCount = gvCel
-            wgt.cell_detected = true
         end
     end
 
