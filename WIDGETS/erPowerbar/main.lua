@@ -42,14 +42,18 @@
 -- friendlier UI, new name (vPowerBar), specify cell count option, reserve, haptic critical
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03170
+-- ver: 0.9.0.03180
 
 local app_name = "erPowerbar"
 
 local AUDIO_PATH = "/SOUNDS/en/"
 
-local battCritical = 20
-local battLowMargin = 10
+local BAR_COLOR_OK          = lcd.RGB(0x00, 0xff, 0x00)
+local BAR_COLOR_WARN        = lcd.RGB(0xf8, 0xc0, 0x00) -- lcd.RGB(0xff, 0xff, 0)
+local BAR_COLOR_LOW         = lcd.RGB(0xff, 0xff, 0x00)
+local BAR_COLOR_CRITICAL    = lcd.RGB(0xff, 0x00, 0x00)
+local BAR_COLOR_CHECK       = lcd.RGB(0xb8, 0xb8, 0xb8)
+local BAR_COLOR_BACKGROUND  = lcd.RGB(0xc8, 0xc8, 0xc8)
 
 local cellFull = 4.16
 
@@ -96,7 +100,6 @@ local function update(wgt, options)
     wgt.options = options
 
     wgt.vReserve = wgt.options.Reserve
-    battCritical = wgt.vReserve > 0 and wgt.vReserve or 20
 
     -- reload common libraries
     local commonClass = loadScript("/WIDGETS/erLib/lib_common.lua", "tcd")
@@ -160,6 +163,7 @@ local function create(zone, options)
         isTelemetryActive = 0,
         vPercent = 0,
         vReserve = 20,
+        vLow = 10,
         vMah = 0,
         cellCount = 1,
         cell_detected = false,
@@ -170,6 +174,11 @@ local function create(zone, options)
 
         battNextPlay = 0,
         battPercentPlayed = 100,
+
+        -- methods
+        getCritical = function (widget)
+            return widget.vReserve > 0 and 0 or 20
+        end
     }
 
     update(wgt, options)
@@ -258,16 +267,16 @@ end
 
 -- color for gauge
 local function getPercentColor(wgt)
-    local critical = wgt.vReserve == 0 and battCritical or 0
+    local critical = wgt:getCritical()
     if wgt.vPercent <= critical then
         -- red
-        return lcd.RGB(0xff, 0, 0)
+        return BAR_COLOR_CRITICAL
     elseif wgt.vPercent <= critical + 20 then
         -- yellow
-        return lcd.RGB(0xff, 0xff, 0)
+        return BAR_COLOR_LOW
     else
         -- green
-        return lcd.RGB(0, 0xff, 0)
+        return BAR_COLOR_OK
     end
 end
 
@@ -336,9 +345,11 @@ local function background(wgt)
     -- voice alerts
     local fvpcnt = wgt.vPercent
 
+    local critical = wgt:getCritical()
+
     -- what do we have to report?
     local battva = 0
-    if fvpcnt > battCritical then
+    if fvpcnt > critical + wgt.vLow then
         battva = math.ceil(fvpcnt / 10) * 10
     else
         battva = fvpcnt
@@ -353,8 +364,7 @@ local function background(wgt)
     if (wgt.battPercentPlayed ~= battva or battva <= 0) and getTime() > wgt.battNextPlay then
 
         -- urgent?
-        local critical = wgt.vReserve == 0 and battCritical or 0
-        if battva > critical + battLowMargin then
+        if battva > critical + wgt.vLow then
             playAudio("battry")
         elseif battva > critical then
             playAudio("batlow")
