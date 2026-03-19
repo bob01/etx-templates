@@ -19,14 +19,22 @@
 -- Designed for 1/8 cell
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03190
+-- ver: 0.9.0.03194
 
 local app_name = "eGovernor"
 
 local AUDIO_PATH = "/SOUNDS/en/"
 
 local _options = {
-    { "Color"             , COLOR, BLACK },
+    { "ArmFlags"              , SOURCE, getSourceIndex(CHAR_TELEMETRY.."ARM") },
+    { "ArmDisable"            , SOURCE, getSourceIndex(CHAR_TELEMETRY.."ARMD") },
+    { "GovFlags"              , SOURCE, getSourceIndex(CHAR_TELEMETRY.."Gov") },
+    { "Throttle"              , SOURCE, getSourceIndex(CHAR_TELEMETRY.."Thr") },
+    { "EscModel"              , SOURCE, getSourceIndex(CHAR_TELEMETRY.."Esc#") },
+    { "EscStatus"             , SOURCE, getSourceIndex(CHAR_TELEMETRY.."EscF") },
+    { "Mute"                  , BOOL, 0 },
+    
+    { "Color"                 , COLOR, BLACK },
 }
 
 local FM_MODE_FM        = 0
@@ -450,22 +458,22 @@ local function update(wgt, options)
     wgt.common = commonClass(app_name)
 
     -- get sensors
-    local fi = getSensorFieldInfo(wgt, "ARM")
+    local fi = getSensorFieldInfo(wgt, wgt.options.ArmFlags)
     wgt.sensorArmId = fi and fi.id or 0
 
-    fi = getSensorFieldInfo(wgt, "ARMD")
+    fi = getSensorFieldInfo(wgt, wgt.options.ArmDisable)
     wgt.sensorArmDisabledId = fi and fi.id or 0
 
-    fi = getSensorFieldInfo(wgt, "Thr")
+    fi = getSensorFieldInfo(wgt, wgt.options.Throttle)
     wgt.sensorThrId = fi and fi.id or 0
 
-    fi = getSensorFieldInfo(wgt, "Gov")
+    fi = getSensorFieldInfo(wgt, wgt.options.GovFlags)
     wgt.sensorGovId = fi and fi.id or 0
 
-    fi = getSensorFieldInfo(wgt, "Esc#")
+    fi = getSensorFieldInfo(wgt, wgt.options.EscModel)
     wgt.sensorEscSigId = fi and fi.id or 0
 
-    fi = getSensorFieldInfo(wgt, "EscF")
+    fi = getSensorFieldInfo(wgt, wgt.options.EscStatus)
     wgt.sensorEscFlagsId = fi and fi.id or 0
     
     wgt.sig = ESC_SIG_NONE
@@ -792,7 +800,7 @@ local function background(wgt)
         end
 
         -- announce if armed state changed
-        if wgt.armed ~= armed then
+        if wgt.options.Mute == 0 and wgt.armed ~= armed then
             if armed then
                 playAudio("armed")
             else
