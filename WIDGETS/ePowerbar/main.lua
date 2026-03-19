@@ -20,7 +20,7 @@
 -- Based on  Lipo battery from single analog source by Offer Shmuely
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03193
+-- ver: 0.9.0.03194
 
 local app_name = "ePowerbar"
 
@@ -41,10 +41,10 @@ local BAR_COLOR_LINE        = lcd.RGB(160, 160, 160)
 local STARTUP_DELAY = 400
 local VOLTTIMER_DISABLED = -1
 
-local defaultVoltSensor = "Vbat"
-local defaultPcntSensor = "Bat%"
-local defaultMahSensor = "Capa"
-local defaultCellSensor = "Cel#"
+local defaultVoltSensor = CHAR_TELEMETRY.."Vbat"
+local defaultPcntSensor = CHAR_TELEMETRY.."Bat%"
+local defaultMahSensor = CHAR_TELEMETRY.."Capa"
+local defaultCellSensor = CHAR_TELEMETRY.."Cel#"
 
 local _options = {
     { "VoltSensor"            , SOURCE, getSourceIndex(defaultVoltSensor) },
