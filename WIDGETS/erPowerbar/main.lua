@@ -56,8 +56,6 @@ local BAR_COLOR_CHECK       = lcd.RGB(0xb8, 0xb8, 0xb8)
 local BAR_COLOR_BACKGROUND  = lcd.RGB(0xc8, 0xc8, 0xc8)
 local BAR_COLOR_LINE        = lcd.RGB(160, 160, 160)
 
-local cellFull = 4.16
-
 local CELL_DETECTION_TIME = 1000
 local VOLTTIMER_DISABLED = -1
 
@@ -73,10 +71,10 @@ local _options = {
     { "CellSensor"            , SOURCE, 0 },
     { "Cells"                 , VALUE, 0, 0, 14 },      -- cell detection time (or interval if calc perceentage)
     { "Reserve"               , VALUE, 20, 0, 1000 },   -- reserve (or filter samples if calc percentage)
-    { "ArmedLS"               , SOURCE, 0 },
-    { "BattFull"              , VALUE, 412, 0, 480 },
-    { "BattLow"               , VALUE, 345, 0, 440 },
-    { "BattCrit"              , VALUE, 330, 0, 440 },
+    { "CellFull"              , VALUE, 412, 200, 480 },
+    { "AlertLS"               , SOURCE, 0 },
+    { "CellLow"               , VALUE, 345, 200, 440 },
+    { "CellCrit"              , VALUE, 330, 200, 440 },
 }
 
 --------------------------------------------------------------
@@ -144,7 +142,6 @@ local function update(wgt, options)
         wgt.cellCount = wgt.options.Cells
         wgt.cell_detected = true
     end
-    wgt.low_batt_blink = BLINK
     wgt.voltTimer = VOLTTIMER_DISABLED
 end
 
@@ -168,8 +165,8 @@ local function create(zone, options)
         vMah = 0,
         cellCount = 1,
         cell_detected = false,
-        low_batt_blink = 0,
         voltTimer = VOLTTIMER_DISABLED,
+        cellFullCheckColor = BAR_COLOR_OK,
         cellFullCheckProgress = 0,
 
         mainValue = 0,
@@ -181,7 +178,11 @@ local function create(zone, options)
         -- methods
         getCritical = function (widget)
             return widget.vReserve > 0 and 0 or 20
-        end
+        end,
+
+        getCellFull = function (widget)
+            return widget.options.CellFull > 0 and (widget.options.CellFull / 100) or 0
+        end,
     }
 
     update(wgt, options)
@@ -239,11 +240,14 @@ local function calculateBatteryData(wgt)
             wgt.cellCount = wgt.cellCount ~= 0 and wgt.cellCount or calcCellCount(v)
 
             -- warn if battery low
-            if (v / wgt.cellCount) >= cellFull then
-                wgt.low_batt_blink = 0
+            if (v / wgt.cellCount) >= wgt:getCellFull() then
+                -- ok
+                wgt.cellFullCheckColor = BAR_COLOR_OK
             else
+                -- warn
                 playAudio("batlow")
                 playNumber(v * 10, 1, PREC1)
+                wgt.cellFullCheckColor = BAR_COLOR_WARN
             end
         else
             local progress = 100 - ((wgt.voltTimer - now) * 100 / CELL_DETECTION_TIME)
@@ -291,7 +295,7 @@ local function getBarColor(wgt)
         return BAR_COLOR_LOW
     else
         -- green
-        return BAR_COLOR_OK
+        return wgt.cellFullCheckColor
     end
 end
 
@@ -307,7 +311,7 @@ local function refreshZoneSmall(wgt)
     if wgt.fuel and wgt.volts and wgt.volts > 0 then
         local fill
         if wgt.voltTimer == VOLTTIMER_DISABLED then
-            fill = wgt.fuel > 0 and wgt.fuel or 100
+            fill = wgt.fuel > 0 and wgt.fuel <= 100 and wgt.fuel or 100
         else
             fill = wgt.cellFullCheckProgress < 100 and wgt.cellFullCheckProgress or 100
         end
@@ -323,9 +327,6 @@ local function refreshZoneSmall(wgt)
     -- outline
     lcd.drawRectangle(myBatt.x, myBatt.y, myBatt.w + 1, myBatt.h, wgt.text_color, 2)
 
-    -- write text
-    local low_batt_blink = wgt.isTelemetryActive and wgt.low_batt_blink or 0
-
     -- power bar
     local volts
     if wgt.cell_detected then
@@ -335,7 +336,7 @@ local function refreshZoneSmall(wgt)
         -- cell count not available
         volts = string.format("%.1f v / %.2f v (?s)", wgt.volts, wgt.mainValue);
     end
-    lcd.drawText(myBatt.x + 8, myBatt.y + 4, volts, BOLD + LEFT  + wgt.text_color + low_batt_blink)
+    lcd.drawText(myBatt.x + 8, myBatt.y + 4, volts, BOLD + LEFT  + wgt.text_color)
 
     if wgt.sensorMahId ~= 0 then
         local mah = string.format("%.0f mah", wgt.vMah)
@@ -343,7 +344,7 @@ local function refreshZoneSmall(wgt)
     end
 
     local percent = string.format("%.0f%%", wgt.fuel)
-    lcd.drawText(myBatt.x + myBatt.w - 4, myBatt.y + myBatt.h / 2, percent, BOLD + VCENTER + RIGHT + MIDSIZE + wgt.text_color + low_batt_blink)
+    lcd.drawText(myBatt.x + myBatt.w - 4, myBatt.y + myBatt.h / 2, percent, BOLD + VCENTER + RIGHT + MIDSIZE + wgt.text_color)
 end
 
 -- This function allow recording of lowest cells when widget is in background
@@ -361,7 +362,6 @@ local function background(wgt)
             wgt.isTelemetryActive = telemetryActive
             if wgt.isTelemetryActive then
                 -- restart voltage check timer on telemetry connection
-                wgt.low_batt_blink = BLINK
                 wgt.voltTimer = getTime() + CELL_DETECTION_TIME
             end
         end
