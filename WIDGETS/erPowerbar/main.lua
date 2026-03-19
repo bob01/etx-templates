@@ -170,6 +170,8 @@ local function create(zone, options)
         cell_detected = false,
         low_batt_blink = 0,
         voltTimer = VOLTTIMER_DISABLED,
+        cellFullCheckProgress = 0,
+
         mainValue = 0,
         volts = 0,
 
@@ -223,22 +225,31 @@ local function calculateBatteryData(wgt)
             wgt.cellCount = cells
             wgt.cell_detected = true
             wgt.voltTimer = getTime() + CELL_DETECTION_TIME
+            wgt.cellFullCheckProgress = 0
         end
     end
 
     -- check for initial voltage check
-    if wgt.voltTimer ~= VOLTTIMER_DISABLED and wgt.voltTimer < getTime() then
-        wgt.voltTimer = VOLTTIMER_DISABLED
+    local now = getTime()
+    if wgt.voltTimer ~= VOLTTIMER_DISABLED then
+        if wgt.voltTimer < now then
+            wgt.voltTimer = VOLTTIMER_DISABLED
 
-        -- finalize cell count
-        wgt.cellCount = wgt.cellCount ~= 0 and wgt.cellCount or calcCellCount(v)
+            -- finalize cell count
+            wgt.cellCount = wgt.cellCount ~= 0 and wgt.cellCount or calcCellCount(v)
 
-        -- warn if battery low
-        if (v / wgt.cellCount) >= cellFull then
-            wgt.low_batt_blink = 0
+            -- warn if battery low
+            if (v / wgt.cellCount) >= cellFull then
+                wgt.low_batt_blink = 0
+            else
+                playAudio("batlow")
+                playNumber(v * 10, 1, PREC1)
+            end
         else
-            playAudio("batlow")
-            playNumber(v * 10, 1, PREC1)
+            local progress = 100 - ((wgt.voltTimer - now) * 100 / CELL_DETECTION_TIME)
+            if wgt.cellFullCheckProgress ~= progress then
+                wgt.cellFullCheckProgress = progress
+            end
         end
     end
 
@@ -269,7 +280,10 @@ end
 -- color for gauge
 local function getBarColor(wgt)
     local critical = wgt:getCritical()
-    if wgt.fuel <= critical then
+    if wgt.voltTimer ~= VOLTTIMER_DISABLED then
+        -- in cell check
+        return BAR_COLOR_CHECK
+    elseif wgt.fuel <= critical then
         -- red
         return BAR_COLOR_CRITICAL
     elseif wgt.fuel <= critical + 20 then
@@ -292,7 +306,11 @@ local function refreshZoneSmall(wgt)
     -- bar
     if wgt.fuel and wgt.volts and wgt.volts > 0 then
         local fill
-        fill = wgt.fuel > 0 and wgt.fuel or 100
+        if wgt.voltTimer == VOLTTIMER_DISABLED then
+            fill = wgt.fuel > 0 and wgt.fuel or 100
+        else
+            fill = wgt.cellFullCheckProgress < 100 and wgt.cellFullCheckProgress or 100
+        end
 
         local bar_width = math.floor((((myBatt.w - 2) / 100) * fill) + 2)
         color = getBarColor(wgt)
