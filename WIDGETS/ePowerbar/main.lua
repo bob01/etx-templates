@@ -42,11 +42,15 @@
 -- friendlier UI, new name (vPowerBar), specify cell count option, reserve, haptic critical
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03191
+-- ver: 0.9.0.03192
 
 local app_name = "ePowerbar"
 
 local AUDIO_PATH = "/SOUNDS/en/"
+
+local ALERTLEVEL_NONE       = 0
+local ALERTLEVEL_LOW        = 1
+local ALERTLEVEL_CRITICAL   = 2
 
 local BAR_COLOR_OK          = lcd.RGB(0x00, 0xff, 0x00)
 local BAR_COLOR_WARN        = lcd.RGB(0xf8, 0xc0, 0x00) -- lcd.RGB(0xff, 0xff, 0)
@@ -73,7 +77,7 @@ local _options = {
     { "Cells"                 , VALUE, 0, 0, 16 },      -- cell detection time (or interval if calc perceentage)
     { "Reserve"               , VALUE, 20, 0, 40 },   -- reserve
     { "Mute"                  , BOOL, 0 },
-    { "AlertsActive"          , SOURCE, 0 },
+    { "VoltageAlerts"         , SOURCE, 0 },
     { "CellFull"              , VALUE, 412, 0, 480 },
     { "CellLow"               , VALUE, 345, 0, 440 },
     { "CellCritical"          , VALUE, 330, 0, 440 },
@@ -118,6 +122,12 @@ local function update(wgt, options)
     fi = getSensorFieldInfo(wgt, wgt.options.CellSensor)
     wgt.sensorCellsId = fi and fi.id or 0
 
+    fi = getSensorFieldInfo(wgt, wgt.options.VoltageAlerts)
+    wgt.sourceVoltageAlertsId = fi and fi.id or 0
+
+    wgt.alertCellCitical = wgt.options.CellCritical
+    wgt.alertCellLow = wgt.options.CellLow
+
     -- trigger retest
     wgt.cellCount = nil
 end
@@ -145,7 +155,14 @@ local function create(zone, options)
         voltTimer = VOLTTIMER_DISABLED,
         cellFullCheckProgress = 0,
 
-        mainValue = 0,
+        -- alerts
+        alertPending = 0,
+        alertSampleDuration = 50,
+        alertLevel = ALERTLEVEL_NONE,
+        alertNext = 0,
+        alertRepeatInterval = 500,
+
+        cellv = 0,
         volts = 0,
 
         -- audio state
@@ -167,8 +184,8 @@ local function create(zone, options)
 end
 
 -- audio support
-local function playAudio(f)
-    playFile(AUDIO_PATH .. f .. ".wav")
+local function playAudio(file)
+    playFile(AUDIO_PATH .. file .. ".wav")
 end
 
 -- color for gauge
@@ -215,16 +232,16 @@ local function paint(wgt)
     end
 
     -- outline
-    lcd.drawRectangle(myBatt.x, myBatt.y, myBatt.w + 1, myBatt.h, wgt.text_color, 2)
+    lcd.drawRectangle(myBatt.x, myBatt.y, myBatt.w + 1, myBatt.h, wgt.text_color)
 
     -- bar
     local volts
     if wgt.cellCount and wgt.cellCount > 0 then
         -- cell count available
-        volts = string.format("%.1f v / %.2f v (%.0fs)", wgt.volts, wgt.mainValue, wgt.cellCount);
+        volts = string.format("%.1f v / %.2f v (%.0fs)", wgt.volts, wgt.cellv, wgt.cellCount);
     else
         -- cell count not available
-        volts = string.format("%.1f v / %.2f v (?s)", wgt.volts, wgt.mainValue);
+        volts = string.format("%.1f v / %.2f v (?s)", wgt.volts, wgt.cellv);
     end
     lcd.drawText(myBatt.x + 8, myBatt.y + 4, volts, BOLD + LEFT  + wgt.text_color)
 
@@ -287,7 +304,7 @@ local function calculateBatteryData(wgt)
     end
 
     -- battery voltage
-    wgt.mainValue = v / vdiv
+    wgt.cellv = v / vdiv
     wgt.volts = v
 
     -- battery percentage
@@ -308,44 +325,105 @@ local function calculateBatteryData(wgt)
         wgt.vMah = getValue(wgt.sensorMahId)
     end
 end
+local function playVibe(widget)
+    playHaptic(100, 0, PLAY_NOW)
+end
 
-local function crankFuelCalls(wgt)
+-- call fuel consumption on the 10's (singles when critical)
+local function crankFuelCalls(widget)
     -- voice alerts
-    local fuel = wgt.fuel
+    local fuel = widget.fuel
 
-    local critical = wgt:getCritical()
+    local critical = widget:getCritical()
 
     -- what do we have to report?
     local capa = 0
-    if fuel > critical + wgt.vLow then
+    if fuel > critical + widget.vLow then
         capa = math.ceil(fuel / 10) * 10
     else
         capa = fuel
     end
 
     -- time to report?
-    if (wgt.lastCapa ~= capa or capa <= 0) and getTime() > wgt.nextCapa then
+    if (widget.lastCapa ~= capa or capa <= 0) and getTime() > widget.nextCapa then
         -- skip initial report
-        if wgt.nextCapa ~= 0 then
+        if widget.nextCapa ~= 0 then
             -- urgent?
-            if capa > critical + wgt.vLow then
+            if capa > critical + widget.vLow then
                 playAudio("battry")
             elseif capa > critical then
                 playAudio("batlow")
             else
                 playAudio("batcrt")
-                playHaptic(100, 0, PLAY_NOW)
+                playVibe(widget)
             end
 
             -- play % if >= 0
             if capa >= 0 then
-                playNumber(capa, 13)
+                playNumber(capa, UNIT_PERCENT)
             end
         end
 
         -- schedule next
-        wgt.lastCapa = capa
-        wgt.nextCapa = getTime() + 500
+        widget.lastCapa = capa
+        widget.nextCapa = getTime() + 500
+    end
+end
+
+local function crankVoltageAlerts(widget)
+    -- bail if in delay
+    local now = getTime()
+    if now < widget.alertNext then
+        return
+    end
+    
+    -- we will be working w/ per cell voltage (x100 for 2 place decimal prec)
+    local prec = 100
+    local cellv = math.floor(widget.cellv * prec)
+
+    local alertLevel = (cellv <= widget.alertCellCitical and ALERTLEVEL_CRITICAL) or (cellv <= widget.alertCellLow and ALERTLEVEL_LOW) or ALERTLEVEL_NONE
+
+    if widget.alertPending ~= 0 then
+        -- in alert state
+        if alertLevel == ALERTLEVEL_NONE then
+            -- exit alert state alert condition cleared while pending
+            widget.alertPending = 0
+            return
+        elseif alertLevel < widget.alertLevel then
+            -- reduce alert level if less critical level seen while pending
+            widget.alertLevel = alertLevel
+        end
+
+        -- trigger if delay elapsed
+        if now >= widget.alertPending then
+            -- alert
+            local locale = "en"
+            local haptic = false
+            if alertLevel == ALERTLEVEL_LOW then
+                playAudio("batlow")
+            elseif alertLevel == ALERTLEVEL_CRITICAL then
+                playAudio("batcrt")
+                haptic = true
+            end
+            -- report total voltage until https://github.com/FrSkyRC/ETHOS-Feedback-Community/issues/3491
+            -- (was https://github.com/FrSkyRC/ETHOS-Feedback-Community/issues/4708)
+            playNumber(widget.volts * 10, UNIT_VOLTS, PREC1)
+
+            if haptic then
+                playVibe(widget)
+            end
+
+            -- start delay
+            widget.alertNext = now + widget.alertRepeatInterval
+
+            -- exit alert state
+            widget.alertPending = 0
+            return
+        end
+    elseif alertLevel > ALERTLEVEL_NONE then
+        -- enter alert state
+        widget.alertLevel = alertLevel
+        widget.alertPending = now + widget.alertSampleDuration
     end
 end
 
@@ -379,6 +457,7 @@ local function background(wgt)
     -- quiet if mute or during startup delay
     if wgt.options.Mute ~=1 and wgt.voltTimer == VOLTTIMER_DISABLED then
         crankFuelCalls(wgt)
+        crankVoltageAlerts(wgt)
     end
 end
 
