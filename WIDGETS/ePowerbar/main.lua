@@ -16,33 +16,11 @@
 # GNU General Public License for more details.                          #
 #                                                                       #
 #########################################################################
-
-
--- This widget display a graphical representation of a Lipo/Li-ion (not other types) battery level,
--- it will automatically detect the cell amount of the battery.
--- it will take a lipo/li-ion voltage that received as a single value (as opposed to multi cell values send while using FLVSS liPo Voltage Sensor)
--- common sources are:
---   * Transmitter Battery
---   * FrSky VFAS
---   * A1/A2 analog voltage
---   * mini quad flight controller
---   * radio-master 168
---   * OMP m2 heli
-
 ]]
-
--- Based on...
--- Widget to display the levels of Lipo battery from single analog source
--- Author : Offer Shmuely
--- Date: 2021-2023
--- ver: 0.5
-
--- Voice alerts added, kill the blink, brighter battery colors + line
--- Added consumption "power bar"
--- friendlier UI, new name (vPowerBar), specify cell count option, reserve, haptic critical
+-- Based on  Lipo battery from single analog source by Offer Shmuely
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03192
+-- ver: 0.9.0.03193
 
 local app_name = "ePowerbar"
 
@@ -72,7 +50,7 @@ local _options = {
     { "VoltSensor"            , SOURCE, getSourceIndex(defaultVoltSensor) },
     { "mAhSensor"             , SOURCE, getSourceIndex(defaultMahSensor) },
     { "FuelSensor"            , SOURCE, getSourceIndex(defaultPcntSensor) },
-    { "LipoMah"               , VALUE, 0, 0, 24000 },
+    { "LipoCapacity"          , VALUE, 0, 0, 24000 },
     { "CellSensor"            , SOURCE, getSourceIndex(defaultCellSensor) },
     { "Cells"                 , VALUE, 0, 0, 16 },      -- cell detection time (or interval if calc perceentage)
     { "Reserve"               , VALUE, 20, 0, 40 },   -- reserve
@@ -150,7 +128,7 @@ local function create(zone, options)
         fuel = 0,
         vReserve = 20,
         vLow = 10,
-        vMah = 0,
+        mah = 0,
         cellCount = nil,
         barColor = BAR_COLOR_OK,
         voltTimer = VOLTTIMER_DISABLED,
@@ -253,7 +231,7 @@ local function paint(wgt)
     lcd.drawText(myBatt.x + 8, myBatt.y + 4, volts, BOLD + LEFT  + wgt.text_color)
 
     if wgt.sensorMahId ~= 0 then
-        local mah = string.format("%.0f mah", wgt.vMah)
+        local mah = string.format("%.0f mah", wgt.mah)
         lcd.drawText(myBatt.x + 8, myBatt.y + myBatt.h / 2, mah, BOLD + LEFT  + wgt.text_color)
     end
 
@@ -262,74 +240,83 @@ local function paint(wgt)
 end
 
 --- battery calcs
-local function calculateBatteryData(wgt)
+local function calculateBatteryData(widget)
     -- get voltage
-    local v = getValue(wgt.sensorVoltId)
+    local v = getValue(widget.sensorVoltId)
 
     -- cells
     local cells = 0
-    if wgt.sensorCellsId ~= 0 then
+    if widget.sensorCellsId ~= 0 then
         -- use sensor cell count
-        cells = getValue(wgt.sensorCellsId)
-    elseif wgt.options.Cells > 0 then
+        cells = getValue(widget.sensorCellsId)
+    elseif widget.options.Cells > 0 then
         -- use configured cell count
-        cells = wgt.options.Cells
+        cells = widget.options.Cells
     end
-    if wgt.cellCount ~= cells then
-        wgt.cellCount = cells
+    if widget.cellCount ~= cells then
+        widget.cellCount = cells
 
-        wgt.voltTimer = getTime() + STARTUP_DELAY
-        wgt.cellFullCheckProgress = 0
+        widget.voltTimer = getTime() + STARTUP_DELAY
+        widget.cellFullCheckProgress = 0
     end
-    local vdiv = wgt.cellCount and wgt.cellCount > 0 and wgt.cellCount or 1
+    local vdiv = widget.cellCount and widget.cellCount > 0 and widget.cellCount or 1
 
     -- check for initial voltage check
     local now = getTime()
-    if wgt.voltTimer ~= VOLTTIMER_DISABLED then
-        if wgt.voltTimer < now then
-            wgt.voltTimer = VOLTTIMER_DISABLED
+    if widget.voltTimer ~= VOLTTIMER_DISABLED then
+        if widget.voltTimer < now then
+            widget.voltTimer = VOLTTIMER_DISABLED
 
             -- warn if battery low or cell count unknown
-            if wgt.cellCount == 0 then
+            if widget.cellCount == 0 then
                 -- cell count unknown
-                wgt.barColor = BAR_COLOR_CHECK
-            elseif (v / vdiv) >= wgt:getCellFull() then
+                widget.barColor = BAR_COLOR_CHECK
+            elseif (v / vdiv) >= widget:getCellFull() then
                 -- ok
-                wgt.barColor = BAR_COLOR_OK
+                widget.barColor = BAR_COLOR_OK
             else
                 -- warn
                 playAudio("batlow")
                 playNumber(v * 10, 1, PREC1)
-                wgt.barColor = BAR_COLOR_WARN
+                widget.barColor = BAR_COLOR_WARN
             end
         else
-            local progress = 100 - ((wgt.voltTimer - now) * 100 / STARTUP_DELAY)
-            if wgt.cellFullCheckProgress ~= progress then
-                wgt.cellFullCheckProgress = progress
+            local progress = 100 - ((widget.voltTimer - now) * 100 / STARTUP_DELAY)
+            if widget.cellFullCheckProgress ~= progress then
+                widget.cellFullCheckProgress = progress
             end
         end
     end
 
-    -- battery voltage
-    wgt.cellv = v / vdiv
-    wgt.volts = v
+    -- voltage
+    widget.cellv = v / vdiv
+    widget.volts = v
 
-    -- battery percentage
-    if wgt.sensorPcntId ~= 0 then
-        local pcnt = getValue(wgt.sensorPcntId)
-        if pcnt < wgt.vReserve then
-            wgt.fuel = pcnt - wgt.vReserve
-        else
-            local usable = 100 - wgt.vReserve
-            wgt.fuel = (pcnt - wgt.vReserve) / usable * 100
-        end
+    -- mah
+    if widget.sensorMahId ~= 0 then
+        widget.mah = getValue(widget.sensorMahId)
+    end
+
+    -- fuel
+    local fuel = nil
+    if widget.sensorPcntId ~= 0 then
+        -- use sensor
+        fuel = getValue(widget.sensorPcntId)
     else
-        wgt.fuel = 0
+        local capacity = widget.options.LipoCapacity
+        if widget.mah and capacity > 0 then
+            -- calculate using capacity
+            fuel = (capacity - widget.mah) * 100 / capacity
+        end
     end
 
-    -- battery mah
-    if wgt.sensorMahId ~= 0 then
-        wgt.vMah = getValue(wgt.sensorMahId)
+    if fuel then
+        if fuel < widget.vReserve then
+            widget.fuel = fuel - widget.vReserve
+        else
+            local usable = 100 - widget.vReserve
+            widget.fuel = (fuel - widget.vReserve) / usable * 100
+        end
     end
 end
 
@@ -438,7 +425,7 @@ local function background(wgt)
     end
 
     -- assume no telemetry if required sensors missing
-    if wgt.sensorVoltId == 0 or wgt.sensorPcntId == 0 then
+    if wgt.sensorVoltId == 0 then
         wgt.isTelemetryActive = false
     else
         local telemetryActive = wgt.common.isTelemetryActive()
