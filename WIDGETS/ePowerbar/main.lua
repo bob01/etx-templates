@@ -56,7 +56,7 @@ local BAR_COLOR_CHECK       = lcd.RGB(0xb8, 0xb8, 0xb8)
 local BAR_COLOR_BACKGROUND  = lcd.RGB(0xc8, 0xc8, 0xc8)
 local BAR_COLOR_LINE        = lcd.RGB(160, 160, 160)
 
-local CELL_DETECTION_TIME = 1000
+local STARTUP_DELAY = 500
 local VOLTTIMER_DISABLED = -1
 
 local defaultVoltSensor = "Vbat"
@@ -118,17 +118,8 @@ local function update(wgt, options)
     fi = getSensorFieldInfo(wgt, wgt.options.CellSensor)
     wgt.sensorCellsId = fi and fi.id or 0
 
-    -- cell count
-    if wgt.options.Cells == 0 then
-        -- use telemetry cell count
-        wgt.cellCount = 1
-        wgt.cell_detected = false
-    else
-        -- use cell settings
-        wgt.cellCount = wgt.options.Cells
-        wgt.cell_detected = true
-    end
-    wgt.voltTimer = VOLTTIMER_DISABLED
+    -- trigger retest
+    wgt.cellCount = nil
 end
 
 local function create(zone, options)
@@ -149,10 +140,9 @@ local function create(zone, options)
         vReserve = 20,
         vLow = 10,
         vMah = 0,
-        cellCount = 1,
-        cell_detected = false,
+        cellCount = nil,
+        barColor = BAR_COLOR_OK,
         voltTimer = VOLTTIMER_DISABLED,
-        cellFullCheckColor = BAR_COLOR_OK,
         cellFullCheckProgress = 0,
 
         mainValue = 0,
@@ -180,93 +170,6 @@ local function playAudio(f)
     playFile(AUDIO_PATH .. f .. ".wav")
 end
 
--- Only invoke this function once.
-local function calcCellCount(voltage)
-    if voltage     < 4.3  then return 1
-    elseif voltage < 8.6  then return 2
-    elseif voltage < 12.9 then return 3
-    elseif voltage < 17.2 then return 4
-    elseif voltage < 21.5 then return 5
-    elseif voltage < 25.8 then return 6
-    elseif voltage < 30.1 then return 7
-    elseif voltage < 34.4 then return 8
-    elseif voltage < 38.7 then return 9
-    elseif voltage < 43.0 then return 10
-    elseif voltage < 47.3 then return 11
-    elseif voltage < 51.6 then return 12
-    elseif voltage < 60.2 then return 14
-    end
-
-    return 1
-end
-
---- This function returns a table with cels values
-local function calculateBatteryData(wgt)
-    -- get voltage
-    local v = getValue(wgt.sensorVoltId)
-
-    -- cell count detection, wait for telemetry to report
-    if not wgt.cell_detected and wgt.sensorCellsId ~= 0 then
-        local cells = getValue(wgt.sensorCellsId)
-        if cells ~= 0 then
-            wgt.cellCount = cells
-            wgt.cell_detected = true
-            wgt.voltTimer = getTime() + CELL_DETECTION_TIME
-            wgt.cellFullCheckProgress = 0
-        end
-    end
-
-    -- check for initial voltage check
-    local now = getTime()
-    if wgt.voltTimer ~= VOLTTIMER_DISABLED then
-        if wgt.voltTimer < now then
-            wgt.voltTimer = VOLTTIMER_DISABLED
-
-            -- finalize cell count
-            wgt.cellCount = wgt.cellCount ~= 0 and wgt.cellCount or calcCellCount(v)
-
-            -- warn if battery low
-            if (v / wgt.cellCount) >= wgt:getCellFull() then
-                -- ok
-                wgt.cellFullCheckColor = BAR_COLOR_OK
-            else
-                -- warn
-                playAudio("batlow")
-                playNumber(v * 10, 1, PREC1)
-                wgt.cellFullCheckColor = BAR_COLOR_WARN
-            end
-        else
-            local progress = 100 - ((wgt.voltTimer - now) * 100 / CELL_DETECTION_TIME)
-            if wgt.cellFullCheckProgress ~= progress then
-                wgt.cellFullCheckProgress = progress
-            end
-        end
-    end
-
-    -- battery voltage
-    wgt.mainValue = v / wgt.cellCount
-    wgt.volts = v
-
-    -- battery percentage
-    if wgt.sensorPcntId ~= 0 then
-        local pcnt = getValue(wgt.sensorPcntId)
-        if pcnt < wgt.vReserve then
-            wgt.fuel = pcnt - wgt.vReserve
-        else
-            local usable = 100 - wgt.vReserve
-            wgt.fuel = (pcnt - wgt.vReserve) / usable * 100
-        end
-    else
-        wgt.fuel = 0
-    end
-
-    -- battery mah
-    if wgt.sensorMahId ~= 0 then
-        wgt.vMah = getValue(wgt.sensorMahId)
-    end
-end
-
-
 -- color for gauge
 local function getBarColor(wgt)
     local critical = wgt:getCritical()
@@ -281,12 +184,12 @@ local function getBarColor(wgt)
         return BAR_COLOR_LOW
     else
         -- green
-        return wgt.cellFullCheckColor
+        return wgt.barColor
     end
 end
 
---- Zone size: 160x32 1/8th
-local function refreshZoneSmall(wgt)
+--- paint
+local function paint(wgt)
     local myBatt = { ["x"] = 4, ["y"] = 4, ["w"] = wgt.zone.w - 8, ["h"] = wgt.zone.h - 8, ["segments_w"] = 25, ["color"] = WHITE, ["cath_w"] = 6, ["cath_h"] = 20 }
 
     -- background
@@ -313,9 +216,9 @@ local function refreshZoneSmall(wgt)
     -- outline
     lcd.drawRectangle(myBatt.x, myBatt.y, myBatt.w + 1, myBatt.h, wgt.text_color, 2)
 
-    -- power bar
+    -- bar
     local volts
-    if wgt.cell_detected then
+    if wgt.cellCount and wgt.cellCount > 0 then
         -- cell count available
         volts = string.format("%.1f v / %.2f v (%.0fs)", wgt.volts, wgt.mainValue, wgt.cellCount);
     else
@@ -333,33 +236,79 @@ local function refreshZoneSmall(wgt)
     lcd.drawText(myBatt.x + myBatt.w - 4, myBatt.y + myBatt.h / 2, percent, BOLD + VCENTER + RIGHT + MIDSIZE + wgt.text_color)
 end
 
--- This function allow recording of lowest cells when widget is in background
-local function background(wgt)
-    if (wgt == nil) then
-        return
-    end
+--- battery calcs
+local function calculateBatteryData(wgt)
+    -- get voltage
+    local v = getValue(wgt.sensorVoltId)
 
-    -- assume no telemetry if required sensors missing
-    if wgt.sensorVoltId == 0 or wgt.sensorPcntId == 0 then
-        wgt.isTelemetryActive = false
-    else
-        local telemetryActive = wgt.common.isTelemetryActive()
-        if telemetryActive ~= wgt.isTelemetryActive then
-            wgt.isTelemetryActive = telemetryActive
-            if wgt.isTelemetryActive then
-                -- restart voltage check timer on telemetry connection
-                wgt.voltTimer = getTime() + CELL_DETECTION_TIME
+    -- cells
+    local cells = 0
+    if wgt.sensorCellsId ~= 0 then
+        -- use sensor cell count
+        cells = getValue(wgt.sensorCellsId)
+    elseif wgt.options.Cells > 0 then
+        -- use configured cell count
+        cells = wgt.options.Cells
+    end
+    if wgt.cellCount ~= cells then
+        wgt.cellCount = cells
+
+        wgt.voltTimer = getTime() + STARTUP_DELAY
+        wgt.cellFullCheckProgress = 0
+    end
+    local vdiv = wgt.cellCount and wgt.cellCount > 0 and wgt.cellCount or 1
+
+    -- check for initial voltage check
+    local now = getTime()
+    if wgt.voltTimer ~= VOLTTIMER_DISABLED then
+        if wgt.voltTimer < now then
+            wgt.voltTimer = VOLTTIMER_DISABLED
+
+            -- warn if battery low or cell count unknown
+            if wgt.cellCount == 0 then
+                -- cell count unknown
+                wgt.barColor = BAR_COLOR_CHECK
+            elseif (v / vdiv) >= wgt:getCellFull() then
+                -- ok
+                wgt.barColor = BAR_COLOR_OK
+            else
+                -- warn
+                playAudio("batlow")
+                playNumber(v * 10, 1, PREC1)
+                wgt.barColor = BAR_COLOR_WARN
+            end
+        else
+            local progress = 100 - ((wgt.voltTimer - now) * 100 / STARTUP_DELAY)
+            if wgt.cellFullCheckProgress ~= progress then
+                wgt.cellFullCheckProgress = progress
             end
         end
     end
 
-    -- bail if no telemetry
-    if not wgt.isTelemetryActive then
-        return
+    -- battery voltage
+    wgt.mainValue = v / vdiv
+    wgt.volts = v
+
+    -- battery percentage
+    if wgt.sensorPcntId ~= 0 then
+        local pcnt = getValue(wgt.sensorPcntId)
+        if pcnt < wgt.vReserve then
+            wgt.fuel = pcnt - wgt.vReserve
+        else
+            local usable = 100 - wgt.vReserve
+            wgt.fuel = (pcnt - wgt.vReserve) / usable * 100
+        end
+    else
+        wgt.fuel = 0
     end
 
-    calculateBatteryData(wgt)
+    -- battery mah
+    if wgt.sensorMahId ~= 0 then
+        wgt.vMah = getValue(wgt.sensorMahId)
+    end
+end
 
+local function crankFuelCalls(wgt)
     -- voice alerts
     local fvpcnt = wgt.fuel
 
@@ -371,11 +320,6 @@ local function background(wgt)
         battva = math.ceil(fvpcnt / 10) * 10
     else
         battva = fvpcnt
-    end
-
-    -- silence until cell_detected
-    if not wgt.cell_detected then
-        wgt.battPercentPlayed = battva
     end
 
     -- time to report?
@@ -401,6 +345,39 @@ local function background(wgt)
     end
 end
 
+-- process sensors, pre-render and announce
+local function background(wgt)
+    if (wgt == nil) then
+        return
+    end
+
+    -- assume no telemetry if required sensors missing
+    if wgt.sensorVoltId == 0 or wgt.sensorPcntId == 0 then
+        wgt.isTelemetryActive = false
+    else
+        local telemetryActive = wgt.common.isTelemetryActive()
+        if telemetryActive ~= wgt.isTelemetryActive then
+            wgt.isTelemetryActive = telemetryActive
+            if wgt.isTelemetryActive then
+                -- restart voltage check timer on telemetry connection
+                wgt.voltTimer = getTime() + STARTUP_DELAY
+            end
+        end
+    end
+
+    -- bail if no telemetry
+    if not wgt.isTelemetryActive then
+        return
+    end
+
+    calculateBatteryData(wgt)
+
+    -- quiet if mute or during startup delay
+    if ~wgt.options.Mute and wgt.voltTimer == VOLTTIMER_DISABLED then
+        crankFuelCalls(wgt)
+    end
+end
+
 local function refresh(wgt, event, touchState)
     if (wgt == nil)         then return end
     if type(wgt) ~= "table" then return end
@@ -418,7 +395,7 @@ local function refresh(wgt, event, touchState)
         wgt.cell_color = COLOR_THEME_DISABLED
     end
 
-    refreshZoneSmall(wgt)
+    paint(wgt)
 
     if (event ~= nil) then
         if (touchState and touchState.tapCount == 2) or (event and event == EVT_VIRTUAL_EXIT) then
