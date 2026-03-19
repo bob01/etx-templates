@@ -285,10 +285,6 @@ end
 local function refreshZoneSmall(wgt)
     local myBatt = { ["x"] = 4, ["y"] = 4, ["w"] = wgt.zone.w - 8, ["h"] = wgt.zone.h - 8, ["segments_w"] = 25, ["color"] = WHITE, ["cath_w"] = 6, ["cath_h"] = 20 }
 
-    -- fill battery
-    -- local fill_color = getBarColor(wgt)
-    -- lcd.drawGauge(myBatt.x, myBatt.y, myBatt.w, myBatt.h, wgt.fuel, 100, fill_color)
-
     -- background
     local color = BAR_COLOR_BACKGROUND
     lcd.drawFilledRectangle(myBatt.x, myBatt.y, myBatt.w, myBatt.h, color)
