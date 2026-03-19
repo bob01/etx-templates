@@ -42,9 +42,9 @@
 -- friendlier UI, new name (vPowerBar), specify cell count option, reserve, haptic critical
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03181
+-- ver: 0.9.0.03190
 
-local app_name = "erPowerbar"
+local app_name = "ePowerbar"
 
 local AUDIO_PATH = "/SOUNDS/en/"
 
@@ -65,10 +65,11 @@ local defaultMahSensor = "Capa"
 local defaultCellSensor = "Cel#"
 
 local _options = {
-    { "VoltSensor"            , SOURCE, 0 },
-    { "PcntSensor"            , SOURCE, 0 },
-    { "MahSensor"             , SOURCE, 0 },
-    { "CellSensor"            , SOURCE, 0 },
+    { "VoltSensor"            , SOURCE, getSourceIndex(defaultVoltSensor) },
+    { "PcntSensor"            , SOURCE, getSourceIndex(defaultPcntSensor) },
+    { "MahSensor"             , SOURCE, getSourceIndex(defaultMahSensor) },
+    { "LipoMah"               , VALUE, 0, 0, 40000 },
+    { "CellSensor"            , SOURCE, getSourceIndex(defaultCellSensor) },
     { "Cells"                 , VALUE, 0, 0, 14 },      -- cell detection time (or interval if calc perceentage)
     { "Reserve"               , VALUE, 20, 0, 1000 },   -- reserve (or filter samples if calc percentage)
     { "CellFull"              , VALUE, 412, 200, 480 },
@@ -101,24 +102,8 @@ local function update(wgt, options)
     wgt.vReserve = wgt.options.Reserve
 
     -- reload common libraries
-    local commonClass = loadScript("/WIDGETS/erLib/lib_common.lua", "tcd")
+    local commonClass = loadScript("/WIDGETS/eLib/lib_common.lua", "tcd")
     wgt.common = commonClass(app_name)
-
-    if wgt.options.VoltSensor == 0 then
-        wgt.options.VoltSensor = defaultVoltSensor
-    end
-
-    if wgt.options.PcntSensor == 0 then
-        wgt.options.PcntSensor = defaultPcntSensor
-    end
-
-    if wgt.options.MahSensor == 0 then
-        wgt.options.MahSensor = defaultMahSensor
-    end
-
-    if wgt.options.CellSensor == 0 then
-        wgt.options.CellSensor = defaultCellSensor
-    end
 
     local fi = getSensorFieldInfo(wgt, wgt.options.VoltSensor)
     wgt.sensorVoltId = fi and fi.id or 0

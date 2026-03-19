@@ -19,10 +19,10 @@
 -- Throttle and arm state display for RotorFlight
 -- Designed for 1/8 cell
 -- Author: Rob Gayle (bob00@rogers.com)
--- Date: 2024
--- ver: 0.8.0
+-- Date: 2026
+-- ver: 0.9.0.03190
 
-local app_name = "erThrottle"
+local app_name = "eThrottle"
 
 local AUDIO_PATH = "/SOUNDS/en/"
 
@@ -314,7 +314,7 @@ local function update(wgt, options)
     escStatusColors[LEVEL_INFO] = wgt.options.Color
 
     -- reload common libraries
-    local commonClass = loadScript("/WIDGETS/erLib/lib_common.lua", "tcd")
+    local commonClass = loadScript("/WIDGETS/eLib/lib_common.lua", "tcd")
     wgt.common = commonClass(app_name)
 
     -- get sensors
