@@ -13,7 +13,6 @@
 # GNU General Public License for more details.                          #
 #                                                                       #
 #########################################################################
-
 ]]
 
 -- Throttle and arm state display for RotorFlight
@@ -22,7 +21,7 @@
 -- Date: 2026
 -- ver: 0.9.0.03190
 
-local app_name = "eThrottle"
+local app_name = "eGovernor"
 
 local AUDIO_PATH = "/SOUNDS/en/"
 
@@ -81,6 +80,7 @@ local ESC_SIG_APD               = 0xA0
 local ESC_SIG_PL5               = 0xFD
 local ESC_SIG_TRIB              = 0x53
 local ESC_SIG_OPENYGE           = 0xA5
+local ESC_SIG_FLY               = 0x73
 local ESC_SIG_RESTART           = 0xFF
 
 --------------------------------------------------------------
@@ -229,14 +229,6 @@ end
     return { text = text, level = level }
 end
 
-local function tribResetStatus()
-    escstatus_text = nil
-    escstatus_level = LEVEL_INFO
-
-    log = {}
-    events = 0
-end
-
 --------------------------------------------------------------
 -- HW5 status
 
@@ -283,7 +275,147 @@ local function pl5GetStatus(code, changed)
    return { text = text, level = level }
 end
 
-local function pl5ResetStatus()
+--------------------------------------------------------------
+-- FLY telemetry
+
+-- * FLYROTOR status
+-- *    0x80 Fan Status 
+-- *    0x40 Reserved 
+-- *    0x20 Reserved 
+-- *    0x10 Throttle Signal 
+-- *    0x08 Short Circuit Protection 
+-- *    0x04 Overcurrent Protection 
+-- *    0x02 Low Voltage Protection 
+-- *    0x01 Temperature Protection
+
+local function flyGetStatus(code, changed)
+   local text = "FLYROTOR ESC OK"
+   local level = LEVEL_INFO
+   -- just report highest order bit (most severe)
+--    if code ~= 0 then
+--         text = string.format("code (%02X)", code)
+--         level = LEVEL_WARN
+--    end
+   for bit = 0, 7 do
+       if (code & (1 << bit)) ~= 0 then
+            if bit == 0 then
+                text = "ESC Over Temp"
+                level = LEVEL_ERROR
+                break
+            elseif bit == 1 then
+                text = "ESC Low Voltage"
+                level = LEVEL_ERROR
+                break
+            elseif bit == 2 then
+                text = "ESC Overcurrent"
+                level = LEVEL_ERROR
+                break
+            elseif bit == 3 then
+                text = "ESC Short Circuit"
+                level = LEVEL_ERROR
+                break
+            elseif bit == 4 then
+                text = "ESC Throttle Signal"
+                level = LEVEL_WARN
+                break
+            elseif bit == 7 then
+                text = "ESC Fan Status"
+                level = LEVEL_INFO
+                break
+            end
+       end
+   end
+   return { text = text, level = level }
+end
+
+--------------------------------------------------------------
+-- OMP telemetry
+
+-- * Status Code bits:
+-- *    0:  Short-circuit protection
+-- *    1:  Motor connection error
+-- *    2:  Throttle signal lost
+-- *    3:  Throttle signal >0 on startup error
+-- *    4:  Low voltage protection
+-- *    5:  Temperature protection
+-- *    6:  Startup protection
+-- *    7:  Current protection
+-- *    8:  Throttle signal error
+-- *   12:  Battery voltage error
+
+local function ompGetStatus(code, changed)
+   local text = "OMP ESC OK"
+   local level = LEVEL_INFO
+   -- just report highest order bit (most severe)
+--    if code ~= 0 then
+--         text = string.format("code (%02X)", code)
+--         level = LEVEL_WARN
+--    end
+   for bit = 0, 12 do
+       if (code & (1 << bit)) ~= 0 then
+            if bit == 0 then
+                text = "ESC Short Circuit"
+                level = LEVEL_ERROR
+                break
+            elseif bit == 1 then
+                text = "ESC Motor Connection"
+                level = LEVEL_ERROR
+                break
+            elseif bit == 2 then
+                text = "ESC Throttle Lost"
+                level = LEVEL_WARN
+                break
+            elseif bit == 3 then
+                text = "ESC Throttle Startup"
+                level = LEVEL_ERROR
+                break
+            elseif bit == 4 then
+                text = "ESC Low Voltage"
+                level = LEVEL_ERROR
+                break
+            elseif bit == 5 then
+                text = "ESC Over Temp"
+                level = LEVEL_ERROR
+                break
+            elseif bit == 6 then
+                text = "ESC Startup"
+                level = LEVEL_ERROR
+                break
+            elseif bit == 7 then
+                text = "ESC Overcurrent"
+                level = LEVEL_ERROR
+                break
+            elseif bit == 8 then
+                text = "ESC Throttle Signal"
+                level = LEVEL_WARN
+                break
+            elseif bit == 12 then
+                text = "ESC Battery Voltage"
+                level = LEVEL_ERROR
+                break
+            end
+       end
+   end
+   return { text = text, level = level }
+end
+
+--------------------------------------------------------------
+-- unknown ESC
+
+local function unkGetStatus(code, changed)
+    local text = escstatus_text
+    local level = LEVEL_INFO
+
+    if code ~= 0 then
+        text = string.format("ESC status code (%04X)", code)
+    end
+
+    return { text = text, level = level }
+ end
+
+--------------------------------------------------------------
+
+local function resetStatus()
    escstatus_text = nil
    escstatus_level = LEVEL_INFO
 
@@ -629,12 +761,19 @@ local function background(wgt)
                     escResetStatus = ygeResetStatus
                 elseif wgt.sig == ESC_SIG_TRIB then
                     escGetStatus = tribGetStatus
-                    escResetStatus = tribResetStatus
+                    escResetStatus = resetStatus
                 elseif wgt.sig == ESC_SIG_PL5 then
                     escGetStatus = pl5GetStatus
-                    escResetStatus = pl5ResetStatus
+                    escResetStatus = resetStatus
+                elseif wgt.sig == ESC_SIG_FLY then
+                    escGetStatus = flyGetStatus
+                    escResetStatus = resetStatus
+                elseif wgt.sig == ESC_SIG_OMP then
+                    escGetStatus = ompGetStatus
+                    escResetStatus = resetStatus
                 elseif wgt.sig ~= ESC_SIG_NONE then
-                    escstatus_text = "Unrecognized ESC"
+                    escstatus_text = "Unrecognized ESC"..string.format(" (%02X)", escSig)
+                    escGetStatus = unkGetStatus
                 end
                 escstatus_level = LEVEL_INFO
             end
