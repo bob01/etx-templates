@@ -78,7 +78,7 @@ local _options = {
     { "Reserve"               , VALUE, 20, 0, 40 },   -- reserve
     { "Mute"                  , BOOL, 0 },
     { "Vibrate"               , BOOL, 1 },
-    { "VoltageAlerts"         , SOURCE, 0 },
+    { "VoltAlerts"            , SOURCE, 0 },
     { "CellFull"              , VALUE, 412, 0, 480 },
     { "CellLow"               , VALUE, 345, 0, 440 },
     { "CellCritical"          , VALUE, 330, 0, 440 },
@@ -123,8 +123,8 @@ local function update(wgt, options)
     fi = getSensorFieldInfo(wgt, wgt.options.CellSensor)
     wgt.sensorCellsId = fi and fi.id or 0
 
-    fi = getSensorFieldInfo(wgt, wgt.options.VoltageAlerts)
-    wgt.sourceVoltageAlertsId = fi and fi.id or 0
+    fi = getSensorFieldInfo(wgt, wgt.options.VoltAlerts)
+    wgt.sourceVoltAlertsId = fi and fi.id or 0
 
     wgt.alertCellCitical = wgt.options.CellCritical
     wgt.alertCellLow = wgt.options.CellLow
@@ -460,8 +460,13 @@ local function background(wgt)
 
     -- quiet if mute or during startup delay
     if wgt.options.Mute ~= 1 and wgt.voltTimer == VOLTTIMER_DISABLED then
+        -- fuel calls
         crankFuelCalls(wgt)
-        crankVoltageAlerts(wgt)
+
+        -- low/critical voltage alerts
+        if getValue(wgt.options.VoltAlerts) > 0 then
+            crankVoltageAlerts(wgt)
+        end
     end
 end
 
