@@ -42,7 +42,7 @@
 -- friendlier UI, new name (vPowerBar), specify cell count option, reserve, haptic critical
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03190
+-- ver: 0.9.0.03191
 
 local app_name = "ePowerbar"
 
@@ -66,16 +66,17 @@ local defaultCellSensor = "Cel#"
 
 local _options = {
     { "VoltSensor"            , SOURCE, getSourceIndex(defaultVoltSensor) },
-    { "PcntSensor"            , SOURCE, getSourceIndex(defaultPcntSensor) },
-    { "MahSensor"             , SOURCE, getSourceIndex(defaultMahSensor) },
-    { "LipoMah"               , VALUE, 0, 0, 40000 },
+    { "mAhSensor"             , SOURCE, getSourceIndex(defaultMahSensor) },
+    { "FuelSensor"            , SOURCE, getSourceIndex(defaultPcntSensor) },
+    { "LipoMah"               , VALUE, 0, 0, 24000 },
     { "CellSensor"            , SOURCE, getSourceIndex(defaultCellSensor) },
-    { "Cells"                 , VALUE, 0, 0, 14 },      -- cell detection time (or interval if calc perceentage)
-    { "Reserve"               , VALUE, 20, 0, 1000 },   -- reserve (or filter samples if calc percentage)
-    { "CellFull"              , VALUE, 412, 200, 480 },
-    { "AlertLS"               , SOURCE, 0 },
-    { "CellLow"               , VALUE, 345, 200, 440 },
-    { "CellCrit"              , VALUE, 330, 200, 440 },
+    { "Cells"                 , VALUE, 0, 0, 16 },      -- cell detection time (or interval if calc perceentage)
+    { "Reserve"               , VALUE, 20, 0, 40 },   -- reserve
+    { "Mute"                  , BOOL, 0 },
+    { "AlertsActive"          , SOURCE, 0 },
+    { "CellFull"              , VALUE, 412, 0, 480 },
+    { "CellLow"               , VALUE, 345, 0, 440 },
+    { "CellCritical"          , VALUE, 330, 0, 440 },
 }
 
 --------------------------------------------------------------
@@ -108,10 +109,10 @@ local function update(wgt, options)
     local fi = getSensorFieldInfo(wgt, wgt.options.VoltSensor)
     wgt.sensorVoltId = fi and fi.id or 0
 
-    fi = getSensorFieldInfo(wgt, wgt.options.MahSensor)
+    fi = getSensorFieldInfo(wgt, wgt.options.mAhSensor)
     wgt.sensorMahId = fi and fi.id or 0
 
-    fi = getSensorFieldInfo(wgt, wgt.options.PcntSensor)
+    fi = getSensorFieldInfo(wgt, wgt.options.FuelSensor)
     wgt.sensorPcntId = fi and fi.id or 0
 
     fi = getSensorFieldInfo(wgt, wgt.options.CellSensor)
