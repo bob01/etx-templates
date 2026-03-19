@@ -56,7 +56,7 @@ local BAR_COLOR_CHECK       = lcd.RGB(0xb8, 0xb8, 0xb8)
 local BAR_COLOR_BACKGROUND  = lcd.RGB(0xc8, 0xc8, 0xc8)
 local BAR_COLOR_LINE        = lcd.RGB(160, 160, 160)
 
-local STARTUP_DELAY = 500
+local STARTUP_DELAY = 400
 local VOLTTIMER_DISABLED = -1
 
 local defaultVoltSensor = "Vbat"
@@ -148,8 +148,9 @@ local function create(zone, options)
         mainValue = 0,
         volts = 0,
 
-        battNextPlay = 0,
-        battPercentPlayed = 100,
+        -- audio state
+        lastCapa = 100,
+        nextCapa = 0,
 
         -- methods
         getCritical = function (widget)
@@ -310,38 +311,41 @@ end
 
 local function crankFuelCalls(wgt)
     -- voice alerts
-    local fvpcnt = wgt.fuel
+    local fuel = wgt.fuel
 
     local critical = wgt:getCritical()
 
     -- what do we have to report?
-    local battva = 0
-    if fvpcnt > critical + wgt.vLow then
-        battva = math.ceil(fvpcnt / 10) * 10
+    local capa = 0
+    if fuel > critical + wgt.vLow then
+        capa = math.ceil(fuel / 10) * 10
     else
-        battva = fvpcnt
+        capa = fuel
     end
 
     -- time to report?
-    if (wgt.battPercentPlayed ~= battva or battva <= 0) and getTime() > wgt.battNextPlay then
+    if (wgt.lastCapa ~= capa or capa <= 0) and getTime() > wgt.nextCapa then
+        -- skip initial report
+        if wgt.nextCapa ~= 0 then
+            -- urgent?
+            if capa > critical + wgt.vLow then
+                playAudio("battry")
+            elseif capa > critical then
+                playAudio("batlow")
+            else
+                playAudio("batcrt")
+                playHaptic(100, 0, PLAY_NOW)
+            end
 
-        -- urgent?
-        if battva > critical + wgt.vLow then
-            playAudio("battry")
-        elseif battva > critical then
-            playAudio("batlow")
-        else
-            playAudio("batcrt")
-            playHaptic(100, 0, PLAY_NOW)
+            -- play % if >= 0
+            if capa >= 0 then
+                playNumber(capa, 13)
+            end
         end
 
-        -- play % if >= 0
-        if battva >= 0 then
-            playNumber(battva, 13)
-        end
-
-        wgt.battPercentPlayed = battva
-        wgt.battNextPlay = getTime() + 500
+        -- schedule next
+        wgt.lastCapa = capa
+        wgt.nextCapa = getTime() + 500
     end
 end
 
@@ -373,7 +377,7 @@ local function background(wgt)
     calculateBatteryData(wgt)
 
     -- quiet if mute or during startup delay
-    if ~wgt.options.Mute and wgt.voltTimer == VOLTTIMER_DISABLED then
+    if wgt.options.Mute ~=1 and wgt.voltTimer == VOLTTIMER_DISABLED then
         crankFuelCalls(wgt)
     end
 end
