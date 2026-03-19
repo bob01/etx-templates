@@ -77,6 +77,7 @@ local _options = {
     { "Cells"                 , VALUE, 0, 0, 16 },      -- cell detection time (or interval if calc perceentage)
     { "Reserve"               , VALUE, 20, 0, 40 },   -- reserve
     { "Mute"                  , BOOL, 0 },
+    { "Vibrate"               , BOOL, 1 },
     { "VoltageAlerts"         , SOURCE, 0 },
     { "CellFull"              , VALUE, 412, 0, 480 },
     { "CellLow"               , VALUE, 345, 0, 440 },
@@ -186,6 +187,12 @@ end
 -- audio support
 local function playAudio(file)
     playFile(AUDIO_PATH .. file .. ".wav")
+end
+
+local function playVibe(widget)
+    if widget.options.Vibrate == 1 then
+        playHaptic(100, 0, PLAY_NOW)
+    end
 end
 
 -- color for gauge
@@ -325,9 +332,6 @@ local function calculateBatteryData(wgt)
         wgt.vMah = getValue(wgt.sensorMahId)
     end
 end
-local function playVibe(widget)
-    playHaptic(100, 0, PLAY_NOW)
-end
 
 -- call fuel consumption on the 10's (singles when critical)
 local function crankFuelCalls(widget)
@@ -455,7 +459,7 @@ local function background(wgt)
     calculateBatteryData(wgt)
 
     -- quiet if mute or during startup delay
-    if wgt.options.Mute ~=1 and wgt.voltTimer == VOLTTIMER_DISABLED then
+    if wgt.options.Mute ~= 1 and wgt.voltTimer == VOLTTIMER_DISABLED then
         crankFuelCalls(wgt)
         crankVoltageAlerts(wgt)
     end
