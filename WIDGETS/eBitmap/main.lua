@@ -26,9 +26,25 @@ local ALIGN_LEFT    = 0
 local ALIGN_CENTER  = 1
 local ALIGN_RIGHT   = 2
 
+local imageDir = "/images/"
+
 local _options = {
     { "TextAlign"             , ALIGNMENT, ALIGN_CENTER },
 }
+
+local function loadBitmapFile(name, ext)
+    local path = imageDir .. name .. ext
+    local bmp = (fstat(path) and Bitmap.open(path)) or nil
+    if bmp then
+        local bw, bh = Bitmap.getSize(bmp)
+        bmp = bw == 0 and bh == 0 and nil or bmp
+    end
+    return bmp
+end
+
+local function loadBitmap(name)
+    return loadBitmapFile(name, ".png") or loadBitmapFile(name, ".bmp") or nil
+end
 
 local function update(wgt, options)
     if (wgt == nil) then
@@ -44,6 +60,8 @@ local function create(zone, options)
         options = options,
 
         modelName = nil,
+        craftBmp = nil,
+        bmpNone = loadBitmap("new")
     }
 
     update(wgt, options)
@@ -60,10 +78,29 @@ local function paint(wgt)
     -- text
     local textAlignment = wgt.options.TextAlign
     local text = wgt.modelName or "---"
-    local textFlags = COLOR_THEME_PRIMARY1
-    local text_w, text_h = lcd.sizeText(text)
+    local textFlags = BOLD + COLOR_THEME_PRIMARY1
+    local text_w, text_h = lcd.sizeText(text, textFlags)
 
     -- bitmap
+    local bmp = wgt.craftBmp or wgt.bmpNone
+    if bmp then
+        local bw, bh = Bitmap.getSize(bmp)
+        local cw, ch = box_width, box_height - margin * 2 - text_h
+        local scalew = cw / bw
+        local scaleh = ch / bh
+        local scale, ofx, ofy
+        -- use smaller scale and center image
+        if scalew < scaleh then
+            scale = scalew
+            ofx = 0
+            ofy = (ch - bh * scale) / 2
+        else
+            scale = scaleh
+            ofy = 0
+            ofx = (cw - bw * scale) / 2
+        end
+        lcd.drawBitmap(bmp, box_left + ofx, box_top +ofy + text_h + margin * 2, scale * 100)
+    end
 
     -- title
     local tx
@@ -85,7 +122,11 @@ local function background(wgt)
     local mi = model.getInfo()
     local modelName = mi.name
     if wgt.modelName ~= modelName then
+        -- name
         wgt.modelName = modelName
+
+        -- bitmap
+        wgt.craftBmp = loadBitmap(modelName)
     end
 end
 
