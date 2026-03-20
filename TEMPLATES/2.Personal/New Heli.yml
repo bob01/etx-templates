@@ -5,7 +5,7 @@ header:
       0:
          val: 7
    bitmap: "new.png"
-   labels: ""
+   labels: "Favorites,Heli"
 timers: 
    0:
       start: 240
@@ -892,7 +892,7 @@ flightModeData:
       fadeOut: 0
       gvars: 
          0:
-            val: 450
+            val: 710
          1:
             val: 0
          2:
@@ -906,7 +906,7 @@ flightModeData:
          6:
             val: 0
          7:
-            val: -765
+            val: 0
          8:
             val: 0
          9:
@@ -1591,7 +1591,7 @@ telemetrySensors:
          id: 4256
       id2: 
          instance: 0
-      label: "Temp"
+      label: "Tesc"
       subId: 0
       type: TYPE_CUSTOM
       unit: 11
@@ -1610,7 +1610,7 @@ telemetrySensors:
          id: 4288
       id2: 
          instance: 0
-      label: "RPM"
+      label: "Hspd"
       subId: 0
       type: TYPE_CUSTOM
       unit: 18
@@ -1787,29 +1787,61 @@ screenData:
                         value: 
                            unsignedValue: 2
             1:
-               widgetName: erPowerbar
+               widgetName: ePowerbar
                widgetData: 
                   options: 
                      0:
                         type: Source
                         value: 
-                           source: NONE
+                           source: tele(13)
                      1:
                         type: Source
                         value: 
-                           source: NONE
+                           source: tele(15)
                      2:
                         type: Source
                         value: 
-                           source: NONE
+                           source: tele(16)
                      3:
                         type: Signed
                         value: 
                            signedValue: 0
                      4:
+                        type: Source
+                        value: 
+                           source: tele(17)
+                     5:
                         type: Signed
                         value: 
                            signedValue: 0
+                     6:
+                        type: Signed
+                        value: 
+                           signedValue: 20
+                     7:
+                        type: Bool
+                        value: 
+                           boolValue: 0
+                     8:
+                        type: Bool
+                        value: 
+                           boolValue: 1
+                     9:
+                        type: Source
+                        value: 
+                           source: ls(2)
+                     10:
+                        type: Signed
+                        value: 
+                           signedValue: 412
+                     11:
+                        type: Signed
+                        value: 
+                           signedValue: 345
+                     12:
+                        type: Signed
+                        value: 
+                           signedValue: 330
             2:
                widgetName: Value
                widgetData: 
@@ -1821,7 +1853,7 @@ screenData:
                      1:
                         type: Color
                         value: 
-                           color: 0x000000
+                           color: COLIDX0
                      2:
                         type: Bool
                         value: 
@@ -1835,37 +1867,49 @@ screenData:
                         value: 
                            unsignedValue: 2
             3:
-               widgetName: erThrottle
+               widgetName: eGovernor
                widgetData: 
                   options: 
                      0:
-                        type: Color
+                        type: Source
                         value: 
-                           color: 0x000000
-            4:
-               widgetName: ModelBmp
-               widgetData: 
-                  options: 
-                     0:
-                        type: Color
-                        value: 
-                           color: 0x105C98
+                           source: tele(34)
                      1:
-                        type: Unsigned
+                        type: Source
                         value: 
-                           unsignedValue: 0
+                           source: tele(35)
                      2:
+                        type: Source
+                        value: 
+                           source: tele(36)
+                     3:
+                        type: Source
+                        value: 
+                           source: tele(22)
+                     4:
+                        type: Source
+                        value: 
+                           source: tele(26)
+                     5:
+                        type: Source
+                        value: 
+                           source: tele(25)
+                     6:
                         type: Bool
                         value: 
                            boolValue: 0
-                     3:
+                     7:
                         type: Color
                         value: 
-                           color: 0xE0ECF0
-                     4:
-                        type: Bool
+                           color: COLIDX14
+            4:
+               widgetName: eBitmap
+               widgetData: 
+                  options: 
+                     0:
+                        type: Unsigned
                         value: 
-                           boolValue: 1
+                           unsignedValue: 2
             5:
                widgetName: Value
                widgetData: 
@@ -1922,7 +1966,7 @@ screenData:
                      0:
                         type: Source
                         value: 
-                           source: tele(+6)
+                           source: tele(3)
                      1:
                         type: Color
                         value: 
@@ -1946,7 +1990,7 @@ screenData:
                      0:
                         type: Source
                         value: 
-                           source: tele(15)
+                           source: tele(25)
                      1:
                         type: Color
                         value: 
@@ -1970,7 +2014,7 @@ screenData:
                      0:
                         type: Source
                         value: 
-                           source: tele(16)
+                           source: tele(20)
                      1:
                         type: Color
                         value: 
@@ -1994,7 +2038,7 @@ screenData:
                      0:
                         type: Source
                         value: 
-                           source: tele(+22)
+                           source: tele(21)
                      1:
                         type: Color
                         value: 
@@ -2018,7 +2062,7 @@ screenData:
                      0:
                         type: Source
                         value: 
-                           source: tele(+13)
+                           source: tele(+18)
                      1:
                         type: Color
                         value: 
@@ -2042,7 +2086,7 @@ screenData:
                      0:
                         type: Source
                         value: 
-                           source: tele(-13)
+                           source: tele(-18)
                      1:
                         type: Color
                         value: 
@@ -2066,7 +2110,7 @@ screenData:
                      0:
                         type: Source
                         value: 
-                           source: tele(+14)
+                           source: tele(+19)
                      1:
                         type: Color
                         value: 
@@ -2090,7 +2134,7 @@ screenData:
                      0:
                         type: Source
                         value: 
-                           source: tele(+30)
+                           source: tele(+17)
                      1:
                         type: Color
                         value: 
@@ -2237,7 +2281,7 @@ topbarData:
                3:
                   type: Unsigned
                   value: 
-                     unsignedValue: 0
+                     unsignedValue: 1
                4:
                   type: Unsigned
                   value: 
