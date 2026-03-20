@@ -18,7 +18,7 @@
 -- RotorFlight aware bitmap
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03200
+-- ver: 0.9.0.03201
 
 local app_name = "eBitmap"
 
@@ -30,6 +30,7 @@ local imageDir = "/images/"
 
 local _options = {
     { "Color"                 , COLOR, COLOR_THEME_PRIMARY1 },
+    { "Size"                  , TEXT_SIZE, 0 },
     { "Shadow"                , BOOL, 0 },
     { "Align"                 , ALIGNMENT, ALIGN_RIGHT },
 }
@@ -83,18 +84,19 @@ local function paint(wgt)
     local box_width, box_height = wgt.zone.w, wgt.zone.h
     local box_left, box_top = 0, 0
     local margin = 8
+    local sepr = 2
 
     -- text
     local textShadowed = wgt.options.Shadow == 0 and 0 or SHADOWED
     local text = wgt.modelName or "---"
-    local textFlags = BOLD + textShadowed + wgt.text_color
+    local textFlags = (wgt.options.Size << 8) + textShadowed + wgt.text_color
     local text_w, text_h = lcd.sizeText(text, textFlags)
 
     -- bitmap
     local bmp = wgt.craftBmp or wgt.bmpNone
     if bmp then
         local bw, bh = Bitmap.getSize(bmp)
-        local cw, ch = box_width, box_height - margin * 2 - text_h
+        local cw, ch = box_width, box_height - margin - sepr - text_h
         local scalew = cw / bw
         local scaleh = ch / bh
         local scale, ofx, ofy
@@ -108,7 +110,7 @@ local function paint(wgt)
             ofy = 0
             ofx = (cw - bw * scale) / 2
         end
-        lcd.drawBitmap(bmp, box_left + ofx, box_top +ofy + text_h + margin * 2, scale * 100)
+        lcd.drawBitmap(bmp, box_left + ofx, box_top +ofy + text_h + margin + sepr, scale * 100)
     end
 
     -- title

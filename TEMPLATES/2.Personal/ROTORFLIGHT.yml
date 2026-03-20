@@ -1848,10 +1848,14 @@ screenData:
                         value: 
                            color: COLIDX0
                      1:
+                        type: Unsigned
+                        value: 
+                           unsignedValue: 1
+                     2:
                         type: Bool
                         value: 
                            boolValue: 0
-                     2:
+                     3:
                         type: Unsigned
                         value: 
                            unsignedValue: 2
