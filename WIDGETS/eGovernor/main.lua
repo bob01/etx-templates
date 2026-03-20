@@ -19,7 +19,7 @@
 -- Designed for 1/8 cell
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03194
+-- ver: 0.9.0.03200
 
 local app_name = "eGovernor"
 
@@ -34,7 +34,7 @@ local _options = {
     { "EscStatus"             , SOURCE, getSourceIndex(CHAR_TELEMETRY.."EscF") },
     { "Mute"                  , BOOL, 0 },
     
-    { "Color"                 , COLOR, BLACK },
+    { "Color"                 , COLOR, COLOR_THEME_PRIMARY1 },
 }
 
 local FM_MODE_FM        = 0

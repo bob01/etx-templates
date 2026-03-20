@@ -18,7 +18,7 @@
 -- RotorFlight aware bitmap
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03194
+-- ver: 0.9.0.03200
 
 local app_name = "eBitmap"
 
@@ -29,7 +29,9 @@ local ALIGN_RIGHT   = 2
 local imageDir = "/images/"
 
 local _options = {
-    { "TextAlign"             , ALIGNMENT, ALIGN_CENTER },
+    { "Color"                 , COLOR, COLOR_THEME_PRIMARY1 },
+    { "Shadow"                , BOOL, 0 },
+    { "Align"                 , ALIGNMENT, ALIGN_RIGHT },
 }
 
 local function loadBitmapFile(name, ext)
@@ -52,12 +54,19 @@ local function update(wgt, options)
     end
 
     wgt.options = options
+
+    -- reload common libraries
+    local commonClass = loadScript("/WIDGETS/eLib/lib_common.lua", "tcd")
+    wgt.common = commonClass(app_name)
 end
 
 local function create(zone, options)
     local wgt = {
         zone = zone,
         options = options,
+
+        connected = false,
+        text_color = COLOR_THEME_PRIMARY1,
 
         modelName = nil,
         craftBmp = nil,
@@ -76,9 +85,9 @@ local function paint(wgt)
     local margin = 8
 
     -- text
-    local textAlignment = wgt.options.TextAlign
+    local textShadowed = wgt.options.Shadow == 0 and 0 or SHADOWED
     local text = wgt.modelName or "---"
-    local textFlags = BOLD + COLOR_THEME_PRIMARY1
+    local textFlags = BOLD + textShadowed + wgt.text_color
     local text_w, text_h = lcd.sizeText(text, textFlags)
 
     -- bitmap
@@ -104,6 +113,7 @@ local function paint(wgt)
 
     -- title
     local tx
+    local textAlignment = wgt.options.Align
     if textAlignment == ALIGN_LEFT then
         tx = box_left + margin * 2
     elseif textAlignment == ALIGN_CENTER then
@@ -119,6 +129,10 @@ local function background(wgt)
         return
     end
 
+    -- telemetry status
+    wgt.connected = wgt.common.isTelemetryActive()
+
+    -- get model info
     local mi = model.getInfo()
     local modelName = mi.name
     if wgt.modelName ~= modelName then
@@ -138,6 +152,12 @@ local function refresh(wgt, event, touchState)
     if (wgt.zone == nil)    then return end
 
     background(wgt)
+
+    if wgt.connected then
+        wgt.text_color = wgt.options.Color
+    else
+        wgt.text_color = COLOR_THEME_DISABLED
+    end
 
     paint(wgt)
 
