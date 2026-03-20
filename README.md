@@ -15,11 +15,12 @@ The idea is...
 - bind or assign a receiver ID if using model match
 - customize switch assignments, battery warnings etc (or not)
 - verify that all controls are correct and setup is SAFE
-- GO FLY<br>No need to know what an input, mixer, logical switch, special function or global variable is ...<br>unless you really want to...
+- GO FLY
 
 Best used with [etx-presets (for RotorFlight)](https://github.com/bob01/etx-presets-rotorflight)
 
 ### Release notes
+- 2025.03.19 - widgets revised for RotorFlight v2.3.x, EdgeTx 2.12.x+, RadioMaster TX16S MK3
 - 2024.09.02 - revised for RotorFlight v2.1
 - 2024.08.05 - ModelEditor - dropped BEC/ADC page - all current FC's have BEC ADCs now
 - 2024.07.09 - eThrottle - Report "Bad Auto" + haptic if GOV reports LOST-HS ie bailout will not be available
@@ -56,11 +57,6 @@ Best used with [etx-presets (for RotorFlight)](https://github.com/bob01/etx-pres
 ![image](https://github.com/bob01/etx-templates/assets/4014433/bae4309c-cc97-40b4-a1c3-5140f3279bce)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/7cb186ef-f856-4b28-bccc-fc215e0d5c82)
 
-### The model editor follows for switch assignments and voltage monitors etc.
-![image](https://github.com/bob01/etx-templates/assets/4014433/88fe8555-9cd0-45d1-8669-36d80a40d10a)
-![image](https://github.com/bob01/etx-templates/assets/4014433/6358c318-2860-4c05-913d-dbd148e2aa23)
-![image](https://github.com/bob01/etx-templates/assets/4014433/870b21cf-4010-4613-8f7d-001b4d13e6b0)
-
 ### Name it, assign an image and maybe labels
 ![image](https://github.com/bob01/etx-templates/assets/4014433/c6f8e435-302c-49ac-9518-682418419e97)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/b006d0b8-7ac9-46e7-8009-eee194809676)
@@ -69,10 +65,6 @@ Best used with [etx-presets (for RotorFlight)](https://github.com/bob01/etx-pres
 ![image](https://github.com/bob01/etx-templates/assets/4014433/3a12aeba-4a79-4b8d-9a39-4e1f0c40df98)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/a85f8916-01f4-4b36-bb71-d6174ba2b0fe)
 ### Done.
-
-
-### The model editor is available at any time from the System screen
-![image](https://github.com/bob01/etx-templates/assets/4014433/1e14e7b4-0a3f-4cd7-bf14-ff0659111a02)
 
 
 ### Installation
