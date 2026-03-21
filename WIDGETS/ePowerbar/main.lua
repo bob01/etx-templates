@@ -20,7 +20,7 @@
 -- Based on  Lipo battery from single analog source by Offer Shmuely
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03194
+-- ver: 0.9.0.03210
 
 local app_name = "ePowerbar"
 
@@ -437,6 +437,8 @@ local function background(wgt)
         if telemetryActive ~= wgt.isTelemetryActive then
             wgt.isTelemetryActive = telemetryActive
             if wgt.isTelemetryActive then
+                -- skip initial report
+                wgt.nextCapa = 0
                 -- restart voltage check timer on telemetry connection
                 wgt.voltTimer = getTime() + STARTUP_DELAY
             end
