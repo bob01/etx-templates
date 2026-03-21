@@ -3,7 +3,7 @@ header:
    name: "ROTORFLIGHT"
    modelId: 
       0:
-         val: 7
+         val: 16
    bitmap: "new.png"
    labels: "Favorites,Heli"
 timers: 
@@ -823,6 +823,8 @@ flightModeData:
       gvars: 
          2:
             val: 0
+         7:
+            val: 0
    2:
       name: ""
       swtch: "NONE"
@@ -830,6 +832,8 @@ flightModeData:
       fadeOut: 0
       gvars: 
          2:
+            val: 0
+         7:
             val: 0
    3:
       name: ""
@@ -839,6 +843,8 @@ flightModeData:
       gvars: 
          2:
             val: 0
+         7:
+            val: 0
    4:
       name: ""
       swtch: "NONE"
@@ -846,6 +852,8 @@ flightModeData:
       fadeOut: 0
       gvars: 
          2:
+            val: 0
+         7:
             val: 0
    5:
       name: ""
@@ -855,6 +863,8 @@ flightModeData:
       gvars: 
          2:
             val: 0
+         7:
+            val: 0
    6:
       name: ""
       swtch: "NONE"
@@ -862,6 +872,8 @@ flightModeData:
       fadeOut: 0
       gvars: 
          2:
+            val: 0
+         7:
             val: 0
    7:
       name: ""
@@ -871,6 +883,8 @@ flightModeData:
       gvars: 
          2:
             val: 0
+         7:
+            val: 0
    8:
       name: ""
       swtch: "NONE"
@@ -878,6 +892,8 @@ flightModeData:
       fadeOut: 0
       gvars: 
          2:
+            val: 0
+         7:
             val: 0
 thrTraceSrc: Thr
 switchWarning: 
@@ -1804,7 +1820,7 @@ screenData:
                         value: 
                            unsignedValue: 2
             3:
-               widgetName: eGovernor
+               widgetName: eStatus
                widgetData: 
                   options: 
                      0:
