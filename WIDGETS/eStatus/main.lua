@@ -21,7 +21,7 @@
 -- Date: 2026
 -- ver: 0.9.0.03200
 
-local app_name = "eGovernor"
+local app_name = "eStatus"
 
 local AUDIO_PATH = "/SOUNDS/en/"
 
