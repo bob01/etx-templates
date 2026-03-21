@@ -68,51 +68,51 @@ local function log(s)
 end
 --------------------------------------------------------------
 
-local function getSensorFieldInfo(wgt, name)
+local function getSensorFieldInfo(widget, name)
     local fi = getFieldInfo(name)
     if fi == nil then
-        wgt.common.log("Required sensor '"..name.."' missing")
+        widget.common.log("Required sensor '"..name.."' missing")
     end
     return fi
 end
 
-local function update(wgt, options)
-    if (wgt == nil) then
+local function update(widget, options)
+    if (widget == nil) then
         return
     end
 
-    wgt.options = options
+    widget.options = options
 
-    wgt.vReserve = wgt.options.Reserve
+    widget.vReserve = widget.options.Reserve
 
     -- reload common libraries
     local commonClass = loadScript("/WIDGETS/eLib/lib_common.lua", "tcd")
-    wgt.common = commonClass(app_name)
+    widget.common = commonClass(app_name)
 
-    local fi = getSensorFieldInfo(wgt, wgt.options.VoltSensor)
-    wgt.sensorVoltId = fi and fi.id or 0
+    local fi = getSensorFieldInfo(widget, widget.options.VoltSensor)
+    widget.sensorVoltId = fi and fi.id or 0
 
-    fi = getSensorFieldInfo(wgt, wgt.options.mAhSensor)
-    wgt.sensorMahId = fi and fi.id or 0
+    fi = getSensorFieldInfo(widget, widget.options.mAhSensor)
+    widget.sensorMahId = fi and fi.id or 0
 
-    fi = getSensorFieldInfo(wgt, wgt.options.FuelSensor)
-    wgt.sensorPcntId = fi and fi.id or 0
+    fi = getSensorFieldInfo(widget, widget.options.FuelSensor)
+    widget.sensorPcntId = fi and fi.id or 0
 
-    fi = getSensorFieldInfo(wgt, wgt.options.CellSensor)
-    wgt.sensorCellsId = fi and fi.id or 0
+    fi = getSensorFieldInfo(widget, widget.options.CellSensor)
+    widget.sensorCellsId = fi and fi.id or 0
 
-    fi = getSensorFieldInfo(wgt, wgt.options.Alerts)
-    wgt.sourceAlertsId = fi and fi.id or 0
+    fi = getSensorFieldInfo(widget, widget.options.Alerts)
+    widget.sourceAlertsId = fi and fi.id or 0
 
-    wgt.alertCellCitical = wgt.options.CellCritical
-    wgt.alertCellLow = wgt.options.CellLow
+    widget.alertCellCitical = widget.options.CellCritical
+    widget.alertCellLow = widget.options.CellLow
 
     -- trigger retest
-    wgt.cellCount = nil
+    widget.cellCount = nil
 end
 
 local function create(zone, options)
-    local wgt = {
+    local widget = {
         zone = zone,
         options = options,
         counter = 0,
@@ -158,8 +158,8 @@ local function create(zone, options)
         end,
     }
 
-    update(wgt, options)
-    return wgt
+    update(widget, options)
+    return widget
 end
 
 -- audio support
@@ -174,42 +174,42 @@ local function playVibe(widget)
 end
 
 -- color for gauge
-local function getBarColor(wgt)
-    local critical = wgt:getCritical()
-    if wgt.voltTimer ~= VOLTTIMER_DISABLED then
+local function getBarColor(widget)
+    local critical = widget:getCritical()
+    if widget.voltTimer ~= VOLTTIMER_DISABLED then
         -- in cell check
         return BAR_COLOR_CHECK
-    elseif wgt.fuel <= critical then
+    elseif widget.fuel <= critical then
         -- red
         return BAR_COLOR_CRITICAL
-    elseif wgt.fuel <= critical + 20 then
+    elseif widget.fuel <= critical + 20 then
         -- yellow
         return BAR_COLOR_LOW
     else
         -- green
-        return wgt.barColor
+        return widget.barColor
     end
 end
 
 --- paint
-local function paint(wgt)
-    local myBatt = { ["x"] = 4, ["y"] = 4, ["w"] = wgt.zone.w - 8, ["h"] = wgt.zone.h - 8, ["segments_w"] = 25, ["color"] = WHITE, ["cath_w"] = 6, ["cath_h"] = 20 }
+local function paint(widget)
+    local myBatt = { ["x"] = 4, ["y"] = 4, ["w"] = widget.zone.w - 8, ["h"] = widget.zone.h - 8, ["segments_w"] = 25, ["color"] = WHITE, ["cath_w"] = 6, ["cath_h"] = 20 }
 
     -- background
     local color = BAR_COLOR_BACKGROUND
     lcd.drawFilledRectangle(myBatt.x, myBatt.y, myBatt.w, myBatt.h, color)
 
     -- bar
-    if wgt.fuel and wgt.volts and wgt.volts > 0 then
+    if widget.fuel and widget.volts and widget.volts > 0 then
         local fill
-        if wgt.voltTimer == VOLTTIMER_DISABLED then
-            fill = wgt.fuel > 0 and wgt.fuel <= 100 and wgt.fuel or 100
+        if widget.voltTimer == VOLTTIMER_DISABLED then
+            fill = widget.fuel > 0 and widget.fuel <= 100 and widget.fuel or 100
         else
-            fill = wgt.cellFullCheckProgress < 100 and wgt.cellFullCheckProgress or 100
+            fill = widget.cellFullCheckProgress < 100 and widget.cellFullCheckProgress or 100
         end
 
         local bar_width = math.floor((((myBatt.w - 2) / 100) * fill) + 2)
-        color = getBarColor(wgt)
+        color = getBarColor(widget)
         lcd.drawFilledRectangle(myBatt.x, myBatt.y, bar_width, myBatt.h, color)
 
         color = BAR_COLOR_LINE
@@ -217,26 +217,26 @@ local function paint(wgt)
     end
 
     -- outline
-    lcd.drawRectangle(myBatt.x, myBatt.y, myBatt.w + 1, myBatt.h, wgt.text_color)
+    lcd.drawRectangle(myBatt.x, myBatt.y, myBatt.w + 1, myBatt.h, widget.text_color)
 
     -- bar
     local volts
-    if wgt.cellCount and wgt.cellCount > 0 then
+    if widget.cellCount and widget.cellCount > 0 then
         -- cell count available
-        volts = string.format("%.1f v / %.2f v (%.0fs)", wgt.volts, wgt.cellv, wgt.cellCount);
+        volts = string.format("%.1f v / %.2f v (%.0fs)", widget.volts, widget.cellv, widget.cellCount);
     else
         -- cell count not available
-        volts = string.format("%.1f v / %.2f v (?s)", wgt.volts, wgt.cellv);
+        volts = string.format("%.1f v / %.2f v (?s)", widget.volts, widget.cellv);
     end
-    lcd.drawText(myBatt.x + 8, myBatt.y + 4, volts, BOLD + LEFT  + wgt.text_color)
+    lcd.drawText(myBatt.x + 8, myBatt.y + 4, volts, BOLD + LEFT  + widget.text_color)
 
-    if wgt.sensorMahId ~= 0 then
-        local mah = string.format("%.0f mah", wgt.mah)
-        lcd.drawText(myBatt.x + 8, myBatt.y + myBatt.h / 2, mah, BOLD + LEFT  + wgt.text_color)
+    if widget.sensorMahId ~= 0 then
+        local mah = string.format("%.0f mah", widget.mah)
+        lcd.drawText(myBatt.x + 8, myBatt.y + myBatt.h / 2, mah, BOLD + LEFT  + widget.text_color)
     end
 
-    local percent = string.format("%.0f%%", wgt.fuel)
-    lcd.drawText(myBatt.x + myBatt.w - 4, myBatt.y + myBatt.h / 2, percent, BOLD + VCENTER + RIGHT + MIDSIZE + wgt.text_color)
+    local percent = string.format("%.0f%%", widget.fuel)
+    lcd.drawText(myBatt.x + myBatt.w - 4, myBatt.y + myBatt.h / 2, percent, BOLD + VCENTER + RIGHT + MIDSIZE + widget.text_color)
 end
 
 --- battery calcs
@@ -424,61 +424,61 @@ local function crankVoltageAlerts(widget)
 end
 
 -- process sensors, pre-render and announce
-local function background(wgt)
-    if (wgt == nil) then
+local function background(widget)
+    if (widget == nil) then
         return
     end
 
     -- assume no telemetry if required sensors missing
-    if wgt.sensorVoltId == 0 then
-        wgt.isTelemetryActive = false
+    if widget.sensorVoltId == 0 then
+        widget.isTelemetryActive = false
     else
-        local telemetryActive = wgt.common.isTelemetryActive()
-        if telemetryActive ~= wgt.isTelemetryActive then
-            wgt.isTelemetryActive = telemetryActive
-            if wgt.isTelemetryActive then
+        local telemetryActive = widget.common.isTelemetryActive()
+        if telemetryActive ~= widget.isTelemetryActive then
+            widget.isTelemetryActive = telemetryActive
+            if widget.isTelemetryActive then
                 -- skip initial report
-                wgt.nextCapa = 0
+                widget.nextCapa = 0
                 -- restart voltage check timer on telemetry connection
-                wgt.voltTimer = getTime() + STARTUP_DELAY
+                widget.voltTimer = getTime() + STARTUP_DELAY
             end
         end
     end
 
     -- bail if no telemetry
-    if not wgt.isTelemetryActive then
+    if not widget.isTelemetryActive then
         return
     end
 
-    calculateBatteryData(wgt)
+    calculateBatteryData(widget)
 
     -- quiet if mute or during startup delay
-    if wgt.options.Mute ~= 1 and wgt.voltTimer == VOLTTIMER_DISABLED then
+    if widget.options.Mute ~= 1 and widget.voltTimer == VOLTTIMER_DISABLED then
         -- fuel calls
-        crankFuelCalls(wgt)
+        crankFuelCalls(widget)
 
         -- low/critical voltage alerts
-        crankVoltageAlerts(wgt)
+        crankVoltageAlerts(widget)
     end
 end
 
-local function refresh(wgt, event, touchState)
-    if (wgt == nil)         then return end
-    if type(wgt) ~= "table" then return end
-    if (wgt.options == nil) then return end
-    if (wgt.zone == nil)    then return end
+local function refresh(widget, event, touchState)
+    if (widget == nil)         then return end
+    if type(widget) ~= "table" then return end
+    if (widget.options == nil) then return end
+    if (widget.zone == nil)    then return end
 
-    background(wgt)
+    background(widget)
 
-    if wgt.isTelemetryActive then
-        wgt.text_color = BLACK
-        wgt.cell_color = BLACK
+    if widget.isTelemetryActive then
+        widget.text_color = BLACK
+        widget.cell_color = BLACK
     else
-        wgt.text_color = COLOR_THEME_DISABLED
-        wgt.cell_color = COLOR_THEME_DISABLED
+        widget.text_color = COLOR_THEME_DISABLED
+        widget.cell_color = COLOR_THEME_DISABLED
     end
 
-    paint(wgt)
+    paint(widget)
 
     if (event ~= nil) then
         if (touchState and touchState.tapCount == 2) or (event and event == EVT_VIRTUAL_EXIT) then

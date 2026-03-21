@@ -18,7 +18,7 @@
 -- RotorFlight aware bitmap
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03201
+-- ver: 0.9.0.03210
 
 local app_name = "eBitmap"
 
@@ -49,20 +49,20 @@ local function loadBitmap(name)
     return loadBitmapFile(name, ".png") or loadBitmapFile(name, ".bmp") or nil
 end
 
-local function update(wgt, options)
-    if (wgt == nil) then
+local function update(widget, options)
+    if (widget == nil) then
         return
     end
 
-    wgt.options = options
+    widget.options = options
 
     -- reload common libraries
     local commonClass = loadScript("/WIDGETS/eLib/lib_common.lua", "tcd")
-    wgt.common = commonClass(app_name)
+    widget.common = commonClass(app_name)
 end
 
 local function create(zone, options)
-    local wgt = {
+    local widget = {
         zone = zone,
         options = options,
 
@@ -74,26 +74,26 @@ local function create(zone, options)
         bmpNone = loadBitmap("new")
     }
 
-    update(wgt, options)
-    return wgt
+    update(widget, options)
+    return widget
 end
 
 --- paint
-local function paint(wgt)
+local function paint(widget)
     -- canvas dimensions
-    local box_width, box_height = wgt.zone.w, wgt.zone.h
+    local box_width, box_height = widget.zone.w, widget.zone.h
     local box_left, box_top = 0, 0
     local margin = 8
     local sepr = 2
 
     -- text
-    local textShadowed = wgt.options.Shadow == 0 and 0 or SHADOWED
-    local text = wgt.modelName or "---"
-    local textFlags = (wgt.options.Size << 8) + textShadowed + wgt.text_color
+    local textShadowed = widget.options.Shadow == 0 and 0 or SHADOWED
+    local text = widget.modelName or "---"
+    local textFlags = (widget.options.Size << 8) + textShadowed + widget.text_color
     local text_w, text_h = lcd.sizeText(text, textFlags)
 
     -- bitmap
-    local bmp = wgt.craftBmp or wgt.bmpNone
+    local bmp = widget.craftBmp or widget.bmpNone
     if bmp then
         local bw, bh = Bitmap.getSize(bmp)
         local cw, ch = box_width, box_height - margin - sepr - text_h
@@ -115,7 +115,7 @@ local function paint(wgt)
 
     -- title
     local tx
-    local textAlignment = wgt.options.Align
+    local textAlignment = widget.options.Align
     if textAlignment == ALIGN_LEFT then
         tx = box_left + margin * 2
     elseif textAlignment == ALIGN_CENTER then
@@ -126,42 +126,42 @@ local function paint(wgt)
     lcd.drawText(tx, box_top + margin, text, textFlags)
 end
 
-local function background(wgt)
-    if (wgt == nil) then
+local function background(widget)
+    if (widget == nil) then
         return
     end
 
     -- telemetry status
-    wgt.connected = wgt.common.isTelemetryActive()
+    widget.connected = widget.common.isTelemetryActive()
 
     -- get model info
     local mi = model.getInfo()
     local modelName = mi.name
-    if wgt.modelName ~= modelName then
+    if widget.modelName ~= modelName then
         -- name
-        wgt.modelName = modelName
+        widget.modelName = modelName
 
         -- bitmap
-        wgt.craftBmp = loadBitmap(modelName)
+        widget.craftBmp = loadBitmap(modelName)
     end
 end
 
-local function refresh(wgt, event, touchState)
+local function refresh(widget, event, touchState)
 
-    if (wgt == nil)         then return end
-    if type(wgt) ~= "table" then return end
-    if (wgt.options == nil) then return end
-    if (wgt.zone == nil)    then return end
+    if (widget == nil)         then return end
+    if type(widget) ~= "table" then return end
+    if (widget.options == nil) then return end
+    if (widget.zone == nil)    then return end
 
-    background(wgt)
+    background(widget)
 
-    if wgt.connected then
-        wgt.text_color = wgt.options.Color
+    if widget.connected then
+        widget.text_color = widget.options.Color
     else
-        wgt.text_color = COLOR_THEME_DISABLED
+        widget.text_color = COLOR_THEME_DISABLED
     end
 
-    paint(wgt)
+    paint(widget)
 
     if (event ~= nil) then
         if (touchState and touchState.tapCount == 2) or (event and event == EVT_VIRTUAL_EXIT) then
