@@ -124,7 +124,7 @@ local function create(zone, options)
         border_t = 0,
         border_b = 10,
 
-        isTelemetryActive = 0,
+        active = false,
         fuel = 0,
         vReserve = 20,
         vLow = 10,
@@ -241,9 +241,6 @@ end
 
 --- battery calcs
 local function calculateBatteryData(widget)
-    -- get voltage
-    local v = getValue(widget.sensorVoltId)
-
     -- cells
     local cells = 0
     if widget.sensorCellsId ~= 0 then
@@ -261,6 +258,13 @@ local function calculateBatteryData(widget)
     end
     local vdiv = widget.cellCount and widget.cellCount > 0 and widget.cellCount or 1
 
+    -- voltage
+    local volts = getValue(widget.sensorVoltId)
+    if volts and volts > 0 then
+        widget.cellv = volts / vdiv
+        widget.volts = volts
+    end
+
     -- check for initial voltage check
     local now = getTime()
     if widget.voltTimer ~= VOLTTIMER_DISABLED then
@@ -271,13 +275,13 @@ local function calculateBatteryData(widget)
             if widget.cellCount == 0 then
                 -- cell count unknown
                 widget.barColor = BAR_COLOR_CHECK
-            elseif (v / vdiv) >= widget:getCellFull() then
+            elseif (volts / vdiv) >= widget:getCellFull() then
                 -- ok
                 widget.barColor = BAR_COLOR_OK
             else
                 -- warn
                 playAudio("batlow")
-                playNumber(v * 10, 1, PREC1)
+                playNumber(volts * 10, 1, PREC1)
                 widget.barColor = BAR_COLOR_WARN
             end
         else
@@ -287,10 +291,6 @@ local function calculateBatteryData(widget)
             end
         end
     end
-
-    -- voltage
-    widget.cellv = v / vdiv
-    widget.volts = v
 
     -- mah
     if widget.sensorMahId ~= 0 then
@@ -431,12 +431,13 @@ local function background(widget)
 
     -- assume no telemetry if required sensors missing
     if widget.sensorVoltId == 0 then
-        widget.isTelemetryActive = false
+        widget.active = false
     else
-        local telemetryActive = widget.common.isTelemetryActive()
-        if telemetryActive ~= widget.isTelemetryActive then
-            widget.isTelemetryActive = telemetryActive
-            if widget.isTelemetryActive then
+        local active = widget.common.isTelemetryActive()
+        if active ~= widget.active then
+            widget.active = active
+
+            if active then
                 -- skip initial report
                 widget.nextCapa = 0
                 -- restart voltage check timer on telemetry connection
@@ -446,7 +447,7 @@ local function background(widget)
     end
 
     -- bail if no telemetry
-    if not widget.isTelemetryActive then
+    if not widget.active then
         return
     end
 
@@ -470,7 +471,7 @@ local function refresh(widget, event, touchState)
 
     background(widget)
 
-    if widget.isTelemetryActive then
+    if widget.active then
         widget.text_color = BLACK
         widget.cell_color = BLACK
     else
