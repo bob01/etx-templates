@@ -252,15 +252,20 @@ local function calculateBatteryData(widget)
     end
     if widget.cellCount ~= cells then
         widget.cellCount = cells
-
-        widget.voltTimer = getTime() + STARTUP_DELAY
-        widget.cellFullCheckProgress = 0
     end
     local vdiv = widget.cellCount and widget.cellCount > 0 and widget.cellCount or 1
+
+    local cellFull = widget:getCellFull()
 
     -- voltage
     local volts = getValue(widget.sensorVoltId)
     if volts and volts > 0 then
+        -- arm cell check if full check enabled and voltage appearing or moving away from 0
+        if cellFull > 0 and volts > 0 and (widget.volts == nil or widget.volts == 0) then
+            widget.voltTimer = getTime() + STARTUP_DELAY
+            widget.cellFullCheckProgress = 0
+        end
+
         widget.cellv = volts / vdiv
         widget.volts = volts
     end
@@ -275,7 +280,7 @@ local function calculateBatteryData(widget)
             if widget.cellCount == 0 then
                 -- cell count unknown
                 widget.barColor = BAR_COLOR_CHECK
-            elseif (volts / vdiv) >= widget:getCellFull() then
+            elseif (volts / vdiv) >= cellFull then
                 -- ok
                 widget.barColor = BAR_COLOR_OK
             else
