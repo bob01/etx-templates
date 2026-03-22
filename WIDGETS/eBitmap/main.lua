@@ -2,6 +2,7 @@
 #########################################################################
 #                                                                       #
 # License GPLv2: http://www.gnu.org/licenses/gpl-2.0.html               #
+# Copyright "Rob 'bob00' Gayle"                                         #
 #                                                                       #
 # This program is free software; you can redistribute it and/or modify  #
 # it under the terms of the GNU General Public License version 2 as     #
@@ -18,7 +19,7 @@
 -- RotorFlight aware bitmap
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03210
+-- ver: 0.9.0.03211
 
 local app_name = "eBitmap"
 

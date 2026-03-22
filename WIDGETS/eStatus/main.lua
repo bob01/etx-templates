@@ -2,6 +2,7 @@
 #########################################################################
 #                                                                       #
 # License GPLv2: http://www.gnu.org/licenses/gpl-2.0.html               #
+# Copyright "Rob 'bob00' Gayle"                                         #
 #                                                                       #
 # This program is free software; you can redistribute it and/or modify  #
 # it under the terms of the GNU General Public License version 2 as     #
@@ -19,7 +20,7 @@
 -- Designed for 1/8 cell
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03210
+-- ver: 0.9.0.03220
 
 local app_name = "eStatus"
 
@@ -702,16 +703,24 @@ local function background(widget)
 
         -- armed?
         local armed
+        local rfArmSensor
         if widget.sensorArmId ~= 0 then
-            armed = (bit32.band(getValue(widget.sensorArmId), 0x01) == 0x01)
+            local val = getValue(widget.sensorArmId)
+            rfArmSensor = (bit32.band(val, 0x01) == 0x01)
+            armed = rfArmSensor or val == 1024
         else
             armed = false
+            rfArmSensor = false
         end
 
         if armed then
             -- armed, get ESC throttle if configured
             if widget.sensorThrId ~= 0 then
                 local thro = getValue(widget.sensorThrId)
+                if not rfArmSensor then
+                    -- convert -1024 / 1024 throttle range to %
+                    thro = (thro + 1024) * 100 / 2048
+                end
                 widget.throttle = string.format("%d%%", thro)
             else
                 widget.throttle = "--"

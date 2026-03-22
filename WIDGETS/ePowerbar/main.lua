@@ -2,7 +2,7 @@
 #########################################################################
 #                                                                       #
 # Telemetry Widget script for FrSky Horus/RadioMaster TX16s             #
-# Copyright "Offer Shmuely"                                             #
+# Copyright "Rob 'bob00' Gayle"                                         #
 #                                                                       #
 # License GPLv2: http://www.gnu.org/licenses/gpl-2.0.html               #
 #                                                                       #
@@ -20,7 +20,7 @@
 -- Based on  Lipo battery from single analog source by Offer Shmuely
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03210
+-- ver: 0.9.0.03220
 
 local app_name = "ePowerbar"
 
