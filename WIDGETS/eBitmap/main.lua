@@ -19,7 +19,7 @@
 -- RotorFlight aware bitmap
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03230
+-- ver: 0.9.0.03231
 
 local app_name = "eBitmap"
 
@@ -119,11 +119,11 @@ local function paint(widget)
     local tx
     local textAlignment = widget.options.Align
     if textAlignment == ALIGN_LEFT then
-        tx = box_left + margin * 2
+        tx = box_left + margin * 2 + bmargin
     elseif textAlignment == ALIGN_CENTER then
         tx = box_left + box_width / 2 - text_w / 2
     else
-        tx = box_left + box_width - text_w - margin * 2
+        tx = box_left + box_width - text_w - margin * 2 - bmargin
     end
     lcd.drawText(tx, box_top + margin, text, textFlags)
 end
