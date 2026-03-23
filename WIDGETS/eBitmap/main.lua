@@ -19,7 +19,7 @@
 -- RotorFlight aware bitmap
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03211
+-- ver: 0.9.0.03230
 
 local app_name = "eBitmap"
 
@@ -85,6 +85,7 @@ local function paint(widget)
     local box_width, box_height = widget.zone.w, widget.zone.h
     local box_left, box_top = 0, 0
     local margin = 8
+    local bmargin = 4
     local sepr = 2
 
     -- text
@@ -97,7 +98,7 @@ local function paint(widget)
     local bmp = widget.craftBmp or widget.bmpNone
     if bmp then
         local bw, bh = Bitmap.getSize(bmp)
-        local cw, ch = box_width, box_height - margin - sepr - text_h
+        local cw, ch = box_width - bmargin * 2, box_height - margin - sepr - text_h
         local scalew = cw / bw
         local scaleh = ch / bh
         local scale, ofx, ofy
@@ -111,7 +112,7 @@ local function paint(widget)
             ofy = 0
             ofx = (cw - bw * scale) / 2
         end
-        lcd.drawBitmap(bmp, box_left + ofx, box_top +ofy + text_h + margin + sepr, scale * 100)
+        lcd.drawBitmap(bmp, box_left + ofx + bmargin, box_top + ofy + text_h + margin + sepr, scale * 100)
     end
 
     -- title

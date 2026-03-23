@@ -20,7 +20,7 @@
 -- Based on  Lipo battery from single analog source by Offer Shmuely
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03221
+-- ver: 0.9.0.03222
 
 local app_name = "ePowerbar"
 
