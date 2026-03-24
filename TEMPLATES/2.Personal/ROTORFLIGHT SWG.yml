@@ -1,6 +1,6 @@
 semver: 2.12.0
 header: 
-   name: "ROTORFLIGHT"
+   name: "ROTORFLIGHT SWG"
    modelId: 
       0:
          val: 16
@@ -578,6 +578,14 @@ logicalSw:
       lsState: 0
       delay: 0
       duration: 0
+   15:
+      func: FUNC_STICKY
+      def: "L15,L13"
+      andsw: "NONE"
+      lsPersist: 0
+      lsState: 1
+      delay: 0
+      duration: 0
    17:
       func: FUNC_AND
       def: "L13,L1"
@@ -794,7 +802,7 @@ flightModeData:
       fadeOut: 0
       gvars: 
          0:
-            val: 820
+            val: 710
          1:
             val: 0
          2:
@@ -1020,7 +1028,7 @@ telemetrySensors:
          id: 20
       id2: 
          instance: 2
-      label: "RQly"
+      label: "Link"
       subId: 0
       type: TYPE_CUSTOM
       unit: 13
@@ -1229,7 +1237,7 @@ telemetrySensors:
          id: 4113
       id2: 
          instance: 0
-      label: "Vbat"
+      label: "Batt"
       subId: 0
       type: TYPE_CUSTOM
       unit: 1
@@ -1267,7 +1275,7 @@ telemetrySensors:
          id: 4115
       id2: 
          instance: 0
-      label: "Capa"
+      label: "mAh"
       subId: 0
       type: TYPE_CUSTOM
       unit: 14
@@ -1514,7 +1522,7 @@ telemetrySensors:
          id: 4225
       id2: 
          instance: 0
-      label: "Vbec"
+      label: "BEC"
       subId: 0
       type: TYPE_CUSTOM
       unit: 1
@@ -1552,7 +1560,7 @@ telemetrySensors:
          id: 4256
       id2: 
          instance: 0
-      label: "Tesc"
+      label: "Temp"
       subId: 0
       type: TYPE_CUSTOM
       unit: 11
@@ -1571,7 +1579,7 @@ telemetrySensors:
          id: 4288
       id2: 
          instance: 0
-      label: "Hspd"
+      label: "RPM"
       subId: 0
       type: TYPE_CUSTOM
       unit: 18
@@ -1685,7 +1693,7 @@ telemetrySensors:
          id: 4625
       id2: 
          instance: 0
-      label: "PID#"
+      label: "Bank"
       subId: 0
       type: TYPE_CUSTOM
       unit: 0
@@ -2182,11 +2190,11 @@ topbarData:
                3:
                   type: Unsigned
                   value: 
-                     unsignedValue: 0
+                     unsignedValue: 1
                4:
                   type: Unsigned
                   value: 
-                     unsignedValue: 0
+                     unsignedValue: 1
       1:
          widgetName: Value
          widgetData: 
@@ -2206,7 +2214,7 @@ topbarData:
                3:
                   type: Unsigned
                   value: 
-                     unsignedValue: 0
+                     unsignedValue: 1
                4:
                   type: Unsigned
                   value: 
@@ -2230,11 +2238,11 @@ topbarData:
                3:
                   type: Unsigned
                   value: 
-                     unsignedValue: 0
+                     unsignedValue: 1
                4:
                   type: Unsigned
                   value: 
-                     unsignedValue: 1
+                     unsignedValue: 2
       3:
          widgetName: Value
          widgetData: 
