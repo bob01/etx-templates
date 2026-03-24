@@ -20,7 +20,7 @@
 -- Designed for 1/8 cell
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03220
+-- ver: 0.9.0.03230
 
 local app_name = "eStatus"
 
@@ -34,9 +34,23 @@ local _options = {
     { "EscModel"              , SOURCE, getSourceIndex(CHAR_TELEMETRY.."Esc#") },
     { "EscStatus"             , SOURCE, getSourceIndex(CHAR_TELEMETRY.."EscF") },
     { "Mute"                  , BOOL, 0 },
-    
+
     { "Color"                 , COLOR, COLOR_THEME_PRIMARY1 },
 }
+
+local function translate(text)
+    local translations = {
+        ArmFlags    = "Arming flags",
+        ArmDisable  = "Arming disable flags",
+        GovFlags    = "Governor state",
+        Throttle    = "ESC or GOV throttle",
+        EscModel    = "ESC model ID",
+        EscStatus   = "ESC status",
+        Mute        = "Mute (voice and vibration)",
+        Color       = "Text color",
+    }
+    return translations[text]
+end
 
 local FM_MODE_FM        = 0
 local FM_MODE_GOV       = 1
@@ -853,4 +867,4 @@ local function refresh(widget, event, touchState)
     end
 end
 
-return { name = app_name, options = _options, create = create, update = update, background = background, refresh = refresh }
+return { name = app_name, options = _options, create = create, update = update, background = background, refresh = refresh, translate = translate }

@@ -20,7 +20,7 @@
 -- Based on  Lipo battery from single analog source by Offer Shmuely
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03222
+-- ver: 0.9.0.03230
 
 local app_name = "ePowerbar"
 
@@ -56,11 +56,30 @@ local _options = {
     { "Reserve"               , VALUE, 20, 0, 40 },   -- reserve
     { "Mute"                  , BOOL, 0 },
     { "Vibrate"               , BOOL, 1 },
-    { "Alerts"            , SOURCE, 0 },
+    { "Alerts"                , SOURCE, 0 },
     { "CellFull"              , VALUE, 412, 0, 480 },
     { "CellLow"               , VALUE, 345, 0, 440 },
     { "CellCritical"          , VALUE, 330, 0, 440 },
 }
+
+local function translate(text)
+    local translations = {
+        VoltSensor      = "Voltage (v) sensor",
+        mAhSensor       = "Consumption (mAh) sensor",
+        FuelSensor      = "Fuel (%) sensor",
+        LipoCapacity    = "Lipo capacity (mAh)",
+        CellSensor      = "Cell count sensor",
+        Cells           = "Cell count",
+        Reserve         = "Reserve capacity (%)",
+        Mute            = "Mute (voice and vibration)",
+        Vibrate         = "Vibrate on critical alerts",
+        Alerts          = "Voltage alert switch",
+        CellFull        = "Full cell voltage (cv)",
+        CellLow         = "Low cell voltage (cv)",
+        CellCritical    = "Critical cell voltage (cv)",
+    }
+    return translations[text]
+end
 
 --------------------------------------------------------------
 local function log(s)
@@ -493,4 +512,4 @@ local function refresh(widget, event, touchState)
     end
 end
 
-return { name = app_name, options = _options, create = create, update = update, background = background, refresh = refresh }
+return { name = app_name, options = _options, create = create, update = update, background = background, refresh = refresh, translate = translate }

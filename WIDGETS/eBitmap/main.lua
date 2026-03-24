@@ -19,7 +19,7 @@
 -- RotorFlight aware bitmap
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03231
+-- ver: 0.9.0.03233
 
 local app_name = "eBitmap"
 
@@ -35,6 +35,16 @@ local _options = {
     { "Shadow"                , BOOL, 0 },
     { "Align"                 , ALIGNMENT, ALIGN_RIGHT },
 }
+
+local function translate(text)
+    local translations = {
+        Color       = "Text color",
+        Size        = "Text size",
+        Shadow      = "Shadow",
+        Align       = "Text alignment",
+    }
+    return translations[text]
+end
 
 local function loadBitmapFile(name, ext)
     local path = imageDir .. name .. ext
@@ -172,4 +182,4 @@ local function refresh(widget, event, touchState)
     end
 end
 
-return { name = app_name, options = _options, create = create, update = update, background = background, refresh = refresh }
+return { name = app_name, options = _options, create = create, update = update, background = background, refresh = refresh, translate = translate }
