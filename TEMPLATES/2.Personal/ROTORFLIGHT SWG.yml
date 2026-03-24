@@ -583,7 +583,7 @@ logicalSw:
       def: "L15,L13"
       andsw: "NONE"
       lsPersist: 0
-      lsState: 1
+      lsState: 0
       delay: 0
       duration: 0
    17:
@@ -2337,7 +2337,7 @@ customSwitches:
       name: ""
       type: NONE
       group: 1
-      start: START_ON
+      start: START_PREVIOUS
       state: 1
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
@@ -2353,7 +2353,7 @@ customSwitches:
       name: ""
       type: NONE
       group: 1
-      start: START_OFF
+      start: START_PREVIOUS
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
@@ -2369,7 +2369,7 @@ customSwitches:
       name: ""
       type: NONE
       group: 1
-      start: START_OFF
+      start: START_PREVIOUS
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
@@ -2385,7 +2385,7 @@ customSwitches:
       name: ""
       type: NONE
       group: 1
-      start: START_OFF
+      start: START_PREVIOUS
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
@@ -2401,7 +2401,7 @@ customSwitches:
       name: ""
       type: NONE
       group: 1
-      start: START_OFF
+      start: START_PREVIOUS
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
@@ -2417,7 +2417,7 @@ customSwitches:
       name: ""
       type: NONE
       group: 1
-      start: START_OFF
+      start: START_PREVIOUS
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
@@ -2431,7 +2431,7 @@ customSwitches:
          b: 0
 cfsGroupOn: 
    1:
-      v: 1
+      v: 0
    2:
       v: 0
    3:
