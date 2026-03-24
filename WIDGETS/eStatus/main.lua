@@ -20,7 +20,7 @@
 -- Designed for 1/8 cell
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03230
+-- ver: 0.9.0.03232
 
 local app_name = "eStatus"
 
@@ -423,6 +423,20 @@ local function ompGetStatus(code, changed)
 end
 
 --------------------------------------------------------------
+-- BLHeli_32 telemetry
+
+local function blheli32GetStatus(code, changed)
+   local text = "BLHeli_32 ESC OK"
+   local level = LEVEL_INFO
+
+    if code ~= 0 then
+        text = string.format("ESC status code (%04X)", code)
+    end
+
+   return { text = text, level = level }
+end
+
+--------------------------------------------------------------
 -- unknown ESC
 
 local function unkGetStatus(code, changed)
@@ -801,8 +815,11 @@ local function background(widget)
                 elseif widget.sig == ESC_SIG_OMP then
                     escGetStatus = ompGetStatus
                     escResetStatus = resetStatus
+                elseif widget.sig == ESC_SIG_BLHELI32 then
+                    escGetStatus = blheli32GetStatus
+                    escResetStatus = resetStatus
                 elseif widget.sig ~= ESC_SIG_NONE then
-                    escstatus_text = "Unrecognized ESC"..string.format(" (%02X)", escSig)
+                    escstatus_text = "Unrecognized ESC"..string.format(" (%02X)", widget.sig)
                     escGetStatus = unkGetStatus
                 end
                 escstatus_level = LEVEL_INFO
@@ -858,7 +875,6 @@ local function refresh(widget, event, touchState)
             widget.escstatus_color = COLOR_THEME_DISABLED
         end
     end
-
 
     if (event ~= nil) then
         refreshAppMode(widget, event, touchState)

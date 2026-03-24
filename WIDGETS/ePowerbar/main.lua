@@ -52,7 +52,7 @@ local _options = {
     { "FuelSensor"            , SOURCE, getSourceIndex(defaultPcntSensor) },
     { "LipoCapacity"          , VALUE, 0, 0, 24000 },
     { "CellSensor"            , SOURCE, getSourceIndex(defaultCellSensor) },
-    { "Cells"                 , VALUE, 0, 0, 16 },      -- cell detection time (or interval if calc perceentage)
+    { "Cells"                 , VALUE, 0, 0, 16 },    -- cell detection time (or interval if calc perceentage)
     { "Reserve"               , VALUE, 20, 0, 40 },   -- reserve
     { "Mute"                  , BOOL, 0 },
     { "Vibrate"               , BOOL, 1 },
