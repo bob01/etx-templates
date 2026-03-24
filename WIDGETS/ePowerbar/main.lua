@@ -20,7 +20,7 @@
 -- Based on  Lipo battery from single analog source by Offer Shmuely
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03230
+-- ver: 0.9.0.03240
 
 local app_name = "ePowerbar"
 
@@ -67,9 +67,9 @@ local function translate(text)
         VoltSensor      = "Voltage (v) sensor",
         mAhSensor       = "Consumption (mAh) sensor",
         FuelSensor      = "Fuel (%) sensor",
-        LipoCapacity    = "Lipo capacity (mAh)",
+        LipoCapacity    = "  ...or lipo capacity (mAh)",
         CellSensor      = "Cell count sensor",
-        Cells           = "Cell count",
+        Cells           = "  ...or cell count",
         Reserve         = "Reserve capacity (%)",
         Mute            = "Mute (voice and vibration)",
         Vibrate         = "Vibrate on critical alerts",
