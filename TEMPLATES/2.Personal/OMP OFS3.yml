@@ -25,7 +25,7 @@ noGlobalFunctions: 0
 displayTrims: 0
 ignoreSensorIds: 0
 trimInc: 0
-disableThrottleWarning: 0
+disableThrottleWarning: 1
 displayChecklist: 0
 extendedLimits: 0
 extendedTrims: 0
@@ -1390,15 +1390,15 @@ screenData:
                      0:
                         type: Source
                         value: 
-                           source: tele(13)
+                           source: tele(3)
                      1:
                         type: Source
                         value: 
-                           source: tele(15)
+                           source: tele(5)
                      2:
                         type: Source
                         value: 
-                           source: tele(16)
+                           source: tele(6)
                      3:
                         type: Signed
                         value: 
@@ -1406,11 +1406,11 @@ screenData:
                      4:
                         type: Source
                         value: 
-                           source: tele(17)
+                           source: NONE
                      5:
                         type: Signed
                         value: 
-                           signedValue: 0
+                           signedValue: 3
                      6:
                         type: Signed
                         value: 
@@ -1439,6 +1439,10 @@ screenData:
                         type: Signed
                         value: 
                            signedValue: 330
+                     13:
+                        type: Signed
+                        value: 
+                           signedValue: 6
             2:
                widgetName: Value
                widgetData: 
@@ -1446,7 +1450,7 @@ screenData:
                      0:
                         type: Source
                         value: 
-                           source: tele(31)
+                           source: tele(23)
                      1:
                         type: Color
                         value: 
@@ -1470,7 +1474,7 @@ screenData:
                      0:
                         type: Source
                         value: 
-                           source: NONE
+                           source: ls(2)
                      1:
                         type: Source
                         value: 
@@ -1482,7 +1486,7 @@ screenData:
                      3:
                         type: Source
                         value: 
-                           source: NONE
+                           source: ch(5)
                      4:
                         type: Source
                         value: 
@@ -1526,7 +1530,7 @@ screenData:
                      0:
                         type: Source
                         value: 
-                           source: tele(30)
+                           source: tele(24)
                      1:
                         type: Color
                         value: 
@@ -1575,7 +1579,7 @@ screenData:
                      0:
                         type: Source
                         value: 
-                           source: tele(+6)
+                           source: tele(+14)
                      1:
                         type: Color
                         value: 
@@ -1599,7 +1603,7 @@ screenData:
                      0:
                         type: Source
                         value: 
-                           source: tele(15)
+                           source: tele(5)
                      1:
                         type: Color
                         value: 
@@ -1623,55 +1627,7 @@ screenData:
                      0:
                         type: Source
                         value: 
-                           source: tele(16)
-                     1:
-                        type: Color
-                        value: 
-                           color: 0x000000
-                     2:
-                        type: Bool
-                        value: 
-                           boolValue: 1
-                     3:
-                        type: Unsigned
-                        value: 
-                           unsignedValue: 0
-                     4:
-                        type: Unsigned
-                        value: 
-                           unsignedValue: 2
-            3:
-               widgetName: Value
-               widgetData: 
-                  options: 
-                     0:
-                        type: Source
-                        value: 
-                           source: tele(+22)
-                     1:
-                        type: Color
-                        value: 
-                           color: 0x000000
-                     2:
-                        type: Bool
-                        value: 
-                           boolValue: 1
-                     3:
-                        type: Unsigned
-                        value: 
-                           unsignedValue: 0
-                     4:
-                        type: Unsigned
-                        value: 
-                           unsignedValue: 2
-            4:
-               widgetName: Value
-               widgetData: 
-                  options: 
-                     0:
-                        type: Source
-                        value: 
-                           source: tele(+13)
+                           source: tele(+23)
                      1:
                         type: Color
                         value: 
@@ -1695,7 +1651,7 @@ screenData:
                      0:
                         type: Source
                         value: 
-                           source: tele(-13)
+                           source: tele(-3)
                      1:
                         type: Color
                         value: 
@@ -1719,7 +1675,7 @@ screenData:
                      0:
                         type: Source
                         value: 
-                           source: tele(+14)
+                           source: tele(+4)
                      1:
                         type: Color
                         value: 
@@ -1743,7 +1699,7 @@ screenData:
                      0:
                         type: Source
                         value: 
-                           source: tele(+30)
+                           source: tele(+24)
                      1:
                         type: Color
                         value: 
@@ -1799,54 +1755,6 @@ screenData:
                   color: 0x4870C8
 topbarData: 
    zones: 
-      0:
-         widgetName: Value
-         widgetData: 
-            options: 
-               0:
-                  type: Source
-                  value: 
-                     source: tele(37)
-               1:
-                  type: Color
-                  value: 
-                     color: 0xF8FCF8
-               2:
-                  type: Bool
-                  value: 
-                     boolValue: 1
-               3:
-                  type: Unsigned
-                  value: 
-                     unsignedValue: 0
-               4:
-                  type: Unsigned
-                  value: 
-                     unsignedValue: 0
-      1:
-         widgetName: Value
-         widgetData: 
-            options: 
-               0:
-                  type: Source
-                  value: 
-                     source: tele(28)
-               1:
-                  type: Color
-                  value: 
-                     color: 0xF8FCF8
-               2:
-                  type: Bool
-                  value: 
-                     boolValue: 1
-               3:
-                  type: Unsigned
-                  value: 
-                     unsignedValue: 0
-               4:
-                  type: Unsigned
-                  value: 
-                     unsignedValue: 1
       2:
          widgetName: Value
          widgetData: 
@@ -1854,7 +1762,7 @@ topbarData:
                0:
                   type: Source
                   value: 
-                     source: tele(2)
+                     source: tele(10)
                1:
                   type: Color
                   value: 
@@ -1878,7 +1786,7 @@ topbarData:
                0:
                   type: Source
                   value: 
-                     source: tele(6)
+                     source: tele(14)
                1:
                   type: Color
                   value: 
@@ -1963,10 +1871,10 @@ modelRegistrationID: "647259G-"
 customSwitches: 
    SW1:
       name: ""
-      type: 2POS
+      type: NONE
       group: 1
-      start: START_ON
-      state: 0
+      start: START_PREVIOUS
+      state: 1
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
       onColor: 
@@ -1979,9 +1887,9 @@ customSwitches:
          b: 0
    SW2:
       name: ""
-      type: 2POS
+      type: NONE
       group: 1
-      start: START_OFF
+      start: START_PREVIOUS
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
@@ -1995,9 +1903,9 @@ customSwitches:
          b: 0
    SW3:
       name: ""
-      type: 2POS
+      type: NONE
       group: 1
-      start: START_OFF
+      start: START_PREVIOUS
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
@@ -2011,9 +1919,9 @@ customSwitches:
          b: 0
    SW4:
       name: ""
-      type: 2POS
+      type: NONE
       group: 1
-      start: START_OFF
+      start: START_PREVIOUS
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
@@ -2027,9 +1935,9 @@ customSwitches:
          b: 0
    SW5:
       name: ""
-      type: 2POS
+      type: NONE
       group: 1
-      start: START_OFF
+      start: START_PREVIOUS
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
@@ -2043,9 +1951,9 @@ customSwitches:
          b: 0
    SW6:
       name: ""
-      type: 2POS
+      type: NONE
       group: 1
-      start: START_OFF
+      start: START_PREVIOUS
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
@@ -2059,7 +1967,7 @@ customSwitches:
          b: 0
 cfsGroupOn: 
    1:
-      v: 1
+      v: 0
    2:
       v: 0
    3:
