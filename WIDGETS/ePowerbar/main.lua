@@ -20,7 +20,7 @@
 -- Based on  Lipo battery from single analog source by Offer Shmuely
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03240
+-- ver: 0.9.0.03241
 
 local app_name = "ePowerbar"
 
@@ -38,7 +38,7 @@ local BAR_COLOR_CHECK       = lcd.RGB(0xb8, 0xb8, 0xb8)
 local BAR_COLOR_BACKGROUND  = lcd.RGB(0xc8, 0xc8, 0xc8)
 local BAR_COLOR_LINE        = lcd.RGB(160, 160, 160)
 
-local STARTUP_DELAY = 400
+local STARTUP_DELAY_DEFAULT = 400
 local VOLTTIMER_DISABLED = -1
 
 local defaultVoltSensor = CHAR_TELEMETRY.."Vbat"
@@ -60,6 +60,7 @@ local _options = {
     { "CellFull"              , VALUE, 412, 0, 480 },
     { "CellLow"               , VALUE, 345, 0, 440 },
     { "CellCritical"          , VALUE, 330, 0, 440 },
+    { "StartupDelay"          , VALUE, STARTUP_DELAY_DEFAULT / 100, 1, 20 },
 }
 
 local function translate(text)
@@ -77,6 +78,7 @@ local function translate(text)
         CellFull        = "Full cell voltage (cv)",
         CellLow         = "Low cell voltage (cv)",
         CellCritical    = "Critical cell voltage (cv)",
+        StartupDelay    = "Startup delay (s)",
     }
     return translations[text]
 end
@@ -126,6 +128,8 @@ local function update(widget, options)
     widget.alertCellCitical = widget.options.CellCritical
     widget.alertCellLow = widget.options.CellLow
 
+    widget.startupDelay = widget.options.StartupDelay and widget.options.StartupDelay > 0 and widget.options.StartupDelay * 100 or STARTUP_DELAY_DEFAULT
+
     -- trigger retest
     widget.cellCount = nil
 end
@@ -152,6 +156,7 @@ local function create(zone, options)
         barColor = BAR_COLOR_OK,
         voltTimer = VOLTTIMER_DISABLED,
         cellFullCheckProgress = 0,
+        startupDelay = STARTUP_DELAY_DEFAULT,
 
         -- alerts
         alertPending = 0,
@@ -281,7 +286,7 @@ local function calculateBatteryData(widget)
     if volts and volts > 0 then
         -- arm cell check if full check enabled and voltage appearing or moving away from 0
         if cellFull > 0 and volts > 0 and (widget.volts == nil or widget.volts == 0) then
-            widget.voltTimer = getTime() + STARTUP_DELAY
+            widget.voltTimer = getTime() + widget.startupDelay
             widget.cellFullCheckProgress = 0
         end
 
@@ -309,7 +314,7 @@ local function calculateBatteryData(widget)
                 widget.barColor = BAR_COLOR_WARN
             end
         else
-            local progress = 100 - ((widget.voltTimer - now) * 100 / STARTUP_DELAY)
+            local progress = 100 - ((widget.voltTimer - now) * 100 / widget.startupDelay)
             if widget.cellFullCheckProgress ~= progress then
                 widget.cellFullCheckProgress = progress
             end
@@ -465,7 +470,7 @@ local function background(widget)
                 -- skip initial report
                 widget.nextCapa = 0
                 -- restart voltage check timer on telemetry connection
-                widget.voltTimer = getTime() + STARTUP_DELAY
+                widget.voltTimer = getTime() + widget.startupDelay
             end
         end
     end
