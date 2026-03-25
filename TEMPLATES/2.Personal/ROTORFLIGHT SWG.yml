@@ -25,7 +25,7 @@ noGlobalFunctions: 0
 displayTrims: 0
 ignoreSensorIds: 0
 trimInc: 0
-disableThrottleWarning: 0
+disableThrottleWarning: 1
 displayChecklist: 0
 extendedLimits: 0
 extendedTrims: 0
