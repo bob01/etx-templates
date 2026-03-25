@@ -1,0 +1,4 @@
+Create new heli (v4.0.03240)
+For OMP OFS3
+
+For use with software throttle
