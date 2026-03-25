@@ -19,7 +19,7 @@
 -- RotorFlight aware bitmap
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03233
+-- ver: 0.9.0.03240
 
 local app_name = "eBitmap"
 
@@ -57,7 +57,7 @@ local function loadBitmapFile(name, ext)
 end
 
 local function loadBitmap(name)
-    return loadBitmapFile(name, ".png") or loadBitmapFile(name, ".bmp") or nil
+    return loadBitmapFile(name, "") or loadBitmapFile(name, ".png") or loadBitmapFile(name, ".bmp") or nil
 end
 
 local function update(widget, options)
@@ -81,8 +81,9 @@ local function create(zone, options)
         text_color = COLOR_THEME_PRIMARY1,
 
         modelName = nil,
-        craftBmp = nil,
-        bmpNone = loadBitmap("new")
+        craftBitmap = nil,
+        modelBitmapName = nil,
+        modelBitmap = nil,
     }
 
     update(widget, options)
@@ -105,7 +106,7 @@ local function paint(widget)
     local text_w, text_h = lcd.sizeText(text, textFlags)
 
     -- bitmap
-    local bmp = widget.craftBmp or widget.bmpNone
+    local bmp = widget.craftBitmap or widget.modelBitmap
     if bmp then
         local bw, bh = Bitmap.getSize(bmp)
         local cw, ch = box_width - bmargin * 2, box_height - margin - sepr - text_h
@@ -154,7 +155,16 @@ local function background(widget)
         widget.modelName = modelName
 
         -- bitmap
-        widget.craftBmp = loadBitmap(modelName)
+        widget.craftBitmap = loadBitmap(modelName)
+    end
+
+    local modelBitmapName = mi.bitmap
+    if widget.modelBitmapName ~= modelBitmapName then
+        -- name
+        widget.modelBitmapName = modelBitmapName
+
+        -- bitmap
+        widget.modelBitmap = loadBitmap(modelBitmapName)
     end
 end
 
