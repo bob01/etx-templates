@@ -536,6 +536,30 @@ logicalSw:
       lsState: 0
       delay: 0
       duration: 0
+   2:
+      func: FUNC_VNEG
+      def: "I6,0"
+      andsw: "NONE"
+      lsPersist: 0
+      lsState: 0
+      delay: 0
+      duration: 0
+   3:
+      func: FUNC_VEQUAL
+      def: "I6,0"
+      andsw: "NONE"
+      lsPersist: 0
+      lsState: 0
+      delay: 0
+      duration: 0
+   4:
+      func: FUNC_VPOS
+      def: "I6,0"
+      andsw: "NONE"
+      lsPersist: 0
+      lsState: 0
+      delay: 0
+      duration: 0
    5:
       func: FUNC_VEQUAL
       def: "tele(37),1"
