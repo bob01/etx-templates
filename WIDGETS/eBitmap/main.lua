@@ -19,7 +19,7 @@
 -- RotorFlight aware bitmap
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03240
+-- ver: 0.9.0.03280
 
 local app_name = "eBitmap"
 
@@ -57,7 +57,12 @@ local function loadBitmapFile(name, ext)
 end
 
 local function loadBitmap(name)
-    return loadBitmapFile(name, "") or loadBitmapFile(name, ".png") or loadBitmapFile(name, ".bmp") or nil
+    return loadBitmapFile(name, "") or
+        loadBitmapFile(name, ".png") or
+        loadBitmapFile(name, ".bmp") or
+        loadBitmapFile(name, ".jpg") or
+        loadBitmapFile(name, ".jpeg") or
+        nil
 end
 
 local function update(widget, options)
