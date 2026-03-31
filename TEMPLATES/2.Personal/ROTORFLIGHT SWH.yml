@@ -131,9 +131,12 @@ mixData:
    delayPrec: 0
    speedPrec: 0
    flightModes: 000000000
-   weight: 50
-   offset: 50
+   weight: 100
+   offset: 0
    swtch: "NONE"
+   curve: 
+      type: 3
+      value: 1
    delayUp: 0
    delayDown: 0
    speedUp: 0
@@ -141,14 +144,14 @@ mixData:
    name: ""
  -
    destCh: 5
-   srcRaw: "MAX"
+   srcRaw: "MIN"
    carryTrim: 0
    mixWarn: 0
    mltpx: REPL
    delayPrec: 0
    speedPrec: 0
    flightModes: 000000000
-   weight: -100
+   weight: 100
    offset: 0
    swtch: "L16"
    delayUp: 0
@@ -418,6 +421,15 @@ expoData:
    chn: 12
    flightModes: 000000000
    name: ""
+curves: 
+   0:
+      type: 0
+      smooth: 0
+      points: -3
+      name: "Thr"
+points: 
+   1:
+      val: 100
 logicalSw: 
    0:
       func: FUNC_VPOS
