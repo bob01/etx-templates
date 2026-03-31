@@ -140,6 +140,23 @@ mixData:
    speedDown: 0
    name: ""
  -
+   destCh: 5
+   srcRaw: "MIN"
+   carryTrim: 0
+   mixWarn: 0
+   mltpx: REPL
+   delayPrec: 0
+   speedPrec: 0
+   flightModes: 000000000
+   weight: 100
+   offset: 0
+   swtch: "L16"
+   delayUp: 0
+   delayDown: 0
+   speedUp: 0
+   speedDown: 0
+   name: "off"
+ -
    destCh: 6
    srcRaw: "I6"
    carryTrim: 0
@@ -471,7 +488,7 @@ logicalSw:
    13:
       func: FUNC_VEQUAL
       def: "I8,0"
-      andsw: "NONE"
+      andsw: "!L16"
       lsPersist: 0
       lsState: 0
       delay: 0
