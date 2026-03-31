@@ -656,8 +656,16 @@ customFn:
       def: "thract,1,!1x"
    10:
       swtch: "L15"
-      func: PLAY_TRACK
-      def: "thrcut,1,!1x"
+      func: PLAY_VALUE
+      def: "tele(13),1,!1x"
+   11:
+      swtch: "L15"
+      func: PLAY_VALUE
+      def: "tele(30),1,!1x"
+   12:
+      swtch: "L15"
+      func: PLAY_VALUE
+      def: "tele(15),1,!1x"
    13:
       swtch: "L25"
       func: PLAY_VALUE
