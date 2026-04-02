@@ -532,7 +532,7 @@ logicalSw:
       def: "L15,L13"
       andsw: "NONE"
       lsPersist: 0
-      lsState: 0
+      lsState: 1
       delay: 0
       duration: 0
    17:
