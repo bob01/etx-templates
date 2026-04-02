@@ -20,7 +20,7 @@
 -- Based on  Lipo battery from single analog source by Offer Shmuely
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03241
+-- ver: 0.9.0.04011
 
 local app_name = "ePowerbar"
 
@@ -263,6 +263,21 @@ local function paint(widget)
     lcd.drawText(myBatt.x + myBatt.w - 4, myBatt.y + myBatt.h / 2, percent, BOLD + VCENTER + RIGHT + MIDSIZE + widget.text_color)
 end
 
+local function cellsFromVolts(widget, volts)
+    -- for 1 to 4 and 6 cells only
+    for cells = 1, 6 do
+        if cells ~= 5 then
+            -- skip 5 cell
+            if volts >= 3.3 * cells and volts <= 4.35 * cells then
+                -- likely cell count
+                return cells
+            end
+        end
+    end
+    -- unknown
+    return 0
+end
+
 --- battery calcs
 local function calculateBatteryData(widget)
     -- cells
@@ -273,17 +288,20 @@ local function calculateBatteryData(widget)
     elseif widget.options.Cells > 0 then
         -- use configured cell count
         cells = widget.options.Cells
+    elseif widget.options.Cells == 0 then
+        -- try to figure out from voltage
+        local volts = getValue(widget.sensorVoltId)
+        cells = cellsFromVolts(widget, volts)
     end
     if widget.cellCount ~= cells then
         widget.cellCount = cells
     end
     local vdiv = widget.cellCount and widget.cellCount > 0 and widget.cellCount or 1
 
-    local cellFull = widget:getCellFull()
-
     -- voltage
-    local volts = getValue(widget.sensorVoltId)
-    if volts and volts > 0 then
+    local cellFull = widget:getCellFull()
+    local volts = widget.cellCount and widget.cellCount > 0 and getValue(widget.sensorVoltId) or 0
+    if volts and volts ~= widget.volts then
         -- arm cell check if full check enabled and voltage appearing or moving away from 0
         if cellFull > 0 and volts > 0 and (widget.volts == nil or widget.volts == 0) then
             widget.voltTimer = getTime() + widget.startupDelay
