@@ -20,7 +20,7 @@
 -- Based on  Lipo battery from single analog source by Offer Shmuely
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.04011
+-- ver: 0.9.0.04030
 
 local app_name = "ePowerbar"
 
@@ -295,6 +295,7 @@ local function calculateBatteryData(widget)
     end
     if widget.cellCount ~= cells then
         widget.cellCount = cells
+        _G.ePowerbarCellCount = cells
     end
     local vdiv = widget.cellCount and widget.cellCount > 0 and widget.cellCount or 1
 
