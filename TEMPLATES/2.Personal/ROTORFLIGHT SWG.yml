@@ -154,6 +154,9 @@ mixData:
    weight: 100
    offset: 0
    swtch: "L16"
+   curve: 
+      type: 3
+      value: 1
    delayUp: 0
    delayDown: 0
    speedUp: 0
@@ -399,8 +402,8 @@ expoData:
  -
    mode: 3
    scale: 0
-   trimSource: 0
-   srcRaw: "SH"
+   trimSource: 1
+   srcRaw: "SF"
    weight: 100
    offset: 0
    swtch: "NONE"
@@ -739,7 +742,7 @@ flightModeData:
       fadeOut: 0
       gvars: 
          0:
-            val: 800
+            val: 810
          1:
             val: 0
          2:
@@ -847,7 +850,7 @@ flightModeData:
          2:
             val: 0
          7:
-            val: 0
+            val: -765
 thrTraceSrc: Thr
 switchWarning: 
    SA:
@@ -1843,7 +1846,7 @@ screenData:
                      1:
                         type: Color
                         value: 
-                           color: 0x000000
+                           color: COLIDX0
                      2:
                         type: Bool
                         value: 
@@ -2223,7 +2226,7 @@ topbarData:
                2:
                   type: Bool
                   value: 
-                     boolValue: 1
+                     boolValue: 0
                3:
                   type: Unsigned
                   value: 
