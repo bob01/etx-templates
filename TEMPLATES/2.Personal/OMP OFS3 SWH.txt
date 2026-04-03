@@ -1,0 +1,4 @@
+Create new heli (v4.0.04040)
+For OMP OFS3
+Motor control is 3-pos SWH w/ momentary OFF
+For use with software throttle
