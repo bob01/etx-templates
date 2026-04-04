@@ -20,7 +20,7 @@
 -- Based on  Lipo battery from single analog source by Offer Shmuely
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.04030
+-- ver: 0.9.0.04040
 
 local app_name = "ePowerbar"
 
@@ -259,7 +259,7 @@ local function paint(widget)
         lcd.drawText(myBatt.x + 8, myBatt.y + myBatt.h / 2, mah, BOLD + LEFT  + widget.text_color)
     end
 
-    local percent = string.format("%.0f%%", widget.fuel)
+    local percent = widget.voltTimer == VOLTTIMER_DISABLED and widget.volts ~= 0 and string.format("%.0f%%", widget.fuel) or "-- "
     lcd.drawText(myBatt.x + myBatt.w - 4, myBatt.y + myBatt.h / 2, percent, BOLD + VCENTER + RIGHT + MIDSIZE + widget.text_color)
 end
 
