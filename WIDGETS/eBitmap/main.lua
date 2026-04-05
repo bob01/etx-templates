@@ -19,7 +19,7 @@
 -- RotorFlight aware bitmap
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.04030
+-- ver: 0.9.0.04050
 
 local app_name = "eBitmap"
 
@@ -90,6 +90,8 @@ local function create(zone, options)
         craftBitmap = nil,
         modelBitmapName = nil,
         modelBitmap = nil,
+
+        cellCount = 0,
     }
 
     update(widget, options)
@@ -162,13 +164,14 @@ local function background(widget)
     end
 
     local cellCount = _G.ePowerbarCellCount or 0
-    local craftBitmapName = cellCount ~= 0 and modelName.."-"..cellCount.."S" or modelName
-    if widget.craftBitmapName ~= craftBitmapName then
-        -- bitmap name
+    local craftBitmapName = modelName
+    if widget.craftBitmapName ~= craftBitmapName or widget.cellCount ~= cellCount then
+        -- bitmap name & cell count
         widget.craftBitmapName = craftBitmapName
+        widget.cellCount = cellCount
 
         -- load bitmap
-        widget.craftBitmap = loadBitmap(craftBitmapName)
+        widget.craftBitmap = cellCount ~= 0 and loadBitmap(craftBitmapName.."-"..cellCount.."S") or loadBitmap(craftBitmapName)
     end
 
     local modelBitmapName = mi.bitmap
