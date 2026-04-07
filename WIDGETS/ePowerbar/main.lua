@@ -20,7 +20,7 @@
 -- Based on  Lipo battery from single analog source by Offer Shmuely
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.04040
+-- ver: 0.9.0.04070
 
 local app_name = "ePowerbar"
 
@@ -217,11 +217,12 @@ end
 
 --- paint
 local function paint(widget)
-    local myBatt = { ["x"] = 4, ["y"] = 4, ["w"] = widget.zone.w - 8, ["h"] = widget.zone.h - 8, ["segments_w"] = 25, ["color"] = WHITE, ["cath_w"] = 6, ["cath_h"] = 20 }
+    local cx, cy, cw, ch = 4, 4, widget.zone.w - 8, widget.zone.h - 8
+    local mx, my = 8, 6
 
     -- background
     local color = BAR_COLOR_BACKGROUND
-    lcd.drawFilledRectangle(myBatt.x, myBatt.y, myBatt.w, myBatt.h, color)
+    lcd.drawFilledRectangle(cx, cy, cw, ch, color)
 
     -- bar
     if widget.fuel and widget.volts and widget.volts > 0 then
@@ -232,16 +233,16 @@ local function paint(widget)
             fill = widget.cellFullCheckProgress < 100 and widget.cellFullCheckProgress or 100
         end
 
-        local bar_width = math.floor((((myBatt.w - 2) / 100) * fill) + 2)
+        local bar_width = math.floor((((cw - 2) / 100) * fill) + 2)
         color = getBarColor(widget)
-        lcd.drawFilledRectangle(myBatt.x, myBatt.y, bar_width, myBatt.h, color)
+        lcd.drawFilledRectangle(cx, cy, bar_width, ch, color)
 
         color = BAR_COLOR_LINE
-        lcd.drawLine(myBatt.x + bar_width, myBatt.y, myBatt.x + bar_width, myBatt.y + myBatt.h, SOLID, color)
+        lcd.drawLine(cx + bar_width, cy, cx + bar_width, cy + ch, SOLID, color)
     end
 
     -- outline
-    lcd.drawRectangle(myBatt.x, myBatt.y, myBatt.w + 1, myBatt.h, widget.text_color)
+    lcd.drawRectangle(cx, cy, cw + 1, ch, widget.text_color)
 
     -- bar
     local volts
@@ -252,15 +253,17 @@ local function paint(widget)
         -- cell count not available
         volts = string.format("%.1f v / %.2f v (?s)", widget.volts, widget.cellv);
     end
-    lcd.drawText(myBatt.x + 8, myBatt.y + 4, volts, BOLD + LEFT  + widget.text_color)
+    lcd.drawText(cx + mx, cy + my, volts, BOLD + LEFT  + widget.text_color)
 
     if widget.sensorMahId ~= 0 then
         local mah = string.format("%.0f mah", widget.mah)
-        lcd.drawText(myBatt.x + 8, myBatt.y + myBatt.h / 2, mah, BOLD + LEFT  + widget.text_color)
+        local textFlags = BOLD + widget.text_color
+        local _, th = lcd.sizeText(mah, textFlags)
+        lcd.drawText(cx + mx, cy + ch - th - my, mah, LEFT  + textFlags)
     end
 
     local percent = widget.voltTimer == VOLTTIMER_DISABLED and widget.volts ~= 0 and string.format("%.0f%%", widget.fuel) or "-- "
-    lcd.drawText(myBatt.x + myBatt.w - 4, myBatt.y + myBatt.h / 2, percent, BOLD + VCENTER + RIGHT + MIDSIZE + widget.text_color)
+    lcd.drawText(cx + cw - 4, cy + ch / 2, percent, BOLD + VCENTER + RIGHT + MIDSIZE + widget.text_color)
 end
 
 local function cellsFromVolts(widget, volts)
