@@ -1,4 +1,4 @@
-Create new heli (v4.0.04040)
+Create new heli (v4.0.04090)
 For RotorFlight v2.3+
 Motor control is 3-pos SWH w/ momentary OFF
 Built for RF 4-bank templates w/ pre-configured telemetry

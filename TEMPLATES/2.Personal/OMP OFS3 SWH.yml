@@ -4,7 +4,7 @@ header:
    modelId: 
       0:
          val: 10
-   bitmap: "OMP M2V3 G.bmp"
+   bitmap: "OMP OFS3.bmp"
    labels: "Favorites,Heli"
 timers: 
    0:
@@ -259,6 +259,20 @@ expoData:
    scale: 0
    trimSource: 0
    srcRaw: "Ail"
+   weight: 70
+   offset: 0
+   swtch: "L19"
+   curve: 
+      type: 1
+      value: 0
+   chn: 0
+   flightModes: 000000000
+   name: ""
+ -
+   mode: 3
+   scale: 0
+   trimSource: 0
+   srcRaw: "Ail"
    weight: 100
    offset: 0
    swtch: "NONE"
@@ -266,6 +280,20 @@ expoData:
       type: 1
       value: 0
    chn: 0
+   flightModes: 000000000
+   name: ""
+ -
+   mode: 3
+   scale: 0
+   trimSource: 0
+   srcRaw: "Ele"
+   weight: 70
+   offset: 0
+   swtch: "L19"
+   curve: 
+      type: 1
+      value: 0
+   chn: 1
    flightModes: 000000000
    name: ""
  -
@@ -524,7 +552,7 @@ logicalSw:
       def: "L15,L13"
       andsw: "NONE"
       lsPersist: 0
-      lsState: 1
+      lsState: 0
       delay: 0
       duration: 0
    17:
@@ -700,6 +728,22 @@ customFn:
       swtch: "!TELEMETRY_STREAMING"
       func: SET_SCREEN
       def: "2,1,!1x"
+   29:
+      swtch: "SW12"
+      func: RESET
+      def: "Tmr1,1"
+   30:
+      swtch: "SW12"
+      func: PLAY_SOUND
+      def: "Tada,1,!1x"
+   31:
+      swtch: "SW62"
+      func: SCREENSHOT
+      def: "1"
+   32:
+      swtch: "SW62"
+      func: PLAY_SOUND
+      def: "Chrp,1,!1x"
 flightModeData: 
    0:
       trim: 
@@ -823,6 +867,8 @@ flightModeData:
 thrTraceSrc: Thr
 switchWarning: 
    SA:
+      pos: up
+   SB:
       pos: up
    SC:
       pos: down
@@ -1472,7 +1518,7 @@ screenData:
                         value: 
                            signedValue: 6
             2:
-               widgetName: Value
+               widgetName: eValue
                widgetData: 
                   options: 
                      0:
@@ -1495,6 +1541,18 @@ screenData:
                         type: Unsigned
                         value: 
                            unsignedValue: 2
+                     5:
+                        type: Bool
+                        value: 
+                           boolValue: 1
+                     6:
+                        type: Bool
+                        value: 
+                           boolValue: 0
+                     7:
+                        type: Bool
+                        value: 
+                           boolValue: 1
             3:
                widgetName: eStatus
                widgetData: 
@@ -1552,7 +1610,7 @@ screenData:
                         value: 
                            unsignedValue: 2
             5:
-               widgetName: Value
+               widgetName: eValue
                widgetData: 
                   options: 
                      0:
@@ -1562,7 +1620,7 @@ screenData:
                      1:
                         type: Color
                         value: 
-                           color: 0x000000
+                           color: COLIDX0
                      2:
                         type: Bool
                         value: 
@@ -1575,6 +1633,18 @@ screenData:
                         type: Unsigned
                         value: 
                            unsignedValue: 2
+                     5:
+                        type: Bool
+                        value: 
+                           boolValue: 1
+                     6:
+                        type: Bool
+                        value: 
+                           boolValue: 1
+                     7:
+                        type: Bool
+                        value: 
+                           boolValue: 1
          options: 
             0:
                type: Bool
@@ -1898,17 +1968,17 @@ view: 0
 modelRegistrationID: "647259G-"
 customSwitches: 
    SW1:
-      name: ""
-      type: NONE
+      name: "rst"
+      type: TOGGLE
       group: 1
       start: START_PREVIOUS
-      state: 1
+      state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
       onColor: 
-         r: 255
-         g: 255
-         b: 255
+         r: 248
+         g: 252
+         b: 0
       offColor: 
          r: 0
          g: 0
@@ -1978,17 +2048,17 @@ customSwitches:
          g: 0
          b: 0
    SW6:
-      name: ""
-      type: NONE
+      name: "scr"
+      type: TOGGLE
       group: 1
       start: START_PREVIOUS
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
       onColor: 
-         r: 255
-         g: 255
-         b: 255
+         r: 0
+         g: 0
+         b: 248
       offColor: 
          r: 0
          g: 0
