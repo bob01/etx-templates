@@ -247,6 +247,23 @@ mixData:
    speedUp: 0
    speedDown: 0
    name: "Rescue"
+ -
+   destCh: 10
+   srcRaw: "ls(11)"
+   carryTrim: 0
+   mixWarn: 0
+   mltpx: ADD
+   delayPrec: 0
+   speedPrec: 0
+   flightModes: 000000000
+   weight: 100
+   offset: 0
+   swtch: "NONE"
+   delayUp: 0
+   delayDown: 0
+   speedUp: 0
+   speedDown: 0
+   name: "Shutdn"
 expoData: 
  -
    mode: 3
@@ -482,6 +499,14 @@ logicalSw:
       func: FUNC_VEQUAL
       def: "tele(37),3"
       andsw: "NONE"
+      lsPersist: 0
+      lsState: 0
+      delay: 0
+      duration: 0
+   10:
+      func: FUNC_VNEG
+      def: "tele(28),700"
+      andsw: "!L1"
       lsPersist: 0
       lsState: 0
       delay: 0
