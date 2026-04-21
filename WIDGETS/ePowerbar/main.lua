@@ -20,7 +20,7 @@
 -- Based on  Lipo battery from single analog source by Offer Shmuely
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.04070
+-- ver: 0.9.0.04210
 
 local app_name = "ePowerbar"
 
@@ -54,7 +54,7 @@ local _options = {
     { "CellSensor"            , SOURCE, getSourceIndex(defaultCellSensor) },
     { "Cells"                 , VALUE, 0, 0, 16 },    -- cell detection time (or interval if calc perceentage)
     { "Reserve"               , VALUE, 20, 0, 40 },   -- reserve
-    { "Mute"                  , BOOL, 0 },
+    { "Mute"                  , CHOICE, 1 , { "Off", "Voltage alerts", "Voltage and fuel alerts" } },
     { "Vibrate"               , BOOL, 1 },
     { "Alerts"                , SOURCE, 0 },
     { "CellFull"              , VALUE, 412, 0, 480 },
@@ -373,6 +373,11 @@ end
 
 -- call fuel consumption on the 10's (singles when critical)
 local function crankFuelCalls(widget)
+    -- bail if muted
+    if widget.options.Mute > 2 then
+        return
+    end
+
     -- voice alerts
     local fuel = widget.fuel
 
@@ -413,6 +418,11 @@ local function crankFuelCalls(widget)
 end
 
 local function crankVoltageAlerts(widget)
+    -- bail if muted
+    if widget.options.Mute > 1 then
+        return
+    end
+
     -- bail if not in alert condition
     if getValue(widget.sourceAlertsId) <= 0 then
         return
@@ -505,7 +515,7 @@ local function background(widget)
     calculateBatteryData(widget)
 
     -- quiet if mute or during startup delay
-    if widget.options.Mute ~= 1 and widget.voltTimer == VOLTTIMER_DISABLED then
+    if widget.voltTimer == VOLTTIMER_DISABLED then
         -- fuel calls
         crankFuelCalls(widget)
 
