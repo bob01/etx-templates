@@ -11,16 +11,24 @@
 These templates have been created to quickly create new EdgeTx models for our standard ELRS RotorFlight configurations with all of the boilerplate stuff out of the way.
 The idea is... 
 - new model
-- name it, give it an image and maybe labels
+- name it and maybe labels
 - bind or assign a receiver ID if using model match
-- customize switch assignments, battery warnings etc (or not)
+- customize widget settings, eg. battery warnings etc (or not)
 - verify that all controls are correct and setup is SAFE
 - GO FLY
 
 Best used with [etx-presets (for RotorFlight)](https://github.com/bob01/etx-presets-rotorflight)
 
 ### Release notes
-- 2025.03.19 - widgets revised for RotorFlight v2.3.x, EdgeTx 2.12.x+, RadioMaster TX16S MK3
+- 2026.04.21 - 2026 updates - many updates to support building single tx model screens for RotorFlight 2.3x+ and OMP OFS3 including...
+  - ePowerbar - enchanements ported from ETHOS version
+  - eBitmap - dynamic image selection based on RotorFlight craft name or cell count (1 - 4, 6)
+  - eThrottle - renamed eStatus
+  - eValue - new: same as stock Value widget + optional min / max fields
+  - templates - Heli, Nitro Heli, OMP OFS3 - updated and simplified
+  - model editor - gone.
+- 2026.03.19 - widgets revised for RotorFlight v2.3.x, EdgeTx 2.12.x+, RadioMaster TX16S MK3
+- .
 - 2024.09.02 - revised for RotorFlight v2.1
 - 2024.08.05 - ModelEditor - dropped BEC/ADC page - all current FC's have BEC ADCs now
 - 2024.07.09 - eThrottle - Report "Bad Auto" + haptic if GOV reports LOST-HS ie bailout will not be available
@@ -28,21 +36,21 @@ Best used with [etx-presets (for RotorFlight)](https://github.com/bob01/etx-pres
 - 2024.05.15 - v2.1 - adjusted RPM tele ratio to 0 to address EdgeTx 2.10.0-rc4 to 2.10.0 release changes
 
 ### Requirements / dependencies
-- RadioMaster Tx16s or equivalent (large color screen)
-- EdgeTx 2.10 or later
-- RotorFlight 2 or later
-- flight controller should have be prepared with (** coming soon **) or a compatible configuration (modes/adjustments/telemetry etc) 
+- RadioMaster Tx16s MK3 (maybe earlier models - untested)
+- EdgeTx 2.12.x or later
+- RotorFlight 2.3.x or later
+- flight controller should have be prepared with [etx-presets (for RotorFlight)](https://github.com/bob01/etx-presets-rotorflight) or at a minimum the following telemetry sensors
+  - ELRS: set telemetry_sensors = 1,3,4,5,6,7,11,12,13,14,15,21,22,27,28,42,43,46,50,60,88,89,90,91,93,95,96,0,0,0,0,0,0,0,0,0,0,0,0,0
+  - FRSKY: set telemetry_sensors = 3,4,5,6,7,42,43,46,47,50,21,22,27,28,60,88,89,90,91,93,95,96,1,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 
 
 ### Features
 - familiar helicopter radio look and feel
 - familiar/practical main screen
 - summary screen automatically displayed at end of the flight
-- familiar/throttle curves (TC1, TC2, TC3, TCH)
 - standard primary switch configurations (bank, safety, motor etc)
-- configured telemetry sensors w/ recognizable names, units, ratios all preset
+- configured telemetry sensors w/ recognizable names, units
 - familiar mixer channel mappings
-- output channel endpoints and subtrim aligned to ELRS (make sure your Tx sticks are calibrated)
 - logical switch and special functions implementing warnings, various telemetry monitoring
 - optional switches for RF blackbox and EdgeTX SD logging
 - 4 bank / profile configuration
