@@ -36,7 +36,6 @@ local _options = {
     { "Unit"                  , BOOL, 1 },
     { "Min"                   , BOOL, 0 },
     { "Max"                   , BOOL, 0 },
-    { "MinMaxOnly"            , BOOL, 0 }
 }
 
 local function translate(text)
@@ -49,7 +48,6 @@ local function translate(text)
         Unit            = "Show unit",
         Min             = "Show minimum",
         Max             = "Show maximum",
-        MinMaxOnly      = "Show min/max only",
     }
     return translations[text]
 end
@@ -206,6 +204,8 @@ local function background(widget)
     widget.connected = widget.common.isTelemetryActive()
 
     if widget.sourceId ~= 0 then
+        widget.text_value = getValue(widget.sourceId) .. (widget.text_unit or "")
+
         if widget.minId ~= 0 and widget.maxId ~= 0 then
             widget.text_minmax = "min " .. getValue(widget.minId) .. " / max " .. getValue(widget.maxId) .. (widget.text_unit or "")
         elseif widget.minId ~= 0 then
@@ -214,11 +214,6 @@ local function background(widget)
             widget.text_minmax = "max " .. getValue(widget.maxId) .. (widget.text_unit or "")
         else
             widget.text_minmax = nil
-        end
-
-        -- use min/max as value
-        if widget.options.MinMaxOnly == 0 then
-            widget.text_value = getValue(widget.sourceId) .. (widget.text_unit or "")
         end
     end
 end
