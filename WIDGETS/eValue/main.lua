@@ -19,7 +19,7 @@
 -- Enhanced value widget
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.04070
+-- ver: 0.9.0.04220
 
 local app_name = "eValue"
 
@@ -36,18 +36,20 @@ local _options = {
     { "Unit"                  , BOOL, 1 },
     { "Min"                   , BOOL, 0 },
     { "Max"                   , BOOL, 0 },
+    { "MinMaxOnly"            , BOOL, 0 }
 }
 
 local function translate(text)
     local translations = {
-        source      = "Source",
-        Color       = "Color",
-        Shadow      = "Shadow",
-        AlignLabel  = "Align label",
-        AlignValue  = "Align value",
-        Unit        = "Show unit",
-        Min         = "Show minimum",
-        Max         = "Show maximum",
+        source          = "Source",
+        Color           = "Color",
+        Shadow          = "Shadow",
+        AlignLabel      = "Align label",
+        AlignValue      = "Align value",
+        Unit            = "Show unit",
+        Min             = "Show minimum",
+        Max             = "Show maximum",
+        MinMaxOnly      = "Show min/max only",
     }
     return translations[text]
 end
@@ -162,11 +164,13 @@ local function paint(widget)
     local cx, cy = 0, 0
     local mx, my = 5, 4
 
+    local shadowed = widget.options.Shadow == 0 and 0 or SHADOWED
+
     -- label
     if widget.text_label then
         local text = widget.text_label
         local alignment = widget.options.AlignLabel
-        local textFlags = widget.text_color
+        local textFlags = widget.text_color + shadowed
         local tw, _ = lcd.sizeText(text, textFlags)
         local dx = align(cw, mx, tw, alignment)
         lcd.drawText(cx + dx, cy + my, CHAR_TELEMETRY .. text, textFlags)
@@ -176,8 +180,7 @@ local function paint(widget)
     if widget.text_value then
         local text = widget.text_value
         local alignment = widget.options.AlignValue
-        local shadowed = widget.options.Shadow == 0 and 0 or SHADOWED
-        local textFlags = widget.text_color + shadowed + BOLD + MIDSIZE
+        local textFlags = widget.text_color + shadowed + MIDSIZE + BOLD
         local tw, _ = lcd.sizeText(text, textFlags)
         local dx = align(cw, mx, tw, alignment)
         lcd.drawText(cx + dx, cy + ch / 2, text, VCENTER + textFlags)
@@ -187,7 +190,7 @@ local function paint(widget)
     if widget.text_minmax then
         local text = widget.text_minmax
         local alignment = widget.options.AlignValue
-        local textFlags = widget.text_color
+        local textFlags = widget.text_color + shadowed
         local tw, th = lcd.sizeText(text, textFlags)
         local dx = align(cw, mx, tw, alignment)
         lcd.drawText(cx + dx, cy + ch - th - my, text, textFlags)
@@ -203,8 +206,6 @@ local function background(widget)
     widget.connected = widget.common.isTelemetryActive()
 
     if widget.sourceId ~= 0 then
-        widget.text_value = getValue(widget.sourceId) .. (widget.text_unit or "")
-
         if widget.minId ~= 0 and widget.maxId ~= 0 then
             widget.text_minmax = "min " .. getValue(widget.minId) .. " / max " .. getValue(widget.maxId) .. (widget.text_unit or "")
         elseif widget.minId ~= 0 then
@@ -213,6 +214,11 @@ local function background(widget)
             widget.text_minmax = "max " .. getValue(widget.maxId) .. (widget.text_unit or "")
         else
             widget.text_minmax = nil
+        end
+
+        -- use min/max as value
+        if widget.options.MinMaxOnly == 0 then
+            widget.text_value = getValue(widget.sourceId) .. (widget.text_unit or "")
         end
     end
 end
