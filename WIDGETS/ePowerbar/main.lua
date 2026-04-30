@@ -20,7 +20,7 @@
 -- Based on  Lipo battery from single analog source by Offer Shmuely
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.04210
+-- ver: 0.9.0.04290
 
 local app_name = "ePowerbar"
 
@@ -54,7 +54,7 @@ local _options = {
     { "CellSensor"            , SOURCE, getSourceIndex(defaultCellSensor) },
     { "Cells"                 , VALUE, 0, 0, 16 },    -- cell detection time (or interval if calc perceentage)
     { "Reserve"               , VALUE, 20, 0, 40 },   -- reserve
-    { "Mute"                  , CHOICE, 1 , { "Off", "Voltage alerts", "Voltage and fuel alerts" } },
+    { "Mute"                  , CHOICE, 1 , { "None", "Voltage alerts", "Voltage and fuel alerts" } },
     { "Vibrate"               , BOOL, 1 },
     { "Alerts"                , SOURCE, 0 },
     { "CellFull"              , VALUE, 412, 0, 480 },
