@@ -58,10 +58,10 @@ Best used with [etx-presets (for RotorFlight)](https://github.com/bob01/etx-pres
 - main screen uses etx-widgets (https://github.com/bob01/etx-widgets), included in this package
 
 <img width="480" height="288" alt="image" src="https://github.com/user-attachments/assets/fb3c799b-f396-476d-ba02-baf4b0affae0" />
-<img width="480" height="288" alt="image" src="https://github.com/user-attachments/assets/7172eb3e-fc57-43d5-b589-fc47d864d6a1" />
-<img width="480" height="288" alt="image" src="https://github.com/user-attachments/assets/12ec2756-f2ff-4c55-aaaa-ebaa90568e1a" />
 <img width="480" height="288" alt="image" src="https://github.com/user-attachments/assets/2e6118d0-a967-4b24-83fb-2121715f2638" />
 
+<img width="480" height="288" alt="image" src="https://github.com/user-attachments/assets/7172eb3e-fc57-43d5-b589-fc47d864d6a1" />
+<img width="480" height="288" alt="image" src="https://github.com/user-attachments/assets/12ec2756-f2ff-4c55-aaaa-ebaa90568e1a" />
 
 ## Start by creating a new model using the EdgeTx wizard...
 ![image](https://github.com/bob01/etx-templates/assets/4014433/6c40cca2-ba6b-4722-999c-26699aa36c75)
