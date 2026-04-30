@@ -1442,9 +1442,9 @@ screenData:
                         value: 
                            signedValue: 20
                      7:
-                        type: Bool
+                        type: Unsigned
                         value: 
-                           boolValue: 0
+                           unsignedValue: 1
                      8:
                         type: Bool
                         value: 

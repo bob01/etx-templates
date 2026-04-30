@@ -1490,9 +1490,9 @@ screenData:
                         value: 
                            signedValue: 20
                      7:
-                        type: Bool
+                        type: Unsigned
                         value: 
-                           boolValue: 0
+                           unsignedValue: 1
                      8:
                         type: Bool
                         value: 
@@ -1553,6 +1553,10 @@ screenData:
                         type: Bool
                         value: 
                            boolValue: 1
+                     8:
+                        type: Bool
+                        value: 
+                           boolValue: 0
             3:
                widgetName: eStatus
                widgetData: 
@@ -1645,6 +1649,10 @@ screenData:
                         type: Bool
                         value: 
                            boolValue: 1
+                     8:
+                        type: Bool
+                        value: 
+                           boolValue: 0
          options: 
             0:
                type: Bool
@@ -1671,17 +1679,17 @@ screenData:
       layoutData: 
          zones: 
             0:
-               widgetName: Value
+               widgetName: eValue
                widgetData: 
                   options: 
                      0:
                         type: Source
                         value: 
-                           source: tele(+14)
+                           source: tele(14)
                      1:
                         type: Color
                         value: 
-                           color: 0x000000
+                           color: COLIDX0
                      2:
                         type: Bool
                         value: 
@@ -1694,6 +1702,22 @@ screenData:
                         type: Unsigned
                         value: 
                            unsignedValue: 2
+                     5:
+                        type: Bool
+                        value: 
+                           boolValue: 1
+                     6:
+                        type: Bool
+                        value: 
+                           boolValue: 1
+                     7:
+                        type: Bool
+                        value: 
+                           boolValue: 1
+                     8:
+                        type: Bool
+                        value: 
+                           boolValue: 0
             1:
                widgetName: Value
                widgetData: 
@@ -1719,17 +1743,17 @@ screenData:
                         value: 
                            unsignedValue: 2
             2:
-               widgetName: Value
+               widgetName: eValue
                widgetData: 
                   options: 
                      0:
                         type: Source
                         value: 
-                           source: tele(+23)
+                           source: tele(23)
                      1:
                         type: Color
                         value: 
-                           color: 0x000000
+                           color: COLIDX0
                      2:
                         type: Bool
                         value: 
@@ -1742,18 +1766,30 @@ screenData:
                         type: Unsigned
                         value: 
                            unsignedValue: 2
+                     5:
+                        type: Bool
+                        value: 
+                           boolValue: 1
+                     6:
+                        type: Bool
+                        value: 
+                           boolValue: 0
+                     7:
+                        type: Bool
+                        value: 
+                           boolValue: 1
             5:
-               widgetName: Value
+               widgetName: eValue
                widgetData: 
                   options: 
                      0:
                         type: Source
                         value: 
-                           source: tele(-3)
+                           source: tele(3)
                      1:
                         type: Color
                         value: 
-                           color: 0x000000
+                           color: COLIDX0
                      2:
                         type: Bool
                         value: 
@@ -1766,18 +1802,30 @@ screenData:
                         type: Unsigned
                         value: 
                            unsignedValue: 2
+                     5:
+                        type: Bool
+                        value: 
+                           boolValue: 1
+                     6:
+                        type: Bool
+                        value: 
+                           boolValue: 1
+                     7:
+                        type: Bool
+                        value: 
+                           boolValue: 1
             6:
-               widgetName: Value
+               widgetName: eValue
                widgetData: 
                   options: 
                      0:
                         type: Source
                         value: 
-                           source: tele(+4)
+                           source: tele(4)
                      1:
                         type: Color
                         value: 
-                           color: 0x000000
+                           color: COLIDX0
                      2:
                         type: Bool
                         value: 
@@ -1790,18 +1838,30 @@ screenData:
                         type: Unsigned
                         value: 
                            unsignedValue: 2
+                     5:
+                        type: Bool
+                        value: 
+                           boolValue: 1
+                     6:
+                        type: Bool
+                        value: 
+                           boolValue: 0
+                     7:
+                        type: Bool
+                        value: 
+                           boolValue: 1
             7:
-               widgetName: Value
+               widgetName: eValue
                widgetData: 
                   options: 
                      0:
                         type: Source
                         value: 
-                           source: tele(+24)
+                           source: tele(24)
                      1:
                         type: Color
                         value: 
-                           color: 0x000000
+                           color: COLIDX0
                      2:
                         type: Bool
                         value: 
@@ -1814,6 +1874,18 @@ screenData:
                         type: Unsigned
                         value: 
                            unsignedValue: 2
+                     5:
+                        type: Bool
+                        value: 
+                           boolValue: 1
+                     6:
+                        type: Bool
+                        value: 
+                           boolValue: 1
+                     7:
+                        type: Bool
+                        value: 
+                           boolValue: 1
          options: 
             0:
                type: Bool

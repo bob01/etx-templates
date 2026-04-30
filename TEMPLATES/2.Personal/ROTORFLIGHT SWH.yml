@@ -519,7 +519,7 @@ logicalSw:
       duration: 0
    10:
       func: FUNC_VNEG
-      def: "tele(28),700"
+      def: "tele(13),700"
       andsw: "!L1"
       lsPersist: 0
       lsState: 0
@@ -562,7 +562,7 @@ logicalSw:
       def: "L15,L13"
       andsw: "NONE"
       lsPersist: 0
-      lsState: 1
+      lsState: 0
       delay: 0
       duration: 0
    17:
@@ -1785,9 +1785,9 @@ screenData:
                         value: 
                            signedValue: 20
                      7:
-                        type: Bool
+                        type: Unsigned
                         value: 
-                           boolValue: 0
+                           unsignedValue: 1
                      8:
                         type: Bool
                         value: 
