@@ -82,7 +82,7 @@ Best used with [etx-presets (for RotorFlight)](https://github.com/bob01/etx-pres
 - download and unzip etx-templates-main.zip from (https://github.com/bob01/etx-templates)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/69cd2a87-3844-4c5a-bf65-9464440fab54)
 - connect the radio and copy the folders from the zip file to the radio
-![image](https://github.com/bob01/etx-templates/assets/4014433/0fe737ca-b2cb-466a-a2df-61bcda9d4252)
+<img width="526" height="376" alt="image" src="https://github.com/user-attachments/assets/992fd774-2ba8-4fc0-bcae-5fdbee24786b" />
 
 
 ### Get a nice EdgeTX theme (optional)
