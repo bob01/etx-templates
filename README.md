@@ -27,8 +27,9 @@ Best used with [etx-presets (for RotorFlight)](https://github.com/bob01/etx-pres
   - eValue - new: same as stock Value widget + optional min / max fields
   - templates - Heli, Nitro Heli, OMP OFS3 - updated and simplified
   - model editor - gone.
+  - docs are out of date but will catch up ... at some point
 - 2026.03.19 - widgets revised for RotorFlight v2.3.x, EdgeTx 2.12.x+, RadioMaster TX16S MK3
-- .
+  - find older RF-2.2.x, pre-EdgeTx 2.12.x, non-MK3 version here if needed<br>https://github.com/bob01/etx-templates/releases/tag/RF-2.2.x
 - 2024.09.02 - revised for RotorFlight v2.1
 - 2024.08.05 - ModelEditor - dropped BEC/ADC page - all current FC's have BEC ADCs now
 - 2024.07.09 - eThrottle - Report "Bad Auto" + haptic if GOV reports LOST-HS ie bailout will not be available
