@@ -57,8 +57,10 @@ Best used with [etx-presets (for RotorFlight)](https://github.com/bob01/etx-pres
 - 4 bank / profile configuration
 - main screen uses etx-widgets (https://github.com/bob01/etx-widgets), included in this package
 
-![image](https://github.com/bob01/etx-templates/assets/4014433/e3de3f75-3bfe-4d51-beb0-7e5cc5d416a8)
-![image](https://github.com/bob01/etx-templates/assets/4014433/08a0e2b5-07ba-484d-a0e5-871c27d71239)
+<img width="480" height="288" alt="image" src="https://github.com/user-attachments/assets/fb3c799b-f396-476d-ba02-baf4b0affae0" />
+<img width="480" height="288" alt="image" src="https://github.com/user-attachments/assets/7172eb3e-fc57-43d5-b589-fc47d864d6a1" />
+<img width="480" height="288" alt="image" src="https://github.com/user-attachments/assets/12ec2756-f2ff-4c55-aaaa-ebaa90568e1a" />
+<img width="480" height="288" alt="image" src="https://github.com/user-attachments/assets/2e6118d0-a967-4b24-83fb-2121715f2638" />
 
 
 ## Start by creating a new model using the EdgeTx wizard...
@@ -70,7 +72,7 @@ Best used with [etx-presets (for RotorFlight)](https://github.com/bob01/etx-pres
 ![image](https://github.com/bob01/etx-templates/assets/4014433/c6f8e435-302c-49ac-9518-682418419e97)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/b006d0b8-7ac9-46e7-8009-eee194809676)
 
-### Bind or assign receiver ID, be sure to check your ELRS settings - D500 packet rate recommended
+### Bind or assign receiver ID, be sure to check your ELRS settings - eg.
 ![image](https://github.com/bob01/etx-templates/assets/4014433/3a12aeba-4a79-4b8d-9a39-4e1f0c40df98)
 ![image](https://github.com/bob01/etx-templates/assets/4014433/a85f8916-01f4-4b36-bb71-d6174ba2b0fe)
 ### Done.
