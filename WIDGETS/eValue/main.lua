@@ -19,7 +19,7 @@
 -- Enhanced value widget
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.05070
+-- ver: 0.9.0.05061
 
 local app_name = "eValue"
 

@@ -20,7 +20,7 @@
 -- Based on  Lipo battery from single analog source by Offer Shmuely
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.04290
+-- ver: 0.9.0.05060
 
 local app_name = "ePowerbar"
 
@@ -287,16 +287,16 @@ local function calculateBatteryData(widget)
     local cells = 0
     if widget.sensorCellsId ~= 0 then
         -- use sensor cell count
-        cells = getValue(widget.sensorCellsId)
+        cells = getSourceValue(widget.sensorCellsId)
     elseif widget.options.Cells > 0 then
         -- use configured cell count
         cells = widget.options.Cells
     elseif widget.options.Cells == 0 then
         -- try to figure out from voltage
-        local volts = getValue(widget.sensorVoltId)
-        cells = cellsFromVolts(widget, volts)
+        local volts = getSourceValue(widget.sensorVoltId)
+        cells = volts and cellsFromVolts(widget, volts) or nil
     end
-    if widget.cellCount ~= cells then
+    if cells and widget.cellCount ~= cells then
         widget.cellCount = cells
         _G.ePowerbarCellCount = cells
     end
@@ -304,7 +304,7 @@ local function calculateBatteryData(widget)
 
     -- voltage
     local cellFull = widget:getCellFull()
-    local volts = widget.cellCount and widget.cellCount > 0 and getValue(widget.sensorVoltId) or 0
+    local volts = widget.cellCount and widget.cellCount > 0 and getSourceValue(widget.sensorVoltId) or nil
     if volts and volts ~= widget.volts then
         -- arm cell check if full check enabled and voltage appearing or moving away from 0
         if cellFull > 0 and volts > 0 and (widget.volts == nil or widget.volts == 0) then
@@ -345,14 +345,17 @@ local function calculateBatteryData(widget)
 
     -- mah
     if widget.sensorMahId ~= 0 then
-        widget.mah = getValue(widget.sensorMahId)
+        local mah = getSourceValue(widget.sensorMahId)
+        if mah and widget.mah ~= mah then
+            widget.mah = mah
+        end
     end
 
     -- fuel
     local fuel = nil
     if widget.sensorPcntId ~= 0 then
         -- use sensor
-        fuel = getValue(widget.sensorPcntId)
+        fuel = getSourceValue(widget.sensorPcntId)
     else
         local capacity = widget.options.LipoCapacity
         if widget.mah and capacity > 0 then
