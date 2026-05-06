@@ -19,7 +19,7 @@
 -- Enhanced value widget
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.04220
+-- ver: 0.9.0.05070
 
 local app_name = "eValue"
 
@@ -120,8 +120,13 @@ local function update(widget, options)
         widget.maxId = 0
     end
 
-    widget.text_value = nil
-    widget.text_minmax = nil
+    widget.text_value = "0"
+    widget.text_min = "0"
+    widget.text_max = "0"
+
+    widget.value = nil
+    widget.min = nil
+    widget.max = nil
 end
 
 local function create(zone, options)
@@ -138,8 +143,6 @@ local function create(zone, options)
 
         text_label = nil,
         text_unit = nil,
-        text_value = nil,
-        text_minmax = nil,
     }
 
     update(widget, options)
@@ -174,9 +177,21 @@ local function paint(widget)
         lcd.drawText(cx + dx, cy + my, CHAR_TELEMETRY .. text, textFlags)
     end
 
+    -- pre-render
+    local text_unit = widget.text_unit or ""
+    local text_value = widget.text_value .. text_unit
+    local text_minmax = nil
+    if widget.minId ~= 0 and widget.maxId ~= 0 then
+        text_minmax = "min " .. widget.text_min .. " / max " .. widget.text_max .. text_unit
+    elseif widget.minId ~= 0 then
+        text_minmax = "min " .. widget.text_min .. text_unit
+    elseif widget.maxId ~= 0 then
+        text_minmax = "max " .. widget.text_max .. text_unit
+    end
+
     -- value
-    if widget.text_value then
-        local text = widget.text_value
+    if text_value then
+        local text = text_value
         local alignment = widget.options.AlignValue
         local textFlags = widget.text_color + shadowed + MIDSIZE + BOLD
         local tw, _ = lcd.sizeText(text, textFlags)
@@ -185,8 +200,8 @@ local function paint(widget)
     end
 
     -- min/max
-    if widget.text_minmax then
-        local text = widget.text_minmax
+    if text_minmax then
+        local text = text_minmax
         local alignment = widget.options.AlignValue
         local textFlags = widget.text_color + shadowed
         local tw, th = lcd.sizeText(text, textFlags)
@@ -203,17 +218,31 @@ local function background(widget)
     -- telemetry status
     widget.connected = widget.common.isTelemetryActive()
 
-    if widget.sourceId ~= 0 then
-        widget.text_value = getValue(widget.sourceId) .. (widget.text_unit or "")
+    if widget.connected then
+        -- value
+        if widget.sourceId ~= 0 then
+            local value = getSourceValue(widget.sourceId)
+            if value and widget.value ~= value then
+                widget.value = value
+                widget.text_value = value
+            end
+        end
 
-        if widget.minId ~= 0 and widget.maxId ~= 0 then
-            widget.text_minmax = "min " .. getValue(widget.minId) .. " / max " .. getValue(widget.maxId) .. (widget.text_unit or "")
-        elseif widget.minId ~= 0 then
-            widget.text_minmax = "min " .. getValue(widget.minId) .. (widget.text_unit or "")
-        elseif widget.maxId ~= 0 then
-            widget.text_minmax = "max " .. getValue(widget.maxId) .. (widget.text_unit or "")
-        else
-            widget.text_minmax = nil
+        -- min
+        if widget.minId ~= 0 then
+            local min = getSourceValue(widget.minId)
+            if min and widget.min ~= min then
+                widget.min = min
+                widget.text_min = min
+            end
+        end
+        -- max
+        if widget.maxId ~= 0 then
+            local max = getSourceValue(widget.maxId)
+            if max and widget.max ~= max then
+                widget.max = max
+                widget.text_max = max
+            end
         end
     end
 end
