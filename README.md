@@ -20,6 +20,7 @@ The idea is...
 Best used with [etx-presets (for RotorFlight)](https://github.com/bob01/etx-presets-rotorflight)
 
 ### Release notes
+- 2026.05.06 - retain last values on disconnect (ePowerbar and eValue)
 - 2026.04.21 - 2026 updates - many updates to support building single tx model screens for RotorFlight 2.3x+ and OMP OFS3 including...
   - ePowerbar - enchanements ported from ETHOS version
   - eBitmap - dynamic image selection based on RotorFlight craft name or cell count (1 - 4, 6)
