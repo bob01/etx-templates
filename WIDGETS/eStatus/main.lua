@@ -20,7 +20,7 @@
 -- Designed for 1/8 cell
 -- Author: Rob Gayle (bob00@rogers.com)
 -- Date: 2026
--- ver: 0.9.0.03250
+-- ver: 0.9.0.09190
 
 local app_name = "eStatus"
 
@@ -499,6 +499,10 @@ local function update(widget, options)
     fi = getSensorFieldInfo(widget, widget.options.GovFlags)
     widget.sensorGovId = fi and fi.id or 0
 
+    -- BetaFlight flight mode easter egg
+    fi = getFieldInfo("FM")
+    widget.bfFmId = widget.sensorGovId == 0 and fi and fi.id or 0
+
     fi = getSensorFieldInfo(widget, widget.options.EscModel)
     widget.sensorEscSigId = fi and fi.id or 0
 
@@ -792,6 +796,9 @@ local function background(widget)
                     govStatus = "UNKNOWN("..gs..")"
                 end
             end
+        elseif widget.bfFmId ~= 0 then
+            local fm = getValue(widget.bfFmId)
+            govStatus = fm or "-"
         else
             govStatus = "--"
         end
